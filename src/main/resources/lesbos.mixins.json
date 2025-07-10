@@ -4,6 +4,7 @@
   "package": "morgan.lesbos.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
+    "entity.player.PlayerInventoryMixin"
   ],
   "client": [
   ],
