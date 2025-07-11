@@ -2,10 +2,13 @@ package morgan.lesbos;
 
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.entity.EntityEquipment;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.collection.DefaultedList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.EnumMap;
 
 public class Lesbos implements ModInitializer {
     // This logger is used to write text to the console and the log file.
@@ -13,8 +16,8 @@ public class Lesbos implements ModInitializer {
     // That way, it's clear which mod wrote info, warnings, and errors.
     public static final String MOD_ID = "Lesbos";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
-    public static DefaultedList<ItemStack> globalInventory = DefaultedList.ofSize(36, ItemStack.EMPTY);
-    public static EntityEquipment equipment = new EntityEquipment();
+    public static DefaultedList<ItemStack> globalInventoryMain = DefaultedList.ofSize(36, ItemStack.EMPTY);
+    public static EnumMap<EquipmentSlot, ItemStack> globalInventoryMap = new EnumMap<EquipmentSlot, ItemStack>(EquipmentSlot.class);
 
     @Override
     public void onInitialize() {
