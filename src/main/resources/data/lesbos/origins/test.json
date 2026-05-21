@@ -1,6 +1,8 @@
 {
   "powers": [
-    "lesbos:test_double_jump"
+    "lesbos:test_double_jump",
+    "lesbos:test_faya",
+    "origins:climbing"
   ],
   "icon": "minecraft:poisonous_potato",
   "name": "Test",
