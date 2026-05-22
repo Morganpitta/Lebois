@@ -1,15 +1,10 @@
 package morgan.lesbos.mixin.entity;
 
-import morgan.lesbos.Lesbos;
-import morgan.lesbos.components.DoubleJumpComponent;
 import morgan.lesbos.components.LesbosComponents;
-import morgan.lesbos.powers.DoubleJumpPower;
-import morgan.lesbos.powers.LesbosPowers;
-import net.minecraft.entity.Attackable;
+import morgan.lesbos.powers.DoubleJumpPowerType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.tag.FluidTags;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -50,7 +45,7 @@ public abstract class LivingEntityMixin extends Entity {
 
     @Unique
     public int getMaxDoubleJumps(){
-        return DoubleJumpPower.getMaxDoubleJumps((LivingEntity) (Object) this);
+        return DoubleJumpPowerType.getMaxDoubleJumps((LivingEntity) (Object) this);
     }
 
     @Unique
@@ -65,7 +60,7 @@ public abstract class LivingEntityMixin extends Entity {
 
     @Unique
     public boolean canDoubleJump(){
-        return (DoubleJumpPower.canDoubleJump((LivingEntity) (Object)this) && getDoubleJumps() > 0 && !this.isOnGround());
+        return (DoubleJumpPowerType.canDoubleJump((LivingEntity) (Object)this) && getDoubleJumps() > 0 && !this.isOnGround());
     }
 
     @Unique
@@ -111,7 +106,7 @@ public abstract class LivingEntityMixin extends Entity {
             if (!(this.isInLava() && (!this.isOnGround() || k > l)) && !(bl && (!this.isOnGround() || k > l)) && ((canDoubleJump()) && this.jumpingCooldown == 0)) {
                 this.doubleJump();
                 this.setDoubleJumps(getDoubleJumps() - 1);
-                this.jumpingCooldown = 10;
+                this.jumpingCooldown = 5;
             }
         }
     }

@@ -4,7 +4,9 @@
     "lesbos:test_faya",
     "origins:climbing"
   ],
-  "icon": "minecraft:poisonous_potato",
+  "icon": {
+    "id": "minecraft:poisonous_potato"
+  },
   "name": "Test",
   "description": "Testing",
   "order": 1,

@@ -1,7 +1,8 @@
 package morgan.lesbos.components;
 
-import dev.onyxstudios.cca.api.v3.component.Component;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.RegistryWrapper;
+import org.ladysnake.cca.api.v3.component.Component;
 
 public class DoubleJumpComponent implements Component {
     private int doubleJumps = 0;
@@ -17,12 +18,12 @@ public class DoubleJumpComponent implements Component {
     }
 
     @Override
-    public void readFromNbt(NbtCompound tag) {
+    public void readFromNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
         doubleJumps = tag.getInt("lesbos:double_jumps");
     }
 
     @Override
-    public void writeToNbt(NbtCompound tag) {
+    public void writeToNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
         tag.putInt("lesbos:double_jumps", doubleJumps);
     }
 }
