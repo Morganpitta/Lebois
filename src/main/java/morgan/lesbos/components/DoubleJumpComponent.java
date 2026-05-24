@@ -10,11 +10,9 @@ public class DoubleJumpComponent implements Component {
     public int getDoubleJumps() {
         return doubleJumps;
     }
+
     public void setDoubleJumps(int value) {
         this.doubleJumps = value;
-    }
-    public void addDoubleJumps(int amount) {
-        this.doubleJumps += amount;
     }
 
     @Override

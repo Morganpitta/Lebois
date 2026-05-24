@@ -1,23 +1,23 @@
 package morgan.lesbos.powers;
 
+import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import io.github.apace100.apoli.power.PowerConfiguration;
 import io.github.apace100.apoli.power.type.PowerType;
-import io.github.apace100.apoli.registry.ApoliRegistries;
+import io.github.apace100.apoli.power.type.PowerTypes;
 import morgan.lesbos.Lesbos;
-import net.minecraft.registry.Registry;
+import net.minecraft.util.Identifier;
 
 public class LesbosPowerTypes {
-    public static final PowerConfiguration<DoubleJumpPowerType> DOUBLE_JUMP = register(PowerConfiguration.of(Lesbos.id("double_jump"), DoubleJumpPowerType.DOUBLE_JUMP));
+    public static final PowerConfiguration<DoubleJumpPowerType> DOUBLE_JUMP = register("double_jump", DoubleJumpPowerType.DOUBLE_JUMP);
 
     public static void register() {
     }
 
-    // https://github.com/apace100/origins-fabric/blob/1.13.0-pre.2%2Bmc.1.21.1/src/main/java/io/github/apace100/origins/power/type/OriginsPowerTypes.java
-    public static <T extends PowerType> PowerConfiguration<T> register(PowerConfiguration<T> config) {
-        //noinspection unchecked
-        PowerConfiguration<PowerType> casted = (PowerConfiguration<PowerType>) config;
-        Registry.register(ApoliRegistries.POWER_TYPE, casted.id(), casted);
+    public static <T extends PowerType> PowerConfiguration<T> register(String path,  TypedDataObjectFactory<T> dataFactory) {
+        PowerConfiguration<T> configuration = PowerConfiguration.of(Lesbos.id(path), dataFactory);
 
-        return config;
+        PowerTypes.register(configuration);
+
+        return configuration;
     }
 }

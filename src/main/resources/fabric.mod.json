@@ -10,9 +10,6 @@
   "icon": "assets/lesbos/icon.png",
   "environment": "*",
   "entrypoints": {
-    "client": [
-      "morgan.lesbos.client.LesbosClient"
-    ],
     "main": [
       "morgan.lesbos.Lesbos"
     ],

@@ -33,13 +33,7 @@ public abstract class LivingEntityMixin extends Entity implements DoubleJumpInte
     protected abstract float getJumpVelocity();
 
     @Shadow
-    public abstract float getJumpBoostVelocityModifier();
-
-    @Shadow
     protected boolean jumping;
-
-    @Shadow
-    protected abstract boolean shouldSwimInFluids();
 
     @Shadow
     private int jumpingCooldown;
@@ -75,10 +69,8 @@ public abstract class LivingEntityMixin extends Entity implements DoubleJumpInte
         float yaw = this.getYaw() * ((float)Math.PI / 180F);
         double horizontalSpeed = vec3d.horizontalLength();
 
-        // Add jump velocity
         this.setVelocity(vec3d.x, (double)this.getJumpVelocity(), vec3d.z);
 
-        // Change direction of movement
         Vec3d directionNormalised = new Vec3d(
                 (-MathHelper.sin(yaw) * this.forwardSpeed) + (MathHelper.cos(yaw) * this.sidewaysSpeed),
                 0,
@@ -89,7 +81,6 @@ public abstract class LivingEntityMixin extends Entity implements DoubleJumpInte
             this.setVelocity(directionNormalised.x * horizontalSpeed, this.getVelocity().y, directionNormalised.z * horizontalSpeed);
         }
 
-        // Add extra sprint boost
         if (this.isSprinting()) {
             this.setVelocity(this.getVelocity().add(directionNormalised.x * 0.2, 0.0, directionNormalised.z * 0.2));
         }
