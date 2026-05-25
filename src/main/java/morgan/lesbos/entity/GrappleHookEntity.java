@@ -18,7 +18,7 @@ import org.jetbrains.annotations.Nullable;
 public class GrappleHookEntity extends Entity implements Ownable {
     @Nullable
     private PlayerEntity owner;
-    public double unhookDistance;
+    public double minDistance;
     public double speed;
     public static final double damping = 0.5;
 
@@ -30,11 +30,11 @@ public class GrappleHookEntity extends Entity implements Ownable {
         super(type, world);
     }
 
-    public GrappleHookEntity(World world, @Nullable PlayerEntity owner, Vec3d position, double unhookDistance, double speed) {
+    public GrappleHookEntity(World world, @Nullable PlayerEntity owner, Vec3d position, double minDistance, double speed) {
         super(LesbosEntities.GRAPPLE_HOOK, world);
         this.setOwner(owner);
         this.setPosition(position);
-        this.unhookDistance = unhookDistance;
+        this.minDistance = minDistance;
         this.speed = speed;
     }
 
@@ -64,9 +64,8 @@ public class GrappleHookEntity extends Entity implements Ownable {
             }
 
             double distanceSq = this.getPos().squaredDistanceTo(owner.getPos());
-            if (distanceSq < (unhookDistance * unhookDistance)) {
-                ((GrappleInterface) (Object) owner).lesbos$unGrapple();
-                this.discard();
+            if (distanceSq < (minDistance * minDistance)) {
+                // TODO: Add smoothing?
                 return;
             }
 
