@@ -1,0 +1,9 @@
+{
+  "type": "origins:attribute",
+  "modifier": {
+    "name": "Safe fall increase",
+    "attribute": "minecraft:generic.safe_fall_distance",
+    "value": 7,
+    "operation": "set_total"
+  }
+}
