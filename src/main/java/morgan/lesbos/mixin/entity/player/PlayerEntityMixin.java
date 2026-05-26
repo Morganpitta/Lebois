@@ -46,7 +46,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements GrappleI
         RaycastContext raycastContext = new RaycastContext(
                 this.getEyePos(),
                 this.getEyePos().add(this.getRotationVec(1.0F).multiply(maxDistance)),
-                RaycastContext.ShapeType.OUTLINE,
+                RaycastContext.ShapeType.COLLIDER,
                 RaycastContext.FluidHandling.NONE,
                 this
         );
