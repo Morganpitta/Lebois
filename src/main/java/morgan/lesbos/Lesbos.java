@@ -1,5 +1,6 @@
 package morgan.lesbos;
 
+import morgan.lesbos.actions.LesbosEntityActionTypes;
 import morgan.lesbos.command.LesbosCommands;
 import morgan.lesbos.entity.LesbosEntities;
 import morgan.lesbos.network.packet.LesbosC2SPackets;
@@ -28,6 +29,7 @@ public class Lesbos implements ModInitializer {
         // Apoli registries
         LesbosPowerTypes.register();
         LesbosEntityConditionTypes.register();
+        LesbosEntityActionTypes.register();
 
         LOGGER.info("Lesbos initialised!!!!!");
     }

@@ -74,7 +74,6 @@ public class ActionOnKeyReleasePowerType extends PowerType {
         List<PowerType> powerTypes = PowerHolderComponent.getOptional(client.player).orElseThrow().getPowerTypes();
         List<ActionOnKeyReleasePowerType> triggeredPowerTypes = new LinkedList<>();
 
-        Map<String, Boolean> currentKeybindingStates = new HashMap<>();
         for (PowerType powerType : powerTypes) {
 
             if (!(powerType instanceof ActionOnKeyReleasePowerType keyReleasePowerType)) {
@@ -87,18 +86,11 @@ public class ActionOnKeyReleasePowerType extends PowerType {
                     .map(TriState::of)
                     .orElse(TriState.DEFAULT);
 
-            if (keyPressed == TriState.DEFAULT) {
-                continue;
-            }
-
-            if (currentKeybindingStates.computeIfAbsent(keyBindingReference.id(), k -> keyPressed.get()) && (keyBindingReference.continuous() || !ApoliClient.lastKeyBindingStates.getOrDefault(keyBindingReference.id(), false))) {
-                //noinspection unchecked
+            if (keyPressed.get() ) {
                 triggeredPowerTypes.add(keyReleasePowerType);
             }
 
         }
-
-        ApoliClient.lastKeyBindingStates.putAll(currentKeybindingStates);
 
         List<Identifier> powerTypeIds = triggeredPowerTypes
                 .stream()

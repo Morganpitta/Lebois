@@ -7,7 +7,8 @@
     "lesbos:test_gp_resource",
     "lesbos:test_gp_fall",
     "lesbos:test_safe_fall",
-    "lesbos:test_key_release"
+    "lesbos:test_grapple",
+    "lesbos:test_un_grapple"
   ],
   "icon": {
     "id": "minecraft:poisonous_potato"
