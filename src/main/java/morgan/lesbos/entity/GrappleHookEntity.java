@@ -63,22 +63,21 @@ public class GrappleHookEntity extends Entity implements Ownable {
                 return;
             }
 
-            double distanceSq = this.getPos().squaredDistanceTo(owner.getPos());
-            if (distanceSq < (minDistance * minDistance)) {
-                // TODO: Add smoothing?
-                return;
-            }
-
             if (owner instanceof ServerPlayerEntity serverPlayer) {
                 Vec3d direction = this.getPos().subtract(owner.getPos()).normalize();
                 Vec3d velocity = owner.getVelocity();
 
+                double distanceSq = this.getPos().squaredDistanceTo(owner.getPos());
+                double pullSpeed = this.speed;
+
+                if ( distanceSq  < (minDistance * minDistance) ) pullSpeed *= (distanceSq/(minDistance*minDistance));
+
                 // TODO: Constants, Damping and pull speed
 
                 serverPlayer.setVelocity(
-                        velocity.x * damping + direction.x * 0.5 * this.speed,
-                        velocity.y * damping + direction.y * 0.5 * this.speed,
-                        velocity.z * damping + direction.z * 0.5 * this.speed
+                        velocity.x * damping + direction.x * 0.5 * pullSpeed,
+                        velocity.y * damping + direction.y * 0.5 * pullSpeed,
+                        velocity.z * damping + direction.z * 0.5 * pullSpeed
                 );
 
                 serverPlayer.velocityDirty = true;
