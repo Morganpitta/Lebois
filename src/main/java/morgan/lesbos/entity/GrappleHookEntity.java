@@ -24,8 +24,8 @@ public class GrappleHookEntity extends Entity implements Ownable {
     public double damping;
 
     // Ideally a 3:2 ratio
-    public static final double pullFactorModifier = 0.2;
-    public static final double lookAssistModifier = 0.13;
+    public static final double pullFactorModifier = 0.25;
+    public static final double lookAssistModifier = 0.18;
 
     private static final TrackedData<Integer> OWNER_ID = DataTracker.registerData(
             GrappleHookEntity.class, TrackedDataHandlerRegistry.INTEGER

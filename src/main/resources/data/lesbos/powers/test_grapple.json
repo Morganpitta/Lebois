@@ -5,6 +5,13 @@
     "type": "lesbos:grapple",
     "max_distance": 50
   },
+  "condition": {
+    "type": "origins:raycast",
+    "block_distance": 50,
+    "shape_type": "collider",
+    "fluid_handling": "none",
+    "entity": false
+  },
   "hud_render": {
     "should_render": true,
     "bar_index": 3

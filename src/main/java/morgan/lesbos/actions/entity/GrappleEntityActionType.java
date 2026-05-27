@@ -24,7 +24,7 @@ public class GrappleEntityActionType extends EntityActionType {
                     .add("min_distance", SerializableDataTypes.DOUBLE, 2D)
                     .add("look_assist", SerializableDataTypes.DOUBLE, 1D)
                     .add("pull_speed", SerializableDataTypes.DOUBLE, 1D)
-                    .add("damping", SerializableDataTypes.DOUBLE, 0.12D),
+                    .add("damping", SerializableDataTypes.DOUBLE, 0.1D),
             data -> new GrappleEntityActionType(
                     data.get("max_distance"),
                     data.get("min_distance"),
