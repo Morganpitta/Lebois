@@ -1,9 +1,9 @@
 {
   "type": "origins:action_on_key_press",
-  "cooldown": 100,
+  "cooldown": 60,
   "entity_action": {
     "type": "lesbos:grapple",
-    "max_distance": 100
+    "max_distance": 50
   },
   "hud_render": {
     "should_render": true,

@@ -14,6 +14,8 @@ import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity implements GrappleInterface {
@@ -73,5 +75,16 @@ public abstract class PlayerEntityMixin extends LivingEntity implements GrappleI
         this.grappleHook.discard();
         this.grappleHook = null;
         return true;
+    }
+
+    @Redirect(
+            method = "getBlockBreakingSpeed",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/entity/player/PlayerEntity;isOnGround()Z"
+            )
+    )
+    public boolean getBlockBreakingSpeedIncreaseMiningSpeedWhenGrappled(PlayerEntity player) {
+        return player.isOnGround() || ((GrappleInterface) player).lesbos$getGrappleHook() != null;
     }
 }

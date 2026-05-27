@@ -23,8 +23,9 @@ public class GrappleHookEntity extends Entity implements Ownable {
     public double pullSpeed;
     public double damping;
 
-    public static final double pullFactorModifier = 0.3; // Default 0.5
-    public static final double lookAssistModifier = 0.2; // Default 0
+    // Ideally a 3:2 ratio
+    public static final double pullFactorModifier = 0.2;
+    public static final double lookAssistModifier = 0.13;
 
     private static final TrackedData<Integer> OWNER_ID = DataTracker.registerData(
             GrappleHookEntity.class, TrackedDataHandlerRegistry.INTEGER
@@ -110,8 +111,17 @@ public class GrappleHookEntity extends Entity implements Ownable {
         if (OWNER_ID.equals(data)) {
             int id = this.dataTracker.get(OWNER_ID);
             this.owner = id != -1 ? (PlayerEntity) this.getWorld().getEntityById(id) : null;
+            if ( this.owner != null && ((GrappleInterface) this.owner).lesbos$getGrappleHook() == null) ((GrappleInterface) this.owner).lesbos$setGrappleHook(this);
         }
         super.onTrackedDataSet(data);
+    }
+
+    @Override
+    public void onRemoved() {
+        if (owner instanceof GrappleInterface grappleOwner && grappleOwner.lesbos$getGrappleHook() == this) {
+            grappleOwner.lesbos$setGrappleHook(null);
+        }
+        super.onRemoved();
     }
 
     // Entity is non-persistent, no need to save or have any additional data

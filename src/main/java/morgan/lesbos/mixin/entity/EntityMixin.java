@@ -24,6 +24,7 @@ public abstract class EntityMixin {
     @Inject(method = "onLanding", at = @At("HEAD"))
     public void onLandingResetDoubleJumps(CallbackInfo ci) {
         if ( !((Entity) (Object)this instanceof PlayerEntity) ) return;
+        if (!((Entity) (Object) this instanceof PlayerEntity)) return;
         DoubleJumpInterface doubleJumps = (DoubleJumpInterface) this;
 
         if (this.isOnGround() && doubleJumps.lesbos$getDoubleJumps() < doubleJumps.lesbos$getMaxDoubleJumps()) {
