@@ -1,0 +1,5 @@
+{
+  "type": "lesbos:drag_modifier",
+  "air_drag": 0.98,
+  "slide_mode": true
+}

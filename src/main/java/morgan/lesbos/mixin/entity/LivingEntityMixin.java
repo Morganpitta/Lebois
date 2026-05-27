@@ -5,6 +5,7 @@ import morgan.lesbos.components.LesbosComponents;
 import morgan.lesbos.interfaces.DoubleJumpInterface;
 import morgan.lesbos.network.packet.DoubleJumpC2SPacket;
 import morgan.lesbos.powers.DoubleJumpPowerType;
+import morgan.lesbos.powers.DragModifierPowerType;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -18,7 +19,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(LivingEntity.class)
@@ -118,5 +121,13 @@ public abstract class LivingEntityMixin extends Entity implements DoubleJumpInte
         }
 
         wasJumping = this.jumping;
+    }
+
+    @ModifyConstant(
+            method = "travel",
+            constant = @Constant(floatValue = 0.91F)
+    )
+    public float travelModifyAirDrag(float constant) {
+        return DragModifierPowerType.getAirDrag((LivingEntity) (Object) this);
     }
 }
