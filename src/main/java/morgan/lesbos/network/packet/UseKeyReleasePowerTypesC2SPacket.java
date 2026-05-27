@@ -1,20 +1,15 @@
 package morgan.lesbos.network.packet;
 
-import io.github.apace100.apoli.Apoli;
 import io.github.apace100.apoli.component.PowerHolderComponent;
 import io.github.apace100.apoli.power.PowerManager;
-import io.github.apace100.apoli.power.type.Active;
 import io.github.apace100.apoli.power.type.PowerType;
-import io.netty.buffer.ByteBuf;
 import morgan.lesbos.Lesbos;
-import morgan.lesbos.interfaces.DoubleJumpInterface;
 import morgan.lesbos.powers.ActionOnKeyReleasePowerType;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.codec.PacketCodecs;
 import net.minecraft.network.packet.CustomPayload;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Identifier;
 

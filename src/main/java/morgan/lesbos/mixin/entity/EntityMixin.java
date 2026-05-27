@@ -1,6 +1,5 @@
 package morgan.lesbos.mixin.entity;
 
-import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import morgan.lesbos.interfaces.DoubleJumpInterface;
 import morgan.lesbos.powers.DragModifierPowerType;
 import net.minecraft.entity.Entity;

@@ -2,8 +2,6 @@ package morgan.lesbos.network.packet;
 
 import io.netty.buffer.ByteBuf;
 import morgan.lesbos.Lesbos;
-import morgan.lesbos.components.DoubleJumpComponent;
-import morgan.lesbos.components.LesbosComponents;
 import morgan.lesbos.interfaces.DoubleJumpInterface;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.network.codec.PacketCodec;

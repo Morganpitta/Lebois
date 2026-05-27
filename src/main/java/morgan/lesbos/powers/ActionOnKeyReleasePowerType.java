@@ -1,30 +1,13 @@
 package morgan.lesbos.powers;
 
-import io.github.apace100.apoli.ApoliClient;
 import io.github.apace100.apoli.action.EntityAction;
-import io.github.apace100.apoli.component.PowerHolderComponent;
 import io.github.apace100.apoli.condition.EntityCondition;
 import io.github.apace100.apoli.data.ApoliDataTypes;
 import io.github.apace100.apoli.data.TypedDataObjectFactory;
-import io.github.apace100.apoli.networking.packet.c2s.UseActivePowerTypesC2SPacket;
-import io.github.apace100.apoli.power.Power;
 import io.github.apace100.apoli.power.PowerConfiguration;
-import io.github.apace100.apoli.power.type.Active;
-import io.github.apace100.apoli.power.type.ActiveCooldownPowerType;
 import io.github.apace100.apoli.power.type.PowerType;
-import io.github.apace100.apoli.power.type.PowerTypes;
-import io.github.apace100.apoli.util.HudRender;
 import io.github.apace100.apoli.util.keybinding.KeyBindingReference;
 import io.github.apace100.calio.data.SerializableData;
-import io.github.apace100.calio.data.SerializableDataTypes;
-import morgan.lesbos.network.packet.UseKeyReleasePowerTypesC2SPacket;
-import net.fabricmc.api.EnvType;
-import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.util.TriState;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.option.KeyBinding;
-import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;

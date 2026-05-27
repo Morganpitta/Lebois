@@ -1,6 +1,5 @@
 package morgan.lesbos.mixin.entity.player;
 
-import morgan.lesbos.Lesbos;
 import morgan.lesbos.entity.GrappleHookEntity;
 import morgan.lesbos.interfaces.DoubleJumpInterface;
 import morgan.lesbos.interfaces.GrappleInterface;

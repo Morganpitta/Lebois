@@ -1,9 +1,6 @@
 package morgan.lesbos.network.packet;
 
-import io.github.apace100.apoli.networking.ModPacketsC2S;
-import io.github.apace100.apoli.networking.packet.c2s.UseActivePowerTypesC2SPacket;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 
 public class LesbosC2SPackets {
