@@ -1,9 +1,10 @@
 {
   "type": "origins:attribute",
   "modifier": {
+    "id": "lesbos:test_safe_fall",
     "name": "Safe fall increase",
     "attribute": "minecraft:generic.safe_fall_distance",
-    "value": 7,
-    "operation": "set_total"
+    "amount": 4,
+    "operation": "ADD_VALUE"
   }
 }

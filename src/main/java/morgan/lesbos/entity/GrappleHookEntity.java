@@ -20,7 +20,7 @@ public class GrappleHookEntity extends Entity implements Ownable {
     private PlayerEntity owner;
     public double minDistance;
     public double speed;
-    public static final double damping = 0.5;
+    public static final double damping = 0.92;
 
     private static final TrackedData<Integer> OWNER_ID = DataTracker.registerData(
             GrappleHookEntity.class, TrackedDataHandlerRegistry.INTEGER
@@ -66,6 +66,7 @@ public class GrappleHookEntity extends Entity implements Ownable {
             if (owner instanceof ServerPlayerEntity serverPlayer) {
                 Vec3d direction = this.getPos().subtract(owner.getPos()).normalize();
                 Vec3d velocity = owner.getVelocity();
+                Vec3d playerdirection = serverPlayer.getRotationVector().normalize();
 
                 double distanceSq = this.getPos().squaredDistanceTo(owner.getPos());
                 double pullSpeed = this.speed;
@@ -74,10 +75,13 @@ public class GrappleHookEntity extends Entity implements Ownable {
 
                 // TODO: Constants, Damping and pull speed
 
+                double pull_factor = 0.3;
+                double look_assist = 0.2;
+
                 serverPlayer.setVelocity(
-                        velocity.x * damping + direction.x * 0.5 * pullSpeed,
-                        velocity.y * damping + direction.y * 0.5 * pullSpeed,
-                        velocity.z * damping + direction.z * 0.5 * pullSpeed
+                        velocity.x * damping + direction.x * pull_factor * pullSpeed + look_assist * playerdirection.x,
+                        velocity.y * damping + direction.y * pull_factor * pullSpeed + look_assist * playerdirection.y,
+                        velocity.z * damping + direction.z * pull_factor * pullSpeed + look_assist * playerdirection.z
                 );
 
                 serverPlayer.velocityDirty = true;
