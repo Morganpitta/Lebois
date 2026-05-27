@@ -2,5 +2,6 @@
   "replace": true,
   "origins": [
     "lesbos:test"
-  ]
+  ],
+  "loading_priority": 1
 }
