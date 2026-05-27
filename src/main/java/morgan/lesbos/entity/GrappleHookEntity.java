@@ -19,8 +19,12 @@ public class GrappleHookEntity extends Entity implements Ownable {
     @Nullable
     private PlayerEntity owner;
     public double minDistance;
-    public double speed;
-    public static final double damping = 0.92;
+    public double lookAssist;
+    public double pullSpeed;
+    public double damping;
+
+    public static final double pullFactorModifier = 0.3; // Default 0.5
+    public static final double lookAssistModifier = 0.2; // Default 0
 
     private static final TrackedData<Integer> OWNER_ID = DataTracker.registerData(
             GrappleHookEntity.class, TrackedDataHandlerRegistry.INTEGER
@@ -30,12 +34,14 @@ public class GrappleHookEntity extends Entity implements Ownable {
         super(type, world);
     }
 
-    public GrappleHookEntity(World world, @Nullable PlayerEntity owner, Vec3d position, double minDistance, double speed) {
+    public GrappleHookEntity(World world, @Nullable PlayerEntity owner, Vec3d position, double minDistance, double pullSpeed, double lookAssist, double damping) {
         super(LesbosEntities.GRAPPLE_HOOK, world);
         this.setOwner(owner);
         this.setPosition(position);
         this.minDistance = minDistance;
-        this.speed = speed;
+        this.lookAssist = lookAssist;
+        this.pullSpeed = pullSpeed;
+        this.damping = damping;
     }
 
     @Override
@@ -65,23 +71,18 @@ public class GrappleHookEntity extends Entity implements Ownable {
 
             if (owner instanceof ServerPlayerEntity serverPlayer) {
                 Vec3d direction = this.getPos().subtract(owner.getPos()).normalize();
+                Vec3d playerDirection = serverPlayer.getRotationVector().normalize();
                 Vec3d velocity = owner.getVelocity();
-                Vec3d playerdirection = serverPlayer.getRotationVector().normalize();
 
                 double distanceSq = this.getPos().squaredDistanceTo(owner.getPos());
-                double pullSpeed = this.speed;
+                double pullSpeed = this.pullSpeed;
 
                 if ( distanceSq  < (minDistance * minDistance) ) pullSpeed *= (distanceSq/(minDistance*minDistance));
 
-                // TODO: Constants, Damping and pull speed
-
-                double pull_factor = 0.3;
-                double look_assist = 0.2;
-
                 serverPlayer.setVelocity(
-                        velocity.x * damping + direction.x * pull_factor * pullSpeed + look_assist * playerdirection.x,
-                        velocity.y * damping + direction.y * pull_factor * pullSpeed + look_assist * playerdirection.y,
-                        velocity.z * damping + direction.z * pull_factor * pullSpeed + look_assist * playerdirection.z
+                        velocity.x * (1-Math.clamp(this.damping, 0, 1)) + direction.x * pullFactorModifier * pullSpeed + playerDirection.x * lookAssistModifier * this.lookAssist,
+                        velocity.y * (1-Math.clamp(this.damping, 0, 1)) + direction.y * pullFactorModifier * pullSpeed + playerDirection.y * lookAssistModifier * this.lookAssist,
+                        velocity.z * (1-Math.clamp(this.damping, 0, 1)) + direction.z * pullFactorModifier * pullSpeed + playerDirection.z * lookAssistModifier * this.lookAssist
                 );
 
                 serverPlayer.velocityDirty = true;

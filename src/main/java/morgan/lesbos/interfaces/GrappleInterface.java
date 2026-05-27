@@ -6,6 +6,6 @@ import org.jetbrains.annotations.Nullable;
 public interface GrappleInterface {
     public GrappleHookEntity lesbos$getGrappleHook();
     public void lesbos$setGrappleHook(@Nullable GrappleHookEntity hook);
-    public GrappleHookEntity lesbos$grapple(double maxDistance, double unhookDistance, double speed);
+    public GrappleHookEntity lesbos$grapple(double maxDistance, double minDistance, double pullSpeed, double lookAssist, double damping);
     public boolean lesbos$unGrapple();
 }

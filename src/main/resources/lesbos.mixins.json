@@ -4,8 +4,10 @@
   "package": "morgan.lesbos.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "entity.EntityMixin",
     "entity.LivingEntityMixin",
-    "entity.player.PlayerEntityMixin"
+    "entity.player.PlayerEntityMixin",
+    "power.type.ActiveMixin"
   ],
   "injectors": {
     "defaultRequire": 1

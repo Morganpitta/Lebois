@@ -3,8 +3,9 @@ package morgan.lesbos.components;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
 import org.ladysnake.cca.api.v3.component.Component;
+import org.ladysnake.cca.api.v3.component.sync.AutoSyncedComponent;
 
-public class DoubleJumpComponent implements Component {
+public class DoubleJumpComponent implements AutoSyncedComponent {
     private int doubleJumps = 0;
 
     public int getDoubleJumps() {

@@ -27,7 +27,6 @@ public record DoubleJumpC2SPacket() implements CustomPayload {
             ServerPlayerEntity player = context.player();
             DoubleJumpInterface playerCasted = (DoubleJumpInterface) (Object) player;
 
-            // TODO: No packet validation...
             if (playerCasted.lesbos$getDoubleJumps() > 0) {
                 playerCasted.lesbos$doubleJump();
             }

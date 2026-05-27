@@ -35,7 +35,7 @@ public class GrappleCommand {
     private static int execute(ServerCommandSource source, double maxDistance) throws CommandSyntaxException {
         GrappleInterface player = (GrappleInterface) (Object) source.getPlayerOrThrow();
 
-        GrappleHookEntity hook = player.lesbos$grapple(maxDistance, 2, 1);
+        GrappleHookEntity hook = player.lesbos$grapple(maxDistance, 2, 1, 1, 0.92);
 
         if (hook != null) {
             source.sendFeedback(() -> Text.literal("Grappled!!!!!"), false);

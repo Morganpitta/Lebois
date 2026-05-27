@@ -18,9 +18,6 @@ public class LesbosClient implements ClientModInitializer {
         // TODO: Make LesbosEntityRenderers.java?
         EntityRendererRegistry.register(LesbosEntities.GRAPPLE_HOOK, GrappleHookEntityRenderer::new);
 
-        // TODO: Make LesbosPowerIntegrationClient.java?
-        ClientTickEvents.START_CLIENT_TICK.register(ActionOnKeyReleasePowerType::integrateCallback);
-
         Lesbos.LOGGER.info("Lesbos Client initialised!!!!!");
     }
 }

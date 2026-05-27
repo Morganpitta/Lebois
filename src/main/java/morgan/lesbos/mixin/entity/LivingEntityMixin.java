@@ -38,6 +38,9 @@ public abstract class LivingEntityMixin extends Entity implements DoubleJumpInte
     @Shadow
     private int jumpingCooldown;
 
+    @Shadow
+    public abstract boolean isFallFlying();
+
     @Unique
     private boolean wasJumping = false;
 
@@ -57,13 +60,15 @@ public abstract class LivingEntityMixin extends Entity implements DoubleJumpInte
 
     @Unique
     public void lesbos$setDoubleJumps(int doubleJumps){
-        if ( lesbos$getDoubleJumps() != doubleJumps )
+        if ( lesbos$getDoubleJumps() != doubleJumps ) {
             LesbosComponents.DOUBLE_JUMP.get(this).setDoubleJumps(doubleJumps);
+            LesbosComponents.DOUBLE_JUMP.sync(this);
+        }
     }
 
     @Unique
     public boolean lesbos$canDoubleJump(){
-        return (DoubleJumpPowerType.canDoubleJump((LivingEntity) (Object)this) && lesbos$getDoubleJumps() > 0 && !this.isOnGround());
+        return (DoubleJumpPowerType.canDoubleJump((LivingEntity) (Object)this) && lesbos$getDoubleJumps() > 0 && !this.isOnGround() && !this.isFallFlying());
     }
 
     @Unique
@@ -88,6 +93,8 @@ public abstract class LivingEntityMixin extends Entity implements DoubleJumpInte
             this.setVelocity(this.getVelocity().add(directionNormalised.x * 0.2, 0.0, directionNormalised.z * 0.2));
         }
 
+        this.lesbos$setDoubleJumps(this.lesbos$getDoubleJumps() - 1);
+
         this.velocityDirty = true;
     }
 
@@ -103,16 +110,9 @@ public abstract class LivingEntityMixin extends Entity implements DoubleJumpInte
     public void tickMovementDoubleJump(CallbackInfo ci) {
         if ( !((LivingEntity)(Object)this instanceof PlayerEntity) ) return;
 
-        if (this.isOnGround() && lesbos$getDoubleJumps() < lesbos$getMaxDoubleJumps()) {
-            this.lesbos$setDoubleJumps(lesbos$getMaxDoubleJumps());
-        } else if ((this.isInLava() || this.isTouchingWater()) && lesbos$getDoubleJumps() <= lesbos$getMaxDoubleJumps()) {
-            this.lesbos$setDoubleJumps(lesbos$getMaxDoubleJumps() + 1);
-        }
-
         if (this.jumping && !wasJumping) {
-            if ( lesbos$canDoubleJump() && !(this.isInLava() || this.isTouchingWater()) ) {
+            if ( this.lesbos$canDoubleJump() && !(this.isInLava() || this.isTouchingWater()) ) {
                 this.lesbos$doubleJump();
-                this.lesbos$setDoubleJumps(lesbos$getDoubleJumps() - 1);
                 ClientPlayNetworking.send(new DoubleJumpC2SPacket());
             }
         }

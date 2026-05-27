@@ -64,46 +64,7 @@ public class ActionOnKeyReleasePowerType extends PowerType {
     }
 
     // See Apoli Active interface
-    @Environment(EnvType.CLIENT)
-    public static void integrateCallback(MinecraftClient client) {
 
-        if (client.player == null) {
-            return;
-        }
-
-        List<PowerType> powerTypes = PowerHolderComponent.getOptional(client.player).orElseThrow().getPowerTypes();
-        List<ActionOnKeyReleasePowerType> triggeredPowerTypes = new LinkedList<>();
-
-        for (PowerType powerType : powerTypes) {
-
-            if (!(powerType instanceof ActionOnKeyReleasePowerType keyReleasePowerType)) {
-                continue;
-            }
-
-            KeyBindingReference keyBindingReference = keyReleasePowerType.getKey();
-            TriState keyPressed = keyBindingReference.asKeyBinding()
-                    .map((key)->!key.isPressed() && key.wasPressed())
-                    .map(TriState::of)
-                    .orElse(TriState.DEFAULT);
-
-            if (keyPressed.get() ) {
-                triggeredPowerTypes.add(keyReleasePowerType);
-            }
-
-        }
-
-        List<Identifier> powerTypeIds = triggeredPowerTypes
-                .stream()
-                .peek(powerType -> {if (powerType.isActive()) {powerType.onUse();}})
-                .map(PowerType::getPower)
-                .map(Power::getId)
-                .toList();
-
-        if (!powerTypeIds.isEmpty()) {
-            ClientPlayNetworking.send(new UseKeyReleasePowerTypesC2SPacket(powerTypeIds));
-        }
-
-    }
 
     public void onUse() {
         entityAction.execute(getHolder());

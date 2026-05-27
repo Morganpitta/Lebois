@@ -2,6 +2,7 @@ package morgan.lesbos.mixin.entity.player;
 
 import morgan.lesbos.Lesbos;
 import morgan.lesbos.entity.GrappleHookEntity;
+import morgan.lesbos.interfaces.DoubleJumpInterface;
 import morgan.lesbos.interfaces.GrappleInterface;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -37,7 +38,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements GrappleI
 
     @Unique
     @Nullable
-    public GrappleHookEntity lesbos$grapple(double maxDistance, double minDistance, double speed) {
+    public GrappleHookEntity lesbos$grapple(double maxDistance, double minDistance, double pullSpeed, double lookAssist, double damping) {
         if (this.grappleHook != null) {
             this.grappleHook.discard();
             this.grappleHook = null;
@@ -55,9 +56,12 @@ public abstract class PlayerEntityMixin extends LivingEntity implements GrappleI
 
         if (hit.getType() == HitResult.Type.MISS) return null;
 
-        GrappleHookEntity hook = new GrappleHookEntity(this.getWorld(), (PlayerEntity) (Object) this, hit.getPos(), 2, 1);
+        GrappleHookEntity hook = new GrappleHookEntity(this.getWorld(), (PlayerEntity) (Object) this, hit.getPos(), minDistance, pullSpeed, lookAssist, damping);
         this.getWorld().spawnEntity(hook);
         this.grappleHook = hook;
+
+        DoubleJumpInterface doubleJumps = (DoubleJumpInterface) (Object) this;
+        doubleJumps.lesbos$setDoubleJumps(doubleJumps.lesbos$getMaxDoubleJumps());
 
         return hook;
     }
