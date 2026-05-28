@@ -1,16 +1,22 @@
 package morgan.lesbos.mixin.entity;
 
 import morgan.lesbos.interfaces.DoubleJumpInterface;
+import morgan.lesbos.interfaces.PossessionInterface;
+import morgan.lesbos.interfaces.PossessorInterface;
 import morgan.lesbos.powers.DragModifierPowerType;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(Entity.class)
 public abstract class EntityMixin {
@@ -22,6 +28,9 @@ public abstract class EntityMixin {
 
     @Shadow
     public abstract boolean isInLava();
+
+    @Shadow
+    public abstract World getWorld();
 
     @Inject(method = "onLanding", at = @At("HEAD"))
     public void onLandingResetDoubleJumps(CallbackInfo ci) {
@@ -46,5 +55,25 @@ public abstract class EntityMixin {
         if (!(entity instanceof LivingEntity)) return this.isOnGround();
 
         return this.isOnGround() || DragModifierPowerType.hasSlideMode((LivingEntity) entity);
+    }
+
+    @Inject(method = "isLogicalSideForUpdatingMovement", at = @At("HEAD"), cancellable = true)
+    public void lesbos$isLogicalSideForUpdatingMovement(CallbackInfoReturnable<Boolean> cir) {
+        if ((Entity) (Object) this instanceof MobEntity mobEntity) {
+            if ( ((PossessorInterface) mobEntity).lesbos$getPossessor() != null )
+                cir.setReturnValue(true);
+        }
+    }
+
+    @Inject(method = "collidesWith", at = @At("HEAD"), cancellable = true)
+    public void collidesWithPossession(Entity other, CallbackInfoReturnable<Boolean> cir) {
+        if ( (Object) this instanceof PlayerEntity playerEntity ) {
+            if (((PossessionInterface) playerEntity).lesbos$getPossessedEntity() == other)
+                cir.setReturnValue(false);
+        }
+        else if ( (Object) this instanceof MobEntity mobEntity ) {
+            if (((PossessorInterface) mobEntity).lesbos$getPossessor() == other)
+                cir.setReturnValue(false);
+        }
     }
 }

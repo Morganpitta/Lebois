@@ -30,7 +30,8 @@
   },
   "custom": {
     "cardinal-components": [
-      "lesbos:double_jumps"
+      "lesbos:double_jumps",
+      "lesbos:possession"
     ]
   }
 }

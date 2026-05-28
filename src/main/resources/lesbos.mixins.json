@@ -5,11 +5,18 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "entity.EntityMixin",
+    "entity.LivingEntityDoubleJumpMixin",
     "entity.LivingEntityMixin",
-    "entity.player.PlayerEntityMixin",
+    "entity.mob.MobEntityMixin",
+    "entity.player.PlayerEntityGrappleMixin",
+    "entity.player.PlayerEntityPossessionMixin",
     "power.type.ActiveMixin"
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "client": [
+    "client.network.ClientPlayerEntityMixin",
+    "client.world.ClientWorldAccessor"
+  ]
 }

@@ -3,6 +3,7 @@ package morgan.lesbos.mixin.entity.player;
 import morgan.lesbos.entity.GrappleHookEntity;
 import morgan.lesbos.interfaces.DoubleJumpInterface;
 import morgan.lesbos.interfaces.GrappleInterface;
+import morgan.lesbos.interfaces.PossessionInterface;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -17,12 +18,12 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 @Mixin(PlayerEntity.class)
-public abstract class PlayerEntityMixin extends LivingEntity implements GrappleInterface {
+public abstract class PlayerEntityGrappleMixin extends LivingEntity implements GrappleInterface {
     @Unique
     @Nullable
     GrappleHookEntity grappleHook;
 
-    protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
+    protected PlayerEntityGrappleMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
 
