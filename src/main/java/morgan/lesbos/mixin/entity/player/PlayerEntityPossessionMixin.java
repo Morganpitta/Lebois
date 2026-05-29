@@ -75,18 +75,6 @@ public abstract class PlayerEntityPossessionMixin extends LivingEntity implement
         if (((PossessorInterface) entity).lesbos$getPossessor() != (PlayerEntity) (Object) this) {
             ((PossessorInterface) entity).lesbos$setPossessor((PlayerEntity) (Object) this);
         }
-
-        this.teleport(entity.getPos().x, entity.getPos().y, entity.getPos().z, false);
-
-        entity.setYaw(this.getYaw());
-        entity.setPitch(this.getPitch());
-        entity.setHeadYaw(this.getHeadYaw());
-
-        entity.sidewaysSpeed = this.sidewaysSpeed;
-        entity.forwardSpeed = this.forwardSpeed;
-
-        entity.setJumping(this.jumping);
-        entity.setSneaking(this.isSneaking());
     }
 
 

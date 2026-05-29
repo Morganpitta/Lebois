@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "entity.EntityMixin",
+    "entity.LivingEntityAccessor",
     "entity.LivingEntityDoubleJumpMixin",
     "entity.LivingEntityMixin",
     "entity.mob.MobEntityMixin",

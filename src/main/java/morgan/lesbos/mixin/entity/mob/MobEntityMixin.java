@@ -1,9 +1,7 @@
 package morgan.lesbos.mixin.entity.mob;
 
-import morgan.lesbos.interfaces.GrappleInterface;
 import morgan.lesbos.interfaces.PossessionInterface;
 import morgan.lesbos.interfaces.PossessorInterface;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.data.DataTracker;
