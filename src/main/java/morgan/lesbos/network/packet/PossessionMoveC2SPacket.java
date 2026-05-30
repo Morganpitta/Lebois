@@ -27,7 +27,7 @@ public record PossessionMoveC2SPacket(double x, double y, double z, float yaw, f
             PossessionMoveC2SPacket::new
     );
 
-    public PossessionMoveC2SPacket(PlayerEntity entity) {
+    public PossessionMoveC2SPacket(MobEntity entity) {
         this(entity.getX(), entity.getY(), entity.getZ(), entity.getYaw(), entity.getPitch());
     }
 
@@ -43,6 +43,7 @@ public record PossessionMoveC2SPacket(double x, double y, double z, float yaw, f
             ServerPlayerEntity player = context.player();
 
             MobEntity entity = ((PossessionInterface) (Object) player).lesbos$getPossessedEntity();
+
             if (entity == null) return;
 
             entity.move(MovementType.PLAYER, new Vec3d(payload.x, payload.y, payload.z).subtract(entity.getPos()));

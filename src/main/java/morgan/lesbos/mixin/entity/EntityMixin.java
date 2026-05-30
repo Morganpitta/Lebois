@@ -1,5 +1,6 @@
 package morgan.lesbos.mixin.entity;
 
+import morgan.lesbos.Lesbos;
 import morgan.lesbos.interfaces.DoubleJumpInterface;
 import morgan.lesbos.interfaces.PossessionInterface;
 import morgan.lesbos.interfaces.PossessorInterface;
@@ -60,20 +61,21 @@ public abstract class EntityMixin {
     @Inject(method = "isLogicalSideForUpdatingMovement", at = @At("HEAD"), cancellable = true)
     public void lesbos$isLogicalSideForUpdatingMovement(CallbackInfoReturnable<Boolean> cir) {
         if ((Entity) (Object) this instanceof MobEntity mobEntity) {
-            if ( ((PossessorInterface) mobEntity).lesbos$getPossessor() != null )
+            if (((PossessorInterface) mobEntity).lesbos$getPossessor() != null) {
                 cir.setReturnValue(true);
+            }
         }
     }
 
-    @Inject(method = "collidesWith", at = @At("HEAD"), cancellable = true)
-    public void collidesWithPossession(Entity other, CallbackInfoReturnable<Boolean> cir) {
+    @Inject(method = "isConnectedThroughVehicle", at = @At("HEAD"), cancellable = true)
+    public void isConnectedThroughVehiclePossession(Entity other, CallbackInfoReturnable<Boolean> cir) {
         if ( (Object) this instanceof PlayerEntity playerEntity ) {
             if (((PossessionInterface) playerEntity).lesbos$getPossessedEntity() == other)
-                cir.setReturnValue(false);
+                cir.setReturnValue(true);
         }
         else if ( (Object) this instanceof MobEntity mobEntity ) {
             if (((PossessorInterface) mobEntity).lesbos$getPossessor() == other)
-                cir.setReturnValue(false);
+                cir.setReturnValue(true);
         }
     }
 }

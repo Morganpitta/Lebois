@@ -1,5 +1,6 @@
 package morgan.lesbos.mixin.entity.mob;
 
+import morgan.lesbos.Lesbos;
 import morgan.lesbos.interfaces.PossessionInterface;
 import morgan.lesbos.interfaces.PossessorInterface;
 import net.minecraft.entity.EntityType;
@@ -52,7 +53,9 @@ public abstract class MobEntityMixin extends LivingEntity implements PossessorIn
         if (POSSESSOR_ID.equals(data)) {
             int id = this.dataTracker.get(POSSESSOR_ID);
             this.possessor = id != -1 ? (PlayerEntity) this.getWorld().getEntityById(id) : null;
-            if ( this.possessor != null && ((PossessionInterface) this.possessor).lesbos$getPossessedEntity() != (MobEntity) (Object) this) this.possessor = null;
+            if ( this.possessor != null && ((PossessionInterface) this.possessor).lesbos$getPossessedEntity() != (MobEntity) (Object) this) {
+                this.possessor = null;
+            }
         }
         super.onTrackedDataSet(data);
     }

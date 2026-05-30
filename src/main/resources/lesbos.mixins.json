@@ -11,7 +11,8 @@
     "entity.mob.MobEntityMixin",
     "entity.player.PlayerEntityGrappleMixin",
     "entity.player.PlayerEntityPossessionMixin",
-    "power.type.ActiveMixin"
+    "power.type.ActiveMixin",
+    "server.network.EntityTrackerEntryMixin"
   ],
   "injectors": {
     "defaultRequire": 1

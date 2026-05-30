@@ -50,11 +50,9 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
             this.networkHandler.sendPacket(new PlayerInputC2SPacket(this.sidewaysSpeed, this.forwardSpeed, this.input.jumping, this.input.sneaking));
             this.sendSprintingPacket();
 
-            ClientPlayNetworking.send(new PossessionMoveC2SPacket(this));
-
             MobEntity entity = ((PossessionInterface) this).lesbos$getPossessedEntity();
             if (entity != null) {
-                this.updatePositionAndAngles(entity.getX(), entity.getY(), entity.getZ(), entity.getYaw(), entity.getPitch());
+                this.setPos(entity.getX(), entity.getY(), entity.getZ());
             }
         }
     }

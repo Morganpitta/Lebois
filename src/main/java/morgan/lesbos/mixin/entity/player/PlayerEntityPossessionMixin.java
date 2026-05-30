@@ -39,6 +39,7 @@ public abstract class PlayerEntityPossessionMixin extends LivingEntity implement
             this.lesbos$unPossess();
 
         this.lesbos$setPossessedEntity(entity);
+        ((PossessorInterface) entity).lesbos$setPossessor((PlayerEntity) (Object) this);
 
         if (entity instanceof MobEntity mobEntity) {
             mobEntity.setAiDisabled(true);
@@ -49,10 +50,12 @@ public abstract class PlayerEntityPossessionMixin extends LivingEntity implement
     }
 
     public void lesbos$unPossess() {
-        Entity entity = this.lesbos$getPossessedEntity();
+        MobEntity entity = this.lesbos$getPossessedEntity();
 
-        if (entity instanceof MobEntity mobEntity) {
-            mobEntity.setAiDisabled(false);
+        if (entity != null ) {
+            entity.setAiDisabled(false);
+
+            ((PossessorInterface) entity).lesbos$setPossessor(null);
         }
 
         this.setInvisible(false);
