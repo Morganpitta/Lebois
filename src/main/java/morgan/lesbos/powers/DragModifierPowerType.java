@@ -14,26 +14,36 @@ import java.util.Optional;
 
 public class DragModifierPowerType extends PowerType {
     private final float airDrag;
+    private final float friction;
     private final boolean slideMode;
+    private final boolean ignoreBlockFriction;
 
     public static final TypedDataObjectFactory<DragModifierPowerType> DATA_FACTORY = PowerType.createConditionedDataFactory(
             new SerializableData()
                     .add("air_drag", SerializableDataTypes.FLOAT, 0.91F)
-                    .add("slide_mode", SerializableDataTypes.BOOLEAN, false),
+                    .add("friction", SerializableDataTypes.FLOAT, 0.91F)
+                    .add("slide_mode", SerializableDataTypes.BOOLEAN, false)
+                    .add("ignore_block_friction", SerializableDataTypes.BOOLEAN, false),
             (data, condition) -> new DragModifierPowerType(
                     data.get("air_drag"),
+                    data.get("friction"),
                     data.get("slide_mode"),
+                    data.get("ignore_block_friction"),
                     condition
             ),
             (powerType, serializableData) -> serializableData.instance()
                     .set("air_drag", powerType.airDrag)
+                    .set("friction", powerType.friction)
                     .set("slide_mode", powerType.slideMode)
+                    .set("ignore_block_friction", powerType.ignoreBlockFriction)
     );
 
-    public DragModifierPowerType(float airDrag, boolean slideMode, Optional<EntityCondition> condition) {
+    public DragModifierPowerType(float airDrag, float friction, boolean slideMode, boolean ignoreBlockFriction, Optional<EntityCondition> condition) {
         super(condition);
         this.airDrag = Math.clamp(airDrag, 0, 1);
+        this.friction = Math.clamp(friction, 0, 1);
         this.slideMode = slideMode;
+        this.ignoreBlockFriction = ignoreBlockFriction;
     }
 
     @Override
@@ -45,8 +55,16 @@ public class DragModifierPowerType extends PowerType {
         return this.airDrag;
     }
 
+    public float getFriction() {
+        return this.friction;
+    }
+
     public boolean getSlideMode() {
         return this.slideMode;
+    }
+
+    public boolean shouldIgnoreBlockFriction() {
+        return this.ignoreBlockFriction;
     }
 
     public static float getAirDrag(LivingEntity entity) {
@@ -60,6 +78,17 @@ public class DragModifierPowerType extends PowerType {
                 .orElse(0.91);
     }
 
+    public static float getFriction(LivingEntity entity) {
+        PowerHolderComponent component = PowerHolderComponent.getNullable(entity);
+
+        if (component == null) return 0.91F;
+
+        return (float) component.getPowers(true).stream()
+                .filter(power -> power.getType() instanceof DragModifierPowerType)
+                .mapToDouble(power -> ((DragModifierPowerType) power.getType()).getFriction()).max()
+                .orElse(0.91);
+    }
+
     public static boolean hasSlideMode(LivingEntity entity) {
         PowerHolderComponent component = PowerHolderComponent.getNullable(entity);
 
@@ -68,5 +97,15 @@ public class DragModifierPowerType extends PowerType {
         return component.getPowers(true).stream()
                 .filter(power -> power.getType() instanceof DragModifierPowerType)
                 .anyMatch(power -> ((DragModifierPowerType) power.getType()).getSlideMode());
+    }
+
+    public static boolean shouldIgnoreBlockFriction(LivingEntity entity) {
+        PowerHolderComponent component = PowerHolderComponent.getNullable(entity);
+
+        if (component == null) return false;
+
+        return component.getPowers(true).stream()
+                .filter(power -> power.getType() instanceof DragModifierPowerType)
+                .anyMatch(power -> ((DragModifierPowerType) power.getType()).shouldIgnoreBlockFriction());
     }
 }

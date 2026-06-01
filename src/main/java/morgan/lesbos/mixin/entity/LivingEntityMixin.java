@@ -1,9 +1,9 @@
 package morgan.lesbos.mixin.entity;
 
-import morgan.lesbos.Lesbos;
 import morgan.lesbos.interfaces.PossessionInterface;
 import morgan.lesbos.interfaces.PossessorInterface;
 import morgan.lesbos.powers.DragModifierPowerType;
+import net.minecraft.block.Block;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.*;
 import net.minecraft.entity.attribute.EntityAttribute;
@@ -15,10 +15,7 @@ import net.minecraft.world.World;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -40,9 +37,27 @@ public abstract class LivingEntityMixin extends Entity {
         super(type, world);
     }
 
+    @Redirect(method = "travel", at= @At(value = "INVOKE", target = "Lnet/minecraft/block/Block;getSlipperiness()F"))
+    public float travelIgnoreBlockFriction(Block instance) {
+        boolean ignoreBlockFriction = DragModifierPowerType.shouldIgnoreBlockFriction((LivingEntity) (Object) this);
+
+        if (ignoreBlockFriction)
+            return 1;
+
+        return instance.getSlipperiness();
+    }
+
     @ModifyConstant(
             method = "travel",
-            constant = @Constant(floatValue = 0.91F)
+            constant = @Constant(floatValue = 0.91F, ordinal = 0)
+    )
+    public float travelModifyFriction(float constant) {
+        return DragModifierPowerType.getAirDrag((LivingEntity) (Object) this);
+    }
+
+    @ModifyConstant(
+            method = "travel",
+            constant = @Constant(floatValue = 0.91F, ordinal = 1)
     )
     public float travelModifyAirDrag(float constant) {
         return DragModifierPowerType.getAirDrag((LivingEntity) (Object) this);
