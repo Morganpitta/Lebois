@@ -86,4 +86,17 @@ public abstract class EntityMixin {
             }
         }
     }
+
+    @Inject(
+            method = "shouldRender(D)Z",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private void shouldRenderDisablePossessionRender(double distance, CallbackInfoReturnable<Boolean> cir) {
+        if ((Entity) (Object) this instanceof PlayerEntity player) {
+            if (((PossessionInterface) player).lesbos$isPossessing()) {
+                cir.setReturnValue(false);
+            }
+        }
+    }
 }

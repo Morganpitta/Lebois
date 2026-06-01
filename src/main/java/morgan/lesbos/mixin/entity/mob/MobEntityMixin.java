@@ -3,6 +3,7 @@ package morgan.lesbos.mixin.entity.mob;
 import morgan.lesbos.interfaces.PossessionInterface;
 import morgan.lesbos.interfaces.PossessorInterface;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.ai.goal.GoalSelector;
 import net.minecraft.entity.ai.goal.PrioritizedGoal;
@@ -12,6 +13,8 @@ import net.minecraft.entity.data.TrackedData;
 import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.collection.DefaultedList;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
@@ -23,6 +26,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(MobEntity.class)
 public abstract class MobEntityMixin extends LivingEntity implements PossessorInterface {
@@ -40,6 +44,14 @@ public abstract class MobEntityMixin extends LivingEntity implements PossessorIn
     @Shadow
     public abstract EntityNavigation getNavigation();
 
+    @Shadow
+    private ItemStack bodyArmor;
+    @Shadow
+    @Final
+    private DefaultedList<ItemStack> handItems;
+    @Shadow
+    @Final
+    private DefaultedList<ItemStack> armorItems;
     @Unique
     private static final TrackedData<Integer> POSSESSOR_ID = DataTracker.registerData(
             MobEntity.class, TrackedDataHandlerRegistry.INTEGER
@@ -95,11 +107,22 @@ public abstract class MobEntityMixin extends LivingEntity implements PossessorIn
     @Unique
     private GoalSelector emptyGoalSelector = null;
 
+    @Inject(
+            method = "setTarget",
+            at = @At("HEAD"),
+            cancellable = true
+    )
+    private void possessedCancelSetTarget(LivingEntity target, CallbackInfo ci) {
+        if (this.lesbos$getPossessor() != null) {
+            ci.cancel();
+        }
+    }
+
     @Redirect(
             method = "tickNewAi",
             at = @At(value = "FIELD", target = "Lnet/minecraft/entity/mob/MobEntity;targetSelector:Lnet/minecraft/entity/ai/goal/GoalSelector;", opcode = Opcodes.GETFIELD)
     )
-    private GoalSelector lesbos$redirectTargetSelector(MobEntity instance) {
+    private GoalSelector redirectTargetSelector(MobEntity instance) {
         if (this.lesbos$getPossessor() != null) {
             if (this.emptyGoalSelector == null) {
                 this.emptyGoalSelector = new GoalSelector(instance.getWorld().getProfilerSupplier());
@@ -110,5 +133,18 @@ public abstract class MobEntityMixin extends LivingEntity implements PossessorIn
 
         // Target selector is protected and MobEntityMixin isn't a subclass and thus cant access, so I had to do this :(
         return ((MobEntityAccessor) instance).lesbos$getTargetSelector();
+    }
+
+    @Inject(method = "getEquippedStack", at=@At("HEAD"), cancellable = true)
+    public void redirectEquippedArmor(EquipmentSlot slot, CallbackInfoReturnable<ItemStack> cir) {
+        PlayerEntity player = this.lesbos$getPossessor();
+        if (player != null) {
+            if (slot.getType() == EquipmentSlot.Type.ANIMAL_ARMOR) {
+                cir.setReturnValue(this.bodyArmor);
+            }
+            else {
+                cir.setReturnValue(player.getEquippedStack(slot));
+            }
+        }
     }
 }
