@@ -28,8 +28,8 @@ public class GrappleEntityActionType extends EntityActionType {
             data -> new GrappleEntityActionType(
                     data.get("max_distance"),
                     data.get("min_distance"),
-                    data.get("look_assist"),
                     data.get("pull_speed"),
+                    data.get("look_assist"),
                     data.get("damping")
             ),
             (actionType, serializableData) -> serializableData.instance()

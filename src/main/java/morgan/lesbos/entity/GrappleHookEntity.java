@@ -78,18 +78,24 @@ public class GrappleHookEntity extends Entity implements Ownable {
 
                 double distanceSq = this.getPos().squaredDistanceTo(owner.getPos());
                 double pullSpeed = this.pullSpeed;
+                double lookAssist = this.lookAssist;
 
-                if ( distanceSq  < (minDistance * minDistance) ) pullSpeed *= (distanceSq/(minDistance*minDistance));
+                if ( distanceSq  < (minDistance * minDistance) ) {
+                    pullSpeed *= (distanceSq/(minDistance*minDistance));
+                    lookAssist = 0;
+                }
 
-                Vec3d inputDirection = new Vec3d(Math.max(0, owner.forwardSpeed), 0, owner.horizontalSpeed).normalize();
+                // Tried to make inputs change direction but i'd need to rework how the grapple works to make it client side
 
-                float yaw = (float) Math.atan2(playerDirection.z, playerDirection.x);
-                float pitch = (float) Math.atan2(playerDirection.y, Math.sqrt(playerDirection.x * playerDirection.x + playerDirection.z * playerDirection.z));
+//                Vec3d inputDirection = new Vec3d(owner.forwardSpeed, 0, owner.horizontalSpeed).normalize();
+//
+//                float yaw = (float) Math.atan2(playerDirection.z, playerDirection.x);
+//                float pitch = (float) Math.atan2(playerDirection.y, Math.sqrt(playerDirection.x * playerDirection.x + playerDirection.z * playerDirection.z));
 
                 serverPlayer.setVelocity(
                         velocity.multiply(1-Math.clamp(this.damping, 0, 1))
                             .add(direction.multiply(pullFactorModifier * pullSpeed))
-                            .add(inputDirection.rotateY(-yaw).rotateX(-pitch).multiply(lookAssistModifier * this.lookAssist))
+                            .add(playerDirection.multiply(lookAssistModifier * lookAssist))
                 );
 
                 serverPlayer.velocityDirty = true;
