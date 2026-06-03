@@ -20,6 +20,7 @@ public class PossessionComponent implements AutoSyncedComponent {
 
     @Nullable
     private UUID possessedEntityUuid;
+    private MobEntity possessedEntity;
 
     public PossessionComponent(PlayerEntity playerEntity) {
         this.playerEntity = playerEntity;
@@ -53,13 +54,20 @@ public class PossessionComponent implements AutoSyncedComponent {
 
     @Nullable
     public MobEntity getPossessedEntity() {
-        return findEntityByUuid(this.playerEntity.getWorld(), this.possessedEntityUuid);
+        MobEntity entity = findEntityByUuid(this.playerEntity.getWorld(), this.possessedEntityUuid);
+
+        if (entity != null && this.possessedEntity != entity) {
+            this.possessedEntity = entity;
+        }
+
+        return this.possessedEntity;
     }
 
     public void setPossessedEntity(@Nullable MobEntity entity) {
         UUID uuid = entity == null ? null : entity.getUuid();
         if ( this.possessedEntityUuid != uuid ) {
             this.possessedEntityUuid = uuid;
+            this.possessedEntity = entity;
             LesbosEntityComponents.POSSESSION.sync(this.playerEntity);
         }
     }
@@ -68,9 +76,11 @@ public class PossessionComponent implements AutoSyncedComponent {
     public void readFromNbt(NbtCompound tag, RegistryWrapper.WrapperLookup registryLookup) {
         if (tag.containsUuid("lesbos:possession")) {
             this.possessedEntityUuid = tag.getUuid("lesbos:possession");
+            this.possessedEntity = findEntityByUuid(this.playerEntity.getWorld(), this.possessedEntityUuid);
         }
         else {
             this.possessedEntityUuid = null;
+            this.possessedEntity = null;
         }
     }
 

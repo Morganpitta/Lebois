@@ -74,9 +74,7 @@ public abstract class EntityMixin {
     )
     private void shouldRenderDisablePossessionRender(double distance, CallbackInfoReturnable<Boolean> cir) {
         if ((Entity) (Object) this instanceof PlayerEntity player) {
-            MobEntity entity = ((PossessionInterface) player).lesbos$getPossessedEntity();
-
-            if (entity != null) {
+            if (((PossessionInterface) player).lesbos$isPossessing()) {
                 cir.setReturnValue(false);
             }
         }

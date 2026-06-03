@@ -34,7 +34,7 @@ public class PossessCommand {
         );
 
         if ( entity != null && ((PossessionInterface) player).lesbos$possess(entity) )
-            source.sendFeedback(()->Text.literal("Possessed " + entity.getType() + "!"), false);
+            source.sendFeedback(()->Text.literal("Possessed ").append(Text.translatable(entity.getType().getTranslationKey())), false);
         else
             source.sendFeedback(()->Text.literal("Couldn't possess!"), false);
 

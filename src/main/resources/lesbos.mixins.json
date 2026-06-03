@@ -16,6 +16,7 @@
     "possession.entity.LivingEntityMixin",
     "possession.entity.mob.MobEntityMixin",
     "possession.entity.player.PlayerEntityMixin",
+    "possession.server.PlayerManagerMixin",
     "possession.server.network.ServerPlayerEntityMixin"
   ],
   "injectors": {

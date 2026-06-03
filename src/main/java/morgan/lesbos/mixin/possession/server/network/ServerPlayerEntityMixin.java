@@ -4,12 +4,15 @@ import com.mojang.authlib.GameProfile;
 import morgan.lesbos.Lesbos;
 import morgan.lesbos.interfaces.PossessionInterface;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ChunkTicketType;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
@@ -93,6 +96,24 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
             if (newEntity != entity) {
                 ((PossessionInterface) this).lesbos$setPossessedEntity((MobEntity) newEntity);
             }
+        }
+    }
+
+
+    @Inject(method = "writeCustomDataToNbt", at = @At("HEAD"))
+    public void writePossessedEntityNbt(NbtCompound nbt, CallbackInfo ci) {
+        MobEntity entity = ((PossessionInterface) this).lesbos$getPossessedEntity();
+        if (entity != null) {
+            NbtCompound entityNbt = new NbtCompound();
+
+            Identifier identifier = EntityType.getId(entity.getType());
+
+            if (identifier == null) return;
+
+            entityNbt.putString("id", identifier.toString());
+            entity.writeNbt(entityNbt);
+
+            nbt.put("lesbos:possessed_entity",entityNbt);
         }
     }
 }

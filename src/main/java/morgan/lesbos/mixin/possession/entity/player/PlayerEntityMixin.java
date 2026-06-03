@@ -106,11 +106,11 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Possessi
     public void tick(CallbackInfo ci) {
         MobEntity entity = this.lesbos$getPossessedEntity();
 
-        if (entity == null) {
+        if (entity == null || entity.isRemoved()) {
             return;
         }
 
-        if (entity.isDead() || entity.isRemoved()) {
+        if (entity.isDead()) {
             this.lesbos$unPossess();
             return;
         }
@@ -129,5 +129,4 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Possessi
             this.calculateDimensions();
         }
     }
-    // Health, hasStatusEffect, attributes
 }
