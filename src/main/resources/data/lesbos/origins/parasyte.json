@@ -3,7 +3,8 @@
     "lesbos:parasyte/possession",
     "lesbos:parasyte/possession_overlay",
     "lesbos:parasyte/possession_possess",
-    "lesbos:parasyte/creeper"
+    "lesbos:parasyte/creeper",
+    "lesbos:parasyte/disable_hunger"
   ],
   "icon": {
     "id": "minecraft:ender_eye"

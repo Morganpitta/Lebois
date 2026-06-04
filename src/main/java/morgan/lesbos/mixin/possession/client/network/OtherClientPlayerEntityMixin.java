@@ -1,7 +1,9 @@
 package morgan.lesbos.mixin.possession.client.network;
 
+import morgan.lesbos.Lesbos;
 import morgan.lesbos.interfaces.PossessionInterface;
 import net.minecraft.client.network.OtherClientPlayerEntity;
+import net.minecraft.util.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

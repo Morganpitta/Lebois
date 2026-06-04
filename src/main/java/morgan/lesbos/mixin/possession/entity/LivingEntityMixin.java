@@ -64,6 +64,9 @@ public abstract class LivingEntityMixin extends Entity {
 
             this.lastHandSwingProgress = player.lastHandSwingProgress;
             this.handSwingProgress = player.handSwingProgress;
+
+            player.setOnFire(this.isOnFire());
+            player.setAir(this.getAir());
         }
     }
 

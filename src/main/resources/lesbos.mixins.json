@@ -8,6 +8,7 @@
     "common.entity.LivingEntityAccessor",
     "common.entity.LivingEntityMixin",
     "common.entity.mob.MobEntityAccessor",
+    "common.entity.player.HungerManagerMixin",
     "common.power.type.ActiveMixin",
     "double_jump.entity.EntityMixin",
     "double_jump.entity.LivingEntityMixin",
@@ -23,6 +24,7 @@
     "defaultRequire": 1
   },
   "client": [
+    "common.client.gui.hud.InGameHudMixin",
     "common.client.world.ClientWorldAccessor",
     "possession.client.network.OtherClientPlayerEntityMixin",
     "possession.client.render.WorldRendererMixin"

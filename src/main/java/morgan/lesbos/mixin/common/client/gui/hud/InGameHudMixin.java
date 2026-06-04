@@ -1,0 +1,40 @@
+package morgan.lesbos.mixin.common.client.gui.hud;
+
+import morgan.lesbos.Lesbos;
+import morgan.lesbos.powers.DisableHungerPowerType;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.Identifier;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.*;
+
+@Mixin(InGameHud.class)
+public class InGameHudMixin {
+    @Shadow
+    @Final
+    private static Identifier FOOD_EMPTY_TEXTURE;
+    @Shadow
+    @Final
+    private static Identifier FOOD_EMPTY_HUNGER_TEXTURE;
+    @Unique
+    private static final Identifier FOOD_DISABLED_TEXTURE = Lesbos.id("hud/food_disabled");
+
+    @Redirect(
+            method = "renderFood",
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Lnet/minecraft/util/Identifier;IIII)V")
+    )
+    private void disableFood(DrawContext instance, Identifier texture, int x, int y, int width, int height, DrawContext context, PlayerEntity player, int top, int right) {
+        if (DisableHungerPowerType.shouldDisableHunger(player)) {
+//            if (texture == FOOD_EMPTY_TEXTURE || texture == FOOD_EMPTY_HUNGER_TEXTURE)
+//                instance.drawGuiTexture(FOOD_EMPTY_TEXTURE, x, y, width, height);
+            instance.drawGuiTexture(FOOD_DISABLED_TEXTURE, x, y, width, height);
+        }
+        else {
+            instance.drawGuiTexture(texture, x, y, width, height);
+        }
+    }
+}

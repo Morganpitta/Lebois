@@ -98,7 +98,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Possessi
         }
 
         this.lesbos$setPossessedEntity(null);
-
+        this.setHealth(this.getMaxHealth());
         this.calculateDimensions();
 
         if ((PlayerEntity) (Object) this instanceof ServerPlayerEntity serverPlayerEntity) {

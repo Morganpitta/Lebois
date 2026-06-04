@@ -46,9 +46,6 @@ public class ActionOnKeyReleasePowerType extends PowerType {
         return key;
     }
 
-    // See Apoli Active interface
-
-
     public void onUse() {
         entityAction.execute(getHolder());
     }
