@@ -4,7 +4,6 @@ import morgan.lesbos.interfaces.PossessionInterface;
 import morgan.lesbos.interfaces.PossessorInterface;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityPose;
-import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.s2c.play.PositionFlag;
@@ -14,6 +13,7 @@ import net.minecraft.world.TeleportTarget;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -26,33 +26,29 @@ public abstract class EntityMixin {
     @Shadow
     public abstract World getWorld();
 
-    @Shadow
-    public abstract double getX();
+    @Unique
+    private Entity getRootEntity(Entity entity) {
+        if (entity == null) return null;
 
-    @Shadow
-    public abstract double getY();
+        entity = entity.getVehicle() != null ? entity.getRootVehicle() : entity;
 
-    @Shadow
-    public abstract double getZ();
+        if (entity instanceof PossessorInterface possessed) {
+            PlayerEntity possessor = possessed.lesbos$getPossessor();
+            if (possessor != null) {
+                return possessor.getVehicle() != null ? possessor.getRootVehicle() : possessor;
+            }
+        }
 
-    @Shadow
-    public abstract float getYaw();
-
-    @Shadow
-    public abstract float getPitch();
-
-    @Shadow
-    public abstract void setPos(double x, double y, double z);
+        return entity;
+    }
 
     @Inject(method = "isConnectedThroughVehicle", at = @At("HEAD"), cancellable = true)
     public void isConnectedThroughVehiclePossession(Entity other, CallbackInfoReturnable<Boolean> cir) {
-        if ( (Object) this instanceof PlayerEntity playerEntity ) {
-            if (((PossessionInterface) playerEntity).lesbos$getPossessedEntity() == other)
-                cir.setReturnValue(true);
-        }
-        else if ( (Object) this instanceof MobEntity mobEntity ) {
-            if (((PossessorInterface) mobEntity).lesbos$getPossessor() == other)
-                cir.setReturnValue(true);
+        Entity entity1 = getRootEntity((Entity) (Object) this);
+        Entity entity2 = getRootEntity(other);
+
+        if (entity1 != null && entity1 == entity2) {
+            cir.setReturnValue(true);
         }
     }
 
@@ -132,6 +128,17 @@ public abstract class EntityMixin {
 
             if (player != null) {
                 cir.setReturnValue(false);
+            }
+        }
+    }
+
+    @Inject(method = "getPose", at=@At("HEAD"), cancellable = true)
+    public void getPose(CallbackInfoReturnable<EntityPose> cir) {
+        if ((Entity) (Object) this instanceof MobEntity entity) {
+            PlayerEntity player = ((PossessorInterface) entity).lesbos$getPossessor();
+
+            if (player != null) {
+                cir.setReturnValue(player.getPose());
             }
         }
     }

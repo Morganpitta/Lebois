@@ -1,6 +1,5 @@
 package morgan.lesbos.mixin.possession.entity.mob;
 
-import morgan.lesbos.Lesbos;
 import morgan.lesbos.interfaces.PossessionInterface;
 import morgan.lesbos.interfaces.PossessorInterface;
 import morgan.lesbos.mixin.common.entity.mob.MobEntityAccessor;
@@ -49,10 +48,6 @@ public abstract class MobEntityMixin extends LivingEntity implements PossessorIn
     @Shadow
     @Final
     protected GoalSelector goalSelector;
-
-    @Shadow
-    @Nullable
-    public abstract LivingEntity getTarget();
 
     @Shadow
     public abstract void setTarget(@Nullable LivingEntity target);
@@ -150,7 +145,8 @@ public abstract class MobEntityMixin extends LivingEntity implements PossessorIn
     }
 
     @Inject(method = "getEquippedStack", at=@At("HEAD"), cancellable = true)
-    public void redirectEquippedArmor(EquipmentSlot slot, CallbackInfoReturnable<ItemStack> cir) {
+    public void redirectEquippedStack(EquipmentSlot slot, CallbackInfoReturnable<ItemStack> cir) {
+        if (this.dead) return;
         PlayerEntity player = this.lesbos$getPossessor();
         if (player != null) {
             if (slot.getType() == EquipmentSlot.Type.ANIMAL_ARMOR) {

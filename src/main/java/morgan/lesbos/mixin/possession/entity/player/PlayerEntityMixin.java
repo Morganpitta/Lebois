@@ -6,6 +6,7 @@ import morgan.lesbos.interfaces.PossessorInterface;
 import morgan.lesbos.network.packet.PossessionS2CPacket;
 import morgan.lesbos.network.packet.UnPossessionS2CPacket;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.mob.MobEntity;
@@ -28,8 +29,6 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Possessi
         super(entityType, world);
     }
 
-
-
     public boolean lesbos$isPossessing() {
         return LesbosEntityComponents.POSSESSION.get(this).isPossessing();
     }
@@ -47,7 +46,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Possessi
     private static final Set<EntityType<?>> UNPOSSESSABLE_TYPES = Set.of(
             EntityType.ENDER_DRAGON,
             EntityType.WITHER,
-            EntityType.WARDEN
+            EntityType.WARDEN,
+            EntityType.SHULKER
     );
 
     public boolean lesbos$canPossess(MobEntity entity) {
@@ -72,6 +72,11 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Possessi
 
         entity.setNoGravity(true);
         ((PossessorInterface) entity).lesbos$stopTargetSelectorGoals();
+        Entity vehicle = entity.getVehicle();
+        if (vehicle!=null) {
+            entity.dismountVehicle();
+            this.startRiding(vehicle);
+        }
 
         this.calculateDimensions();
 
