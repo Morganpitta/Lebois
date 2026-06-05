@@ -6,12 +6,13 @@
     "lesbos:stryder/grapple",
     "lesbos:stryder/grapple_oc",
     "lesbos:stryder/oc_charge",
-    "lesbos:stryder/attributes",
-    "lesbos:stryder/attributes_oc",
+    "lesbos:stryder/safe_fall",
+    "lesbos:stryder/safe_fall_oc",
     "lesbos:stryder/un_grapple",
     "lesbos:stryder/oc_over_time",
     "lesbos:stryder/oc_toggle",
     "lesbos:stryder/oc_overlay",
+    "lesbos:stryder/step_height_oc",
     "lesbos:stryder/shockwave"
   ],
   "icon": {

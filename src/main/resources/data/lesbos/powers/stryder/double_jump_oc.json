@@ -1,6 +1,6 @@
 {
   "type": "lesbos:double_jump",
-  "double_jumps": 15,
+  "double_jumps": 10,
   "name": "Test",
   "description": "Testign",
   "condition": {
