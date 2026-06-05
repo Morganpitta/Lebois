@@ -75,7 +75,7 @@ public class ShockwaveEntityActionType extends EntityActionType {
 
         for (double j = 2; j < distance*2; j+=2) {
             Vec3d particlePos = player.getPos().add(playerVelocity.multiply(j));
-            player.getServerWorld().spawnParticles(ParticleTypes.EXPLOSION, particlePos.x, particlePos.y, particlePos.z, 0, 0.0, 0.0, 0.0, j/2);
+            Util.spawnParticles(player.getServerWorld(), ParticleTypes.EXPLOSION, particlePos.x, particlePos.y, particlePos.z, (int) (j*j), j/2, j/2, j/2, 0.0, true);
         }
 
         player.getServerWorld().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_WARDEN_SONIC_BOOM, SoundCategory.PLAYERS, 3.0F, 1.0F);
