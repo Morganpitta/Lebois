@@ -1,0 +1,10 @@
+{
+  "type": "lesbos:double_jump",
+  "double_jumps": 15,
+  "name": "Test",
+  "description": "Testign",
+  "condition": {
+    "type": "origins:power_active",
+    "power": "lesbos:stryder/oc_toggle"
+  }
+}

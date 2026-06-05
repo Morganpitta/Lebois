@@ -5,6 +5,7 @@
   "ignore_block_friction": true,
   "slide_mode": true,
   "condition": {
-    "type": "lesbos:grappling"
+    "type": "apoli:power_active",
+    "power": "lesbos:stryder/oc_toggle"
   }
 }

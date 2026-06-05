@@ -1,0 +1,33 @@
+{
+  "type": "origins:action_on_key_press",
+  "cooldown": 60,
+  "entity_action": {
+    "type": "lesbos:grapple",
+    "max_distance": 50
+  },
+  "key": {
+    "key": "key.origins.primary_active"
+  },
+  "condition": {
+    "type": "origins:and",
+    "conditions": [
+      {
+        "type": "origins:raycast",
+        "block_distance": 50,
+        "shape_type": "collider",
+        "fluid_handling": "none",
+        "entity": false
+      },
+      {
+        "type": "origins:power_active",
+        "power": "lesbos:stryder/oc_toggle",
+        "inverted": true
+      }
+    ]
+  },
+  "hud_render": {
+    "should_render": true,
+    "sprite_location": "origins:textures/gui/community/huang/resource_bar_02.png",
+    "bar_index": 5
+  }
+}

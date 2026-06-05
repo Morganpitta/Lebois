@@ -1,0 +1,22 @@
+{
+  "powers": [
+    "lesbos:stryder/double_jump",
+    "lesbos:stryder/double_jump_oc",
+    "lesbos:stryder/drag_modifier",
+    "lesbos:stryder/grapple",
+    "lesbos:stryder/grapple_oc",
+    "lesbos:stryder/oc_charge",
+    "lesbos:stryder/attributes",
+    "lesbos:stryder/attributes_oc",
+    "lesbos:stryder/un_grapple",
+    "lesbos:stryder/oc_over_time",
+    "lesbos:stryder/oc_toggle",
+    "lesbos:stryder/oc_overlay"
+  ],
+  "icon": {
+    "id": "minecraft:ender_eye"
+  },
+  "name": "Stryder",
+  "description": "Stryde around with the stryd mmmmmm",
+  "impact": 3
+}
