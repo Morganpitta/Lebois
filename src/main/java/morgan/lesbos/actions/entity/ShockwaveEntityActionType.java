@@ -30,10 +30,10 @@ public class ShockwaveEntityActionType extends EntityActionType {
 
     public static final TypedDataObjectFactory<ShockwaveEntityActionType> DATA_FACTORY = TypedDataObjectFactory.simple(
             new SerializableData()
-                    .add("min_speed", SerializableDataTypes.DOUBLE, 0.5D)
-                    .add("distance", SerializableDataTypes.DOUBLE, 15D)
-                    .add("damage", SerializableDataTypes.DOUBLE, 5D)
-                    .add("knockback", SerializableDataTypes.DOUBLE, 5D),
+                    .add("min_speed", SerializableDataTypes.DOUBLE, 1D)
+                    .add("distance", SerializableDataTypes.DOUBLE, 10D)
+                    .add("damage", SerializableDataTypes.DOUBLE, 2D)
+                    .add("knockback", SerializableDataTypes.DOUBLE, 1D),
             data -> new ShockwaveEntityActionType(
                     data.get("min_speed"),
                     data.get("distance"),

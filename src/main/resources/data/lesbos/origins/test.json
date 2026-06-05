@@ -3,7 +3,8 @@
     "lesbos:test_ground_pound",
     "lesbos:test_gp_land",
     "lesbos:test_gp_resource",
-    "lesbos:test_gp_fall"
+    "lesbos:test_gp_fall",
+    "lesbos:test_faya"
   ],
   "icon": {
     "id": "minecraft:poisonous_potato"

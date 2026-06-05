@@ -3,7 +3,7 @@
   "cooldown": 20,
   "entity_action": {
     "type": "lesbos:grapple",
-    "max_distance": 100
+    "max_distance": 80
   },
   "key": {
     "key": "key.origins.primary_active"
@@ -13,7 +13,7 @@
     "conditions":[
       {
         "type": "origins:raycast",
-        "block_distance": 100,
+        "block_distance": 80,
         "shape_type": "collider",
         "fluid_handling": "none",
         "entity": false
