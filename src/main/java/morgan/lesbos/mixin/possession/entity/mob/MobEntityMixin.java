@@ -113,9 +113,6 @@ public abstract class MobEntityMixin extends LivingEntity implements PossessorIn
         }
     }
 
-    @Unique
-    private GoalSelector emptyGoalSelector = null;
-
     @Inject(
             method = "setTarget",
             at = @At("HEAD"),
@@ -126,6 +123,9 @@ public abstract class MobEntityMixin extends LivingEntity implements PossessorIn
             ci.cancel();
         }
     }
+
+    @Unique
+    private GoalSelector emptyGoalSelector = null;
 
     @Redirect(
             method = "tickNewAi",
@@ -142,6 +142,30 @@ public abstract class MobEntityMixin extends LivingEntity implements PossessorIn
 
         // Target selector is protected and MobEntityMixin isn't a subclass and thus cant access, so I had to do this :(
         return ((MobEntityAccessor) instance).lesbos$getTargetSelector();
+    }
+
+
+
+    @Redirect(
+            method = "tickNewAi",
+            at = @At(value = "FIELD", target = "Lnet/minecraft/entity/mob/MobEntity;goalSelector:Lnet/minecraft/entity/ai/goal/GoalSelector;", opcode = Opcodes.GETFIELD)
+    )
+    private GoalSelector redirectGoalSelector(MobEntity instance) {
+        // Dolphins have a goal that can spit out items... Man screw dolphins
+
+        if (this.lesbos$getPossessor() != null) {
+            GoalSelector goalSelector = new GoalSelector(instance.getWorld().getProfilerSupplier());
+
+            for (PrioritizedGoal prioritizedGoal : ((MobEntityAccessor) instance).lesbos$getGoalSelector().getGoals()) {
+                if (!prioritizedGoal.getGoal().getClass().getSimpleName().equals("PlayWithItemsGoal")) {
+                    goalSelector.add(prioritizedGoal.getPriority(), prioritizedGoal);
+                }
+            }
+
+            return goalSelector;
+        }
+
+        return ((MobEntityAccessor) instance).lesbos$getGoalSelector();
     }
 
     @Inject(method = "getEquippedStack", at=@At("HEAD"), cancellable = true)
