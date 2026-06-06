@@ -1,7 +1,7 @@
 {
   "type": "origins:toggle",
   "key": {
-    "key": "key.origins.ternary_active",
+    "key": "key.origins.secondary_active",
     "continuous": false
   },
   "retain_state": false,
