@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.impl.lib.sat4j.core.Vec;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.network.packet.s2c.play.ParticleS2CPacket;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -59,8 +60,16 @@ public class Util {
         if (entity.getWorld() instanceof ServerWorld serverWorld) {
             MovingSoundS2CPacket packet = new MovingSoundS2CPacket(sound.getId(), volume, pitch, entity.getId(), seed);
 
-            for (ServerPlayerEntity player : PlayerLookup.tracking(entity)) {
-                ServerPlayNetworking.send(player, packet);
+            if ( entity instanceof ServerPlayerEntity )
+            {
+                for (ServerPlayerEntity player : serverWorld.getPlayers()) {
+                    ServerPlayNetworking.send(player, packet);
+                }
+            }
+            else {
+                for (ServerPlayerEntity player : PlayerLookup.tracking(entity)) {
+                    ServerPlayNetworking.send(player, packet);
+                }
             }
         }
     }
