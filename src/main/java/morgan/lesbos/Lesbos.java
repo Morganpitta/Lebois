@@ -6,6 +6,7 @@ import morgan.lesbos.entity.LesbosEntities;
 import morgan.lesbos.network.packet.LesbosPackets;
 import morgan.lesbos.conditions.entity.LesbosEntityConditionTypes;
 import morgan.lesbos.powers.LesbosPowerTypes;
+import morgan.lesbos.sound.LesbosSounds;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
@@ -25,6 +26,7 @@ public class Lesbos implements ModInitializer {
         LesbosPackets.register();
         LesbosEntities.register();
         LesbosCommands.register();
+        LesbosSounds.register();
 
         // Apoli registries
         LesbosPowerTypes.register();

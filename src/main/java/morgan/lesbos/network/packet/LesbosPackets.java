@@ -20,6 +20,7 @@ public class LesbosPackets {
 
         PayloadTypeRegistry.playS2C().register(PossessionS2CPacket.ID, PossessionS2CPacket.CODEC);
         PayloadTypeRegistry.playS2C().register(UnPossessionS2CPacket.ID, UnPossessionS2CPacket.CODEC);
+        PayloadTypeRegistry.playS2C().register(MovingSoundS2CPacket.ID, MovingSoundS2CPacket.CODEC);
 
         ServerPlayNetworking.registerGlobalReceiver(DoubleJumpC2SPacket.ID, LesbosPackets::handleDoubleJumpPacket);
         ServerPlayNetworking.registerGlobalReceiver(UseKeyReleasePowerTypesC2SPacket.ID, LesbosPackets::handleUseKeyReleasePowerType);

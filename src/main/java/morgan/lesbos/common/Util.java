@@ -1,11 +1,16 @@
 package morgan.lesbos.common;
 
+import morgan.lesbos.network.packet.MovingSoundS2CPacket;
+import net.fabricmc.fabric.api.networking.v1.PlayerLookup;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.loader.impl.lib.sat4j.core.Vec;
 import net.minecraft.entity.Entity;
 import net.minecraft.network.packet.s2c.play.ParticleS2CPacket;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 
@@ -47,5 +52,16 @@ public class Util {
         }
 
         return i;
+    }
+
+    public static void sendMovingSound(SoundEvent sound, float volume, float pitch, Entity entity, long seed)
+     {
+        if (entity.getWorld() instanceof ServerWorld serverWorld) {
+            MovingSoundS2CPacket packet = new MovingSoundS2CPacket(sound.getId(), volume, pitch, entity.getId(), seed);
+
+            for (ServerPlayerEntity player : PlayerLookup.tracking(entity)) {
+                ServerPlayNetworking.send(player, packet);
+            }
+        }
     }
 }

@@ -10,10 +10,13 @@ import io.github.apace100.calio.data.SerializableDataTypes;
 import morgan.lesbos.actions.LesbosActionTypes;
 import morgan.lesbos.common.Util;
 import morgan.lesbos.interfaces.GrappleInterface;
+import morgan.lesbos.sound.LesbosSounds;
+import net.minecraft.client.sound.MovingSoundInstance;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.damage.DamageType;
@@ -21,6 +24,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.Vec3d;
@@ -65,6 +69,7 @@ public class ShockwaveEntityActionType extends EntityActionType {
             return;
         }
 
+        ServerWorld world = player.getServerWorld();
         Vec3d playerVelocity = player.getVelocity();
         double playerSpeed = playerVelocity.length();
 
@@ -84,9 +89,13 @@ public class ShockwaveEntityActionType extends EntityActionType {
             Util.spawnParticles(player.getServerWorld(), ParticleTypes.EXPLOSION, particlePos.x, particlePos.y, particlePos.z, (int) Math.ceil((j/4)*(j/4)), j/5, j/5, j/5, 0.0, true);
         }
 
-        player.getServerWorld().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ENTITY_WARDEN_SONIC_BOOM, SoundCategory.PLAYERS, 3.0F, 1.0F);
+
+        world.playSound(null, player.getX(), player.getY(), player.getZ(), LesbosSounds.SONIC_BOOM, SoundCategory.PLAYERS, 3.0F, 1.0F);
 
         entities.forEach(entity -> {
+            if ( entity instanceof LivingEntity )
+                Util.sendMovingSound(LesbosSounds.PATRICK_SCREAM, 2.3F, 1.0F, entity, world.getRandom().nextLong());
+
             Vec3d vectorToEntity = entity.getPos().subtract(player.getPos()).normalize();
 
             entity.damage(entity.getDamageSources().playerAttack(player), (float) (this.damage * playerSpeed * player.getAttributeValue(EntityAttributes.GENERIC_ATTACK_DAMAGE)));

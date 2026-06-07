@@ -5,17 +5,21 @@ import morgan.lesbos.interfaces.PossessionInterface;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.sound.EntityTrackingSoundInstance;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.registry.Registries;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
 
 @Environment(EnvType.CLIENT)
 public class LesbosClientPackets {
     public static void register() {
         ClientPlayNetworking.registerGlobalReceiver(PossessionS2CPacket.ID, LesbosClientPackets::handlePossessionPacket);
         ClientPlayNetworking.registerGlobalReceiver(UnPossessionS2CPacket.ID, LesbosClientPackets::handleUnPossessionPacket);
+        ClientPlayNetworking.registerGlobalReceiver(MovingSoundS2CPacket.ID, LesbosClientPackets::handleMovingSoundPacket);
     }
 
     public static void handlePossessionPacket(PossessionS2CPacket payload, ClientPlayNetworking.Context context) {
@@ -46,5 +50,21 @@ public class LesbosClientPackets {
         PlayerEntity player = context.player();
 
         ((PossessionInterface) player).lesbos$unPossess();
+    }
+
+    public static void handleMovingSoundPacket(MovingSoundS2CPacket payload, ClientPlayNetworking.Context context) {
+        context.client().execute(() -> {
+            var client = context.client();
+            if (client.world == null) return;
+
+            Entity entity = client.world.getEntityById(payload.entityId());
+            SoundEvent sound = Registries.SOUND_EVENT.get(payload.soundId());
+
+            if (entity != null && sound != null) {
+                client.getSoundManager().play(
+                        new EntityTrackingSoundInstance(sound, SoundCategory.PLAYERS, payload.volume(), payload.pitch(), entity, payload.seed())
+                );
+            }
+        });
     }
 }
