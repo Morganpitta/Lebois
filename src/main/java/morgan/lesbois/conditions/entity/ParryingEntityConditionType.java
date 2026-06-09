@@ -9,7 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import org.jetbrains.annotations.NotNull;
 
-public class IsParryingEntityConditionType extends EntityConditionType {
+public class ParryingEntityConditionType extends EntityConditionType {
     @Override
     public boolean test(EntityConditionContext context) {
         Entity entity = context.entity();
@@ -23,6 +23,6 @@ public class IsParryingEntityConditionType extends EntityConditionType {
 
     @Override
     public @NotNull ConditionConfiguration<?> getConfig() {
-        return LesboisConditionTypes.IS_PARRYING;
+        return LesboisConditionTypes.PARRYING;
     }
 }

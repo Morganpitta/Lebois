@@ -186,4 +186,15 @@ public abstract class LivingEntityMixin extends Entity {
 
         return EnchantmentHelper.getProtectionAmount(world, user, damageSource);
     }
+
+    @Inject(method = "setSprinting", at=@At("TAIL"))
+    public void setSprinting(boolean sprinting, CallbackInfo ci) {
+        if ((LivingEntity) (Object) this instanceof PlayerEntity player) {
+            MobEntity entity = ((PossessionInterface) player).lesbois$getPossessedEntity();
+
+            if ( entity != null ) {
+                entity.setSprinting(sprinting);
+            }
+        }
+    }
 }

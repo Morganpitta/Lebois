@@ -9,6 +9,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -21,6 +22,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Set;
 
@@ -143,6 +145,15 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Possessi
 
         if ( entity != null ) {
             ci.cancel();
+        }
+    }
+
+    @Inject(method = "getMovementSpeed", at= @At("HEAD"), cancellable = true)
+    public void getMovementSpeed(CallbackInfoReturnable<Float> cir) {
+        MobEntity entity = this.lesbois$getPossessedEntity();
+
+        if ( entity != null ) {
+            cir.setReturnValue((float) (this.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED) * 0.5));
         }
     }
 }
