@@ -62,13 +62,4 @@ public abstract class ToolItemMixin extends Item implements FalteredInterface {
             player.getItemCooldownManager().set(this, 20);
         }
     }
-
-    @Override
-    public void inventoryTick(ItemStack stack, World world, Entity entity, int slot, boolean selected) {
-        if (entity instanceof PlayerEntity player) {
-            if (this.lesbois$isFaltered(stack) && !player.getItemCooldownManager().isCoolingDown(this)) {
-                this.lesbois$setFaltered(stack, false);
-            }
-        }
-    }
 }
