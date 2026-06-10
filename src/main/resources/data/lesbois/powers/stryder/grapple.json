@@ -3,10 +3,7 @@
   "cooldown": 60,
   "entity_action": {
     "type": "lesbois:grapple",
-    "max_distance": 40,
-    "look_assist": 0.5,
-    "pull_speed": 0.5,
-    "damping": 0.05
+    "max_distance": 40
   },
   "key": {
     "key": "key.origins.primary_active"
