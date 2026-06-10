@@ -4,6 +4,7 @@ import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.item.HeldItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.SwordItem;
 import net.minecraft.util.Arm;
@@ -27,7 +28,7 @@ public class HeldItemRendererMixin {
             )
     )
     private void renderParryAnimation(AbstractClientPlayerEntity player, float tickDelta, float pitch, Hand hand, float swingProgress, ItemStack item, float equipProgress, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
-        if (item.getItem() instanceof SwordItem) {
+        if (item.getItem() instanceof SwordItem || item.getItem() instanceof AxeItem) {
             boolean isRightHand = player.getMainArm() == Arm.RIGHT;
             int sideMultiplier = isRightHand ? 1 : -1;
 

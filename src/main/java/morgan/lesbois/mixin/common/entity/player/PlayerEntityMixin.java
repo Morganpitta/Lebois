@@ -1,5 +1,6 @@
 package morgan.lesbois.mixin.common.entity.player;
 
+import morgan.lesbois.Lesbois;
 import morgan.lesbois.interfaces.FalteredInterface;
 import morgan.lesbois.interfaces.ParryInterface;
 import morgan.lesbois.powers.ParryPowerType;
@@ -74,9 +75,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ParryInt
     }
 
     @Unique
-    private static final List<Item> DISABLED_WEAPONS = Registries.ITEM.stream()
-            .filter(item -> item instanceof SwordItem || item instanceof AxeItem || item instanceof MaceItem)
-            .toList();
+    private static List<Item> DISABLED_WEAPONS = null;
 
     @Inject(method = "damage", at = @At("HEAD"), cancellable = true)
     private void parryDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
@@ -88,7 +87,13 @@ public abstract class PlayerEntityMixin extends LivingEntity implements ParryInt
                 if (!source.isIn(DamageTypeTags.IS_PROJECTILE) && source.getAttacker() instanceof LivingEntity entity) {
                     entity.takeKnockback(0.5F, this.getX() - entity.getX(), this.getZ() - entity.getZ());
                     if ( entity instanceof PlayerEntity player) {
-                        DISABLED_WEAPONS.forEach(weapon -> player.getItemCooldownManager().set(weapon, 10));
+                        if (DISABLED_WEAPONS == null) {
+                            DISABLED_WEAPONS = Registries.ITEM.stream()
+                                    .filter(item -> item instanceof SwordItem || item instanceof AxeItem || item instanceof MaceItem)
+                                    .toList();
+                        }
+
+                        DISABLED_WEAPONS.forEach(weapon -> player.getItemCooldownManager().set(weapon, 40));
 
                         player.getInventory().main.stream()
                             .filter(itemStack -> !itemStack.isEmpty() && DISABLED_WEAPONS.contains(itemStack.getItem()))
