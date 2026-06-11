@@ -47,6 +47,10 @@ public abstract class LivingEntityMixin extends Entity implements DoubleJumpInte
         return DoubleJumpPowerType.getMaxDoubleJumps((LivingEntity) (Object) this);
     }
 
+    public double lesbois$getDoubleJumpHeight(){
+        return DoubleJumpPowerType.getDoubleJumpHeight((LivingEntity) (Object) this);
+    }
+
     public int lesbois$getDoubleJumps(){
         return LesboisEntityComponents.DOUBLE_JUMP.get(this).getDoubleJumps();
     }
@@ -65,7 +69,7 @@ public abstract class LivingEntityMixin extends Entity implements DoubleJumpInte
         float yaw = this.getYaw() * ((float)Math.PI / 180F);
         double horizontalSpeed = vec3d.horizontalLength();
 
-        this.setVelocity(vec3d.x, Math.max(this.getJumpVelocity(), vec3d.y), vec3d.z);
+        this.setVelocity(vec3d.x, Math.max(this.getJumpVelocity() * this.lesbois$getDoubleJumpHeight(), vec3d.y), vec3d.z);
 
         Vec3d directionNormalised = new Vec3d(
                 (-MathHelper.sin(yaw) * this.forwardSpeed) + (MathHelper.cos(yaw) * this.sidewaysSpeed),
