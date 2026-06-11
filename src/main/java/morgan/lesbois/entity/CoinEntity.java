@@ -29,6 +29,11 @@ public class CoinEntity extends ThrownItemEntity {
         return LesboisItems.COIN;
     }
 
+    // Stops jitter by disabling server sync
+    @Override
+    public void updateTrackedPositionAndAngles(double x, double y, double z, float yaw, float pitch, int interpolationSteps) {
+    }
+
     protected double getGravity() {
         return 0.1;
     }
