@@ -48,7 +48,6 @@ public class TossCoinEntityAction extends EntityActionType {
             return;
         }
 
-        Vec3d velocity = entity.getVelocity(); // Doesn't actually work unless your in the air... I hate everything
         Vec3d horizontalVec = entity.getRotationVector().multiply(1, 0, 1).normalize();
         Vec3d offset = entity.getPos().add(0, entity.getEyeHeight(entity.getPose())/2, 0).add(horizontalVec);
 
@@ -56,7 +55,7 @@ public class TossCoinEntityAction extends EntityActionType {
 
         coin.setOwner(entity);
         coin.setPos(offset.x, offset.y, offset.z);
-        coin.setVelocity(velocity.add(horizontalVec.x*this.speed*0.5, this.height, horizontalVec.z*this.speed*0.5));
+        coin.setVelocity(new Vec3d(horizontalVec.x*this.speed*0.5, this.height, horizontalVec.z*this.speed*0.5));
 
         serverWorld.spawnEntity(coin);
     }
