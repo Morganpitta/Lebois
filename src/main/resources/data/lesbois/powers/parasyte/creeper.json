@@ -4,7 +4,7 @@
     "type": "origins:and",
     "actions": [
       {
-        "type": "lesbois:possessed_entity_action",
+        "type": "lesbois:possessing_entity",
         "entity_action": {
           "type": "origins:execute_command",
           "command": "kill"

@@ -13,21 +13,23 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import org.jetbrains.annotations.NotNull;
 
-public class PossessedEntityConditionEntityConditionType extends EntityConditionType {
-    private final EntityCondition entityCondition;
+import java.util.Optional;
+
+public class PossessingEntityEntityConditionType extends EntityConditionType {
+    private final Optional<EntityCondition> entityCondition;
 
 
-    public static final TypedDataObjectFactory<PossessedEntityConditionEntityConditionType> DATA_FACTORY = TypedDataObjectFactory.simple(
+    public static final TypedDataObjectFactory<PossessingEntityEntityConditionType> DATA_FACTORY = TypedDataObjectFactory.simple(
             new SerializableData()
-                    .add("entity_condition", EntityCondition.DATA_TYPE),
-            data -> new PossessedEntityConditionEntityConditionType(
+                    .add("entity_condition", EntityCondition.DATA_TYPE.optional()),
+            data -> new PossessingEntityEntityConditionType(
                     data.get("entity_condition")
             ),
             (conditionType, serializableData) -> serializableData.instance()
                     .set("entity_condition", conditionType.entityCondition)
     );
 
-    public PossessedEntityConditionEntityConditionType(EntityCondition entityCondition) {
+    public PossessingEntityEntityConditionType(Optional<EntityCondition> entityCondition) {
         this.entityCondition = entityCondition;
     }
 
@@ -38,7 +40,7 @@ public class PossessedEntityConditionEntityConditionType extends EntityCondition
             MobEntity entity = ((PossessionInterface) player).lesbois$getPossessedEntity();
 
             if (entity != null) {
-                return entityCondition.test(entity);
+                return entityCondition.map(condition -> condition.test(entity)).orElse(true);
             }
         }
 
@@ -47,6 +49,6 @@ public class PossessedEntityConditionEntityConditionType extends EntityCondition
 
     @Override
     public @NotNull ConditionConfiguration<?> getConfig() {
-        return LesboisConditionTypes.POSSESSED_ENTITY_CONDITION;
+        return LesboisConditionTypes.POSSESSING_ENTITY;
     }
 }

@@ -7,13 +7,13 @@ import io.github.apace100.apoli.data.TypedDataObjectFactory;
 import morgan.lesbois.Lesbois;
 import morgan.lesbois.conditions.entity.GrapplingEntityConditionType;
 import morgan.lesbois.conditions.entity.ParryingEntityConditionType;
-import morgan.lesbois.conditions.entity.PossessedEntityConditionEntityConditionType;
+import morgan.lesbois.conditions.entity.PossessingEntityEntityConditionType;
 
 import java.util.function.Supplier;
 
 public class LesboisConditionTypes {
     public static final ConditionConfiguration<GrapplingEntityConditionType> GRAPPLING = register("grappling", GrapplingEntityConditionType::new);
-    public static final ConditionConfiguration<PossessedEntityConditionEntityConditionType> POSSESSED_ENTITY_CONDITION = register("possessed_entity_condition", PossessedEntityConditionEntityConditionType.DATA_FACTORY);
+    public static final ConditionConfiguration<PossessingEntityEntityConditionType> POSSESSING_ENTITY = register("possessing_entity", PossessingEntityEntityConditionType.DATA_FACTORY);
     public static final ConditionConfiguration<ParryingEntityConditionType> PARRYING = register("parrying", ParryingEntityConditionType::new);
 
     public static void register() {
