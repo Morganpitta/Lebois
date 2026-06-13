@@ -13,7 +13,6 @@ import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.state.property.Properties;
@@ -33,7 +32,7 @@ public class LesboisPackets {
         ServerPlayNetworking.registerGlobalReceiver(DoubleJumpC2SPacket.ID, LesboisPackets::handleDoubleJumpPacket);
         ServerPlayNetworking.registerGlobalReceiver(UseKeyReleasePowerTypesC2SPacket.ID, LesboisPackets::handleUseKeyReleasePowerType);
         ServerPlayNetworking.registerGlobalReceiver(UseCoinPowerTypesC2SPacket.ID, LesboisPackets::handleUseCoinPowerType);
-        ServerPlayNetworking.registerGlobalReceiver(FrostGlideC2SPacket.ID, LesboisPackets::handlePlaceFrostBlock);
+        ServerPlayNetworking.registerGlobalReceiver(FrostGlideC2SPacket.ID, LesboisPackets::handleFrostGlide);
     }
 
     public static void handleDoubleJumpPacket(DoubleJumpC2SPacket payload, ServerPlayNetworking.Context context) {
@@ -100,7 +99,7 @@ public class LesboisPackets {
         }
     }
 
-    public static void handlePlaceFrostBlock(FrostGlideC2SPacket payload, ServerPlayNetworking.Context context) {
+    public static void handleFrostGlide(FrostGlideC2SPacket payload, ServerPlayNetworking.Context context) {
         MinecraftServer server = context.player().getServer();
 
         if ( server == null ) return;
