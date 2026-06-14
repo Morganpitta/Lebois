@@ -61,7 +61,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements GrappleI
 
         Vec3d offset = new Vec3d(hit.getSide().getUnitVector()).multiply(0.1);
 
-        GrappleHookEntity hook = new GrappleHookEntity(this.getWorld(), (PlayerEntity) (Object) this, hit.getPos().add(offset), hit.getSide(), minDistance, pullSpeed, lookAssist, damping);
+        GrappleHookEntity hook = new GrappleHookEntity(this.getWorld(), (PlayerEntity) (Object) this, hit.getPos().add(offset), this.getYaw(), this.getPitch(), minDistance, pullSpeed, lookAssist, damping);
         this.getWorld().spawnEntity(hook);
         this.grappleHook = hook;
 

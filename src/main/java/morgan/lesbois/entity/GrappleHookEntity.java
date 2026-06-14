@@ -32,19 +32,15 @@ public class GrappleHookEntity extends Entity implements Ownable {
             GrappleHookEntity.class, TrackedDataHandlerRegistry.INTEGER
     );
 
-    private static final TrackedData<Direction> ATTACHED_SIDE = DataTracker.registerData(
-            GrappleHookEntity.class, TrackedDataHandlerRegistry.FACING
-    );
-
     public GrappleHookEntity(EntityType<? extends GrappleHookEntity> type, World world) {
         super(type, world);
     }
 
-    public GrappleHookEntity(World world, @Nullable PlayerEntity owner, Vec3d position, Direction side, double minDistance, double pullSpeed, double lookAssist, double damping) {
+    public GrappleHookEntity(World world, @Nullable PlayerEntity owner, Vec3d position, float yaw, float pitch, double minDistance, double pullSpeed, double lookAssist, double damping) {
         super(LesboisEntities.GRAPPLE_HOOK, world);
         this.setOwner(owner);
         this.setPosition(position);
-        this.setSide(side);
+        this.setRotation(yaw, pitch);
         this.minDistance = minDistance;
         this.lookAssist = lookAssist;
         this.pullSpeed = pullSpeed;
@@ -62,14 +58,6 @@ public class GrappleHookEntity extends Entity implements Ownable {
         this.dataTracker.set(OWNER_ID, owner != null ? owner.getId() : -1);
     }
 
-    private void setSide(Direction side) {
-        this.dataTracker.set(ATTACHED_SIDE, side != null ? side : Direction.UP);
-    }
-
-    public Direction getSide() {
-        return this.dataTracker.get(ATTACHED_SIDE);
-    }
-
     @Override
     public void tick() {
         super.tick();
@@ -85,18 +73,22 @@ public class GrappleHookEntity extends Entity implements Ownable {
             }
 
             if (owner instanceof ServerPlayerEntity serverPlayer) {
-                Vec3d hiltOffset = new Vec3d(this.getSide().getUnitVector()).multiply(0.55);
+                Vec3d hiltOffset = this.getRotationVector().normalize().multiply(-0.55);
                 Vec3d hiltPos = this.getPos().add(hiltOffset);
                 Vec3d direction = hiltPos.subtract(owner.getPos()).normalize();
                 Vec3d playerDirection = serverPlayer.getRotationVector().normalize();
                 Vec3d velocity = owner.getVelocity();
 
-                double distanceSq = hiltPos.squaredDistanceTo(owner.getPos());
+                double distanceSq = hiltPos.squaredDistanceTo(owner.getBoundingBox().getCenter());
                 double pullSpeed = this.pullSpeed;
                 double lookAssist = this.lookAssist;
 
-                if ( distanceSq  < (minDistance * minDistance) ) {
-                    pullSpeed *= (distanceSq/(minDistance*minDistance));
+                double minDistanceSq = this.minDistance * this.minDistance;
+                if (distanceSq < (minDistanceSq * 0.25)) {
+                    pullSpeed = 0;
+                    lookAssist = 0;
+                } else if (distanceSq < minDistanceSq) {
+                    pullSpeed *= (distanceSq - (minDistanceSq * 0.25)) / (minDistanceSq * 0.75);
                     lookAssist = 0;
                 }
 
@@ -131,7 +123,6 @@ public class GrappleHookEntity extends Entity implements Ownable {
     @Override
     protected void initDataTracker(DataTracker.Builder builder) {
         builder.add(OWNER_ID, -1);
-        builder.add(ATTACHED_SIDE, Direction.UP);
     }
 
     @Override

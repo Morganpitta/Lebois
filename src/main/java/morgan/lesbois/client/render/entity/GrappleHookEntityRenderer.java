@@ -14,6 +14,7 @@ import net.minecraft.client.render.entity.EntityRendererFactory;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.render.model.json.ModelTransformationMode;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -36,18 +37,21 @@ public class GrappleHookEntityRenderer extends EntityRenderer<GrappleHookEntity>
 
     @Override
     public void render(GrappleHookEntity entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
-        renderSword(entity, matrices, vertexConsumers, light);
+        renderSword(entity, tickDelta, matrices, vertexConsumers, light);
 
         renderLine(entity, tickDelta, matrices, vertexConsumers);
 
         super.render(entity, yaw, tickDelta, matrices, vertexConsumers, light);
     }
 
-    private void renderSword(GrappleHookEntity entity, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+    private void renderSword(GrappleHookEntity entity, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         matrices.push();
 
-        matrices.multiply(entity.getSide().getRotationQuaternion());
+        float lerpedYaw = MathHelper.lerp(tickDelta, entity.prevYaw, entity.getYaw());
+        float lerpedPitch = MathHelper.lerp(tickDelta, entity.prevPitch, entity.getPitch());
 
+        matrices.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(-lerpedYaw));
+        matrices.multiply(RotationAxis.POSITIVE_X.rotationDegrees(lerpedPitch - 90.0F));
         matrices.multiply(RotationAxis.POSITIVE_Z.rotationDegrees(135.0F));
 
         this.itemRenderer.renderItem(
@@ -93,7 +97,7 @@ public class GrappleHookEntityRenderer extends EntityRenderer<GrappleHookEntity>
         // Remember entity.getLerpedPos(tickDelta) is origin for this matrix
 
         Vec3d handPos = getHandPos(owner, j, tickDelta).subtract(entity.getLerpedPos(tickDelta));
-        Vec3d hiltOffset = new Vec3d(entity.getSide().getUnitVector()).multiply(0.55);
+        Vec3d hiltOffset = entity.getRotationVector().multiply(-0.55);
 
         matrices.push();
 
