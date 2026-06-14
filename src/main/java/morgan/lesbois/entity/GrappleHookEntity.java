@@ -63,7 +63,7 @@ public class GrappleHookEntity extends Entity implements Ownable {
         super.tick();
         if (!this.getWorld().isClient()) {
             PlayerEntity owner = this.getOwner();
-            if (owner == null || owner.isDead()) {
+            if (owner == null || owner.isDead() || owner.isRemoved()) {
                 if (owner != null) {
                     ((GrappleInterface) (Object) owner).lesbois$setGrappleHook(null);
                 }
