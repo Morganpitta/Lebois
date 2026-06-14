@@ -1,4 +1,4 @@
-package morgan.lesbois.mixin.common.item;
+package morgan.lesbois.mixin.parry.item;
 
 import morgan.lesbois.entity.effect.LesboisStatusEffects;
 import morgan.lesbois.interfaces.ParryInterface;

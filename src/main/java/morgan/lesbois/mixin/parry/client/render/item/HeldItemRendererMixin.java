@@ -1,4 +1,4 @@
-package morgan.lesbois.mixin.common.client.render.item;
+package morgan.lesbois.mixin.parry.client.render.item;
 
 import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.VertexConsumerProvider;
