@@ -4,13 +4,16 @@ import morgan.lesbois.interfaces.ParryInterface;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.ProjectileUtil;
+import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -31,11 +34,7 @@ public abstract class ProjectileUtilMixin {
     private static Box scaleParryingPlayerHitbox(Entity instance, World world, Entity entity, Vec3d min, Vec3d max, Box box, Predicate<Entity> predicate, float margin) {
         if (instance instanceof PlayerEntity player) {
             if (((ParryInterface) player).lesbois$isParrying()) {
-                // Check if the arrow was a near miss
-                Box entityBox = instance.getBoundingBox().expand(margin);
-                if (entityBox.raycast(min, max).isEmpty()) {
-                    return instance.getBoundingBox().expand(1.5);
-                }
+                return instance.getBoundingBox().expand(1.5);
             }
         }
 
@@ -56,5 +55,29 @@ public abstract class ProjectileUtilMixin {
         }
 
         return instance.raycast(min, max);
+    }
+
+
+    @Inject(
+            method = "getEntityCollision(Lnet/minecraft/world/World;Lnet/minecraft/entity/Entity;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Box;Ljava/util/function/Predicate;F)Lnet/minecraft/util/hit/EntityHitResult;",
+            at = @At("RETURN"),
+            cancellable = true
+    )
+    private static void appendHitPos(World world, Entity entity, Vec3d min, Vec3d max, Box box, Predicate<Entity> predicate, float margin, CallbackInfoReturnable<EntityHitResult> cir) {
+        EntityHitResult hit = cir.getReturnValue();
+
+        if (hit != null) {
+            Box entityBox = hit.getEntity().getBoundingBox().expand(margin);
+            Optional<Vec3d> arrowHit = entityBox.raycast(min, max);
+            if (arrowHit.isPresent()) {
+                cir.setReturnValue(new EntityHitResult(hit.getEntity(), arrowHit.get()));
+            } else {
+                // Try snap it onto the hitbox by finding the closest (ish) point.
+                Optional<Vec3d> snapPos = entityBox.raycast(max, hit.getEntity().getBoundingBox().getCenter());
+                if (snapPos.isPresent()) {
+                    cir.setReturnValue(new EntityHitResult(hit.getEntity(), snapPos.get()));
+                }
+            }
+        }
     }
 }

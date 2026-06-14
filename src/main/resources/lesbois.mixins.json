@@ -18,6 +18,7 @@
     "double_jump.entity.LivingEntityMixin",
     "grapple.entity.player.PlayerEntityMixin",
     "parry.entity.player.PlayerEntityMixin",
+    "parry.entity.projectile.PersistentProjectileEntityMixin",
     "parry.entity.projectile.ProjectileEntityMixin",
     "parry.entity.projectile.ProjectileUtilMixin",
     "parry.item.ToolItemMixin",
