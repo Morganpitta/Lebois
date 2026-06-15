@@ -6,7 +6,10 @@
     "actions": [
       {
         "type": "lesbois:grapple",
-        "max_distance": 40
+        "max_distance": 40,
+        "look_assist": 0.1,
+        "pull_speed": 0.5,
+        "damping": 0.05
       },
       {
         "type": "origins:play_sound",
