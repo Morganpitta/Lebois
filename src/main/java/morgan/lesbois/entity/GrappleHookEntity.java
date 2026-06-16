@@ -20,6 +20,7 @@ import org.jetbrains.annotations.Nullable;
 public class GrappleHookEntity extends Entity implements Ownable {
     @Nullable
     private PlayerEntity owner;
+    public boolean disableFallDamage;
     public double minDistance;
     public double lookAssist;
     public double pullSpeed;
@@ -37,11 +38,12 @@ public class GrappleHookEntity extends Entity implements Ownable {
         super(type, world);
     }
 
-    public GrappleHookEntity(World world, @Nullable PlayerEntity owner, Vec3d position, float yaw, float pitch, double minDistance, double pullSpeed, double lookAssist, double damping) {
+    public GrappleHookEntity(World world, @Nullable PlayerEntity owner, Vec3d position, float yaw, float pitch, boolean disableFallDamage, double minDistance, double pullSpeed, double lookAssist, double damping) {
         super(LesboisEntities.GRAPPLE_HOOK, world);
         this.setOwner(owner);
         this.setPosition(position);
         this.setRotation(yaw, pitch);
+        this.disableFallDamage = disableFallDamage;
         this.minDistance = minDistance;
         this.lookAssist = lookAssist;
         this.pullSpeed = pullSpeed;
@@ -100,6 +102,9 @@ public class GrappleHookEntity extends Entity implements Ownable {
                             .add(playerDirection.multiply(lookAssistModifier * lookAssist))
             );
 
+            if (this.disableFallDamage)
+                player.fallDistance = 0;
+
             if (!this.getWorld().isClient() && player instanceof ServerPlayerEntity serverPlayer) {
                 serverPlayer.velocityDirty = true;
                 serverPlayer.velocityModified = true;
@@ -138,6 +143,9 @@ public class GrappleHookEntity extends Entity implements Ownable {
         }
         super.onRemoved();
     }
+
+
+    // MP TODO: implement createSpawnPacket and onSpawnPacket
 
     // Entity is non-persistent, no need to save or have any additional data
     @Override

@@ -41,7 +41,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements GrappleI
 
     @Unique
     @Nullable
-    public GrappleHookEntity lesbois$grapple(double maxDistance, double minDistance, double pullSpeed, double lookAssist, double damping) {
+    public GrappleHookEntity lesbois$grapple(double maxDistance, double minDistance, boolean disableFallDamage, double pullSpeed, double lookAssist, double damping) {
         if (this.grappleHook != null) {
             this.grappleHook.discard();
             this.grappleHook = null;
@@ -61,7 +61,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements GrappleI
 
         Vec3d offset = new Vec3d(hit.getSide().getUnitVector()).multiply(0.1);
 
-        GrappleHookEntity hook = new GrappleHookEntity(this.getWorld(), (PlayerEntity) (Object) this, hit.getPos().add(offset), this.getYaw(), this.getPitch(), minDistance, pullSpeed, lookAssist, damping);
+        GrappleHookEntity hook = new GrappleHookEntity(this.getWorld(), (PlayerEntity) (Object) this, hit.getPos().add(offset), this.getYaw(), this.getPitch(), disableFallDamage, minDistance, pullSpeed, lookAssist, damping);
         this.getWorld().spawnEntity(hook);
         this.grappleHook = hook;
 

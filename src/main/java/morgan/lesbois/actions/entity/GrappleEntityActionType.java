@@ -12,6 +12,7 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import org.jetbrains.annotations.NotNull;
 
 public class GrappleEntityActionType extends EntityActionType {
+    private final boolean disableFallDamage;
     private final double maxDistance;
     private final double minDistance;
     private final double lookAssist;
@@ -20,12 +21,14 @@ public class GrappleEntityActionType extends EntityActionType {
 
     public static final TypedDataObjectFactory<GrappleEntityActionType> DATA_FACTORY = TypedDataObjectFactory.simple(
             new SerializableData()
+                    .add("disable_fall_damage", SerializableDataTypes.BOOLEAN, false)
                     .add("max_distance", SerializableDataTypes.DOUBLE, 20D)
                     .add("min_distance", SerializableDataTypes.DOUBLE, 2D)
                     .add("look_assist", SerializableDataTypes.DOUBLE, 1D)
                     .add("pull_speed", SerializableDataTypes.DOUBLE, 1D)
                     .add("damping", SerializableDataTypes.DOUBLE, 0.1D),
             data -> new GrappleEntityActionType(
+                    data.get("disable_fall_damage"),
                     data.get("max_distance"),
                     data.get("min_distance"),
                     data.get("pull_speed"),
@@ -33,6 +36,7 @@ public class GrappleEntityActionType extends EntityActionType {
                     data.get("damping")
             ),
             (actionType, serializableData) -> serializableData.instance()
+                    .set("disable_fall_damage", actionType.disableFallDamage)
                     .set("max_distance", actionType.maxDistance)
                     .set("min_distance", actionType.minDistance)
                     .set("look_assist", actionType.lookAssist)
@@ -40,7 +44,8 @@ public class GrappleEntityActionType extends EntityActionType {
                     .set("damping", actionType.damping)
     );
 
-    public GrappleEntityActionType(double maxDistance, double minDistance, double pullSpeed, double lookAssist, double damping) {
+    public GrappleEntityActionType(boolean disableFallDamage, double maxDistance, double minDistance, double pullSpeed, double lookAssist, double damping) {
+        this.disableFallDamage = disableFallDamage;
         this.maxDistance = maxDistance;
         this.minDistance = minDistance;
         this.lookAssist = lookAssist;
@@ -56,7 +61,7 @@ public class GrappleEntityActionType extends EntityActionType {
 
         GrappleInterface player = (GrappleInterface) context.entity();
 
-        player.lesbois$grapple(this.maxDistance, this.minDistance, this.pullSpeed, this.lookAssist, this.damping);
+        player.lesbois$grapple(this.maxDistance, this.minDistance, this.disableFallDamage, this.pullSpeed, this.lookAssist, this.damping);
     }
 
     @Override
