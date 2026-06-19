@@ -174,19 +174,6 @@ public abstract class LivingEntityMixin extends Entity {
         }
     }
 
-    @Redirect(method = "modifyAppliedDamage", at= @At(value = "INVOKE", target = "Lnet/minecraft/enchantment/EnchantmentHelper;getProtectionAmount(Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/entity/LivingEntity;Lnet/minecraft/entity/damage/DamageSource;)F"))
-    public float redirectProtectionAmount(ServerWorld world, LivingEntity user, DamageSource damageSource) {
-        if (user instanceof MobEntity) {
-            PlayerEntity player = ((PossessorInterface) user).lesbois$getPossessor();
-
-            if ( player != null ) {
-                return EnchantmentHelper.getProtectionAmount(world, player, damageSource);
-            }
-        }
-
-        return EnchantmentHelper.getProtectionAmount(world, user, damageSource);
-    }
-
     @Inject(method = "setSprinting", at=@At("TAIL"))
     public void setSprinting(boolean sprinting, CallbackInfo ci) {
         if ((LivingEntity) (Object) this instanceof PlayerEntity player) {

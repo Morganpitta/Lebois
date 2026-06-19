@@ -23,6 +23,7 @@
     "parry.entity.projectile.ProjectileEntityMixin",
     "parry.entity.projectile.ProjectileUtilMixin",
     "parry.item.ToolItemMixin",
+    "possession.enchantment.EnchantmentHelperMixin",
     "possession.entity.EntityMixin",
     "possession.entity.LivingEntityMixin",
     "possession.entity.ai.brain.BrainMixin",

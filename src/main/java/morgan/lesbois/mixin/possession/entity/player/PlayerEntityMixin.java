@@ -21,6 +21,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -56,6 +57,9 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Possessi
     public boolean lesbois$canPossess(MobEntity entity) {
         PlayerEntity possessor = ((PossessorInterface) entity).lesbois$getPossessor();
         if (possessor != null && possessor != (PlayerEntity) (Object) this)
+            return false;
+
+        if (entity.isDead() || entity.isRemoved())
             return false;
 
         if (UNPOSSESSABLE_TYPES.contains(entity.getType()))
@@ -156,5 +160,20 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Possessi
         if ( entity != null ) {
             cir.setReturnValue((float) (this.getAttributeValue(EntityAttributes.GENERIC_MOVEMENT_SPEED) * 0.5));
         }
+    }
+
+    @Redirect(
+            method = "attack",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/entity/player/PlayerEntity;isTeammate(Lnet/minecraft/entity/Entity;)Z"
+            )
+    )
+    private boolean redirectAttack(PlayerEntity player, Entity entity) {
+        if (((PossessionInterface) player).lesbois$getPossessedEntity() == entity) {
+            return true;
+        }
+
+        return player.isTeammate(entity);
     }
 }
