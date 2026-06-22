@@ -9,9 +9,10 @@ import net.minecraft.registry.Registry;
 import java.util.function.UnaryOperator;
 
 public class LesboisComponentTypes {
-    public static final ComponentType<ItemBuffsComponent> BUFFS = register(
-            "enchantments", builder -> builder.codec(ItemBuffsComponent.CODEC).packetCodec(ItemBuffsComponent.PACKET_CODEC).cache()
-    );
+//    Replacing this with a potion effect. Leaving code in for future reference
+//    public static final ComponentType<ItemBuffsComponent> BUFFS = register(
+//            "enchantments", builder -> builder.codec(ItemBuffsComponent.CODEC).packetCodec(ItemBuffsComponent.PACKET_CODEC).cache()
+//    );
 
     public static void register() {
     }
