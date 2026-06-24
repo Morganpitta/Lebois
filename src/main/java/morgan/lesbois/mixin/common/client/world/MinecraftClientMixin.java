@@ -2,10 +2,13 @@ package morgan.lesbois.mixin.common.client.world;
 
 import morgan.lesbois.entity.CoinEntity;
 import morgan.lesbois.entity.effect.LesboisStatusEffects;
+import morgan.lesbois.network.packet.CoinHitC2SPacket;
 import morgan.lesbois.powers.ActionOnCoinPowerType;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.WindowEventHandler;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.TypeFilter;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
@@ -24,6 +27,10 @@ public abstract class MinecraftClientMixin extends ReentrantThreadExecutor<Runna
     @Shadow
     @Nullable
     public ClientPlayerEntity player;
+
+    @Shadow
+    @Nullable
+    public ClientWorld world;
 
     public MinecraftClientMixin(String string) {
         super(string);
@@ -45,7 +52,7 @@ public abstract class MinecraftClientMixin extends ReentrantThreadExecutor<Runna
             );
 
             for (CoinEntity coin : coins) {
-                ActionOnCoinPowerType.triggerCoinActions(this.player);
+                ClientPlayNetworking.send(new CoinHitC2SPacket(coin.getId()));
                 coin.discard();
             }
 

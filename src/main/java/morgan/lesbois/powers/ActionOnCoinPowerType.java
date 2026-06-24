@@ -8,7 +8,7 @@ import io.github.apace100.apoli.power.Power;
 import io.github.apace100.apoli.power.PowerConfiguration;
 import io.github.apace100.apoli.power.type.PowerType;
 import io.github.apace100.calio.data.SerializableData;
-import morgan.lesbois.network.packet.UseCoinPowerTypesC2SPacket;
+import morgan.lesbois.network.packet.CoinHitC2SPacket;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.Identifier;
@@ -50,15 +50,8 @@ public class ActionOnCoinPowerType extends PowerType {
 
         if (component == null) return;
 
-        List<Identifier> powerTypeIds = component.getPowerTypes().stream()
+        component.getPowerTypes().stream()
                 .filter(powerType -> powerType instanceof ActionOnCoinPowerType).map(powerType -> (ActionOnCoinPowerType) powerType)
-                .peek(powerType -> {if (powerType.isActive()) {powerType.onUse();}})
-                .map(PowerType::getPower)
-                .map(Power::getId)
-                .toList();
-
-        if (!powerTypeIds.isEmpty() && player.getWorld().isClient()) {
-            ClientPlayNetworking.send(new UseCoinPowerTypesC2SPacket(powerTypeIds));
-        }
+                .forEach(powerType -> {if (powerType.isActive()) {powerType.onUse();}});
     }
 }

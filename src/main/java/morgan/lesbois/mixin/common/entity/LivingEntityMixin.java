@@ -1,6 +1,5 @@
 package morgan.lesbois.mixin.common.entity;
 
-import io.github.apace100.apoli.component.PowerHolderComponent;
 import io.github.apace100.apoli.power.type.*;
 import morgan.lesbois.entity.effect.LesboisStatusEffects;
 import morgan.lesbois.powers.DragModifierPowerType;
@@ -9,7 +8,6 @@ import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
@@ -17,9 +15,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
-    @Shadow
-    private @Nullable LivingEntity attacker;
-
     @Shadow
     public abstract boolean addStatusEffect(StatusEffectInstance effect);
 
@@ -66,8 +61,16 @@ public abstract class LivingEntityMixin extends Entity {
                 StatusEffectInstance effect = livingEntity.getStatusEffect(LesboisStatusEffects.OVERCHARGED);
 
                 this.addStatusEffect(new StatusEffectInstance(LesboisStatusEffects.UNSTABLE, 200, effect.getAmplifier()));
-                livingEntity.removeStatusEffect(LesboisStatusEffects.OVERCHARGED);
-                // Set duration
+
+                // Clear it down to one tick
+                if (effect.getDuration() > 1) {
+                    livingEntity.removeStatusEffect(LesboisStatusEffects.OVERCHARGED);
+                    livingEntity.addStatusEffect(new StatusEffectInstance(
+                            LesboisStatusEffects.OVERCHARGED,
+                            1,
+                            effect.getAmplifier()
+                    ));
+                }
             }
         }
     }
