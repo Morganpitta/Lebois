@@ -6,6 +6,7 @@ import morgan.lesbois.Lesbois;
 import morgan.lesbois.common.Util;
 import morgan.lesbois.entity.effect.LesboisStatusEffects;
 import morgan.lesbois.interfaces.StatusEffectSourceInterface;
+import morgan.lesbois.world.explosion.UnstableExplosionBehavior;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;
@@ -82,25 +83,14 @@ public abstract class LivingEntityMixin extends Entity implements StatusEffectSo
         if (this.getWorld() instanceof ServerWorld serverWorld) {
             Entity attacker = serverWorld.getEntity(attackerUuid);
             if (attacker != null) {
-                this.damage(this.getDamageSources().explosion(attacker, attacker), damage * (amplifier + 1));
-
                 serverWorld.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.PLAYERS, 0.5F, 1.5F);
 
-                // Can't be bothered writing own class I'm sorry I have commited sins
                 serverWorld.createExplosion(
-                        this,
+                        null,
                         this.getDamageSources().explosion(this, attacker),
-                        new ExplosionBehavior() {
-                            public boolean canDestroyBlocks(Explosion explosion, BlockView world, BlockPos pos, BlockState state, float power) {
-                                return false;
-                            }
-
-                            public boolean shouldDamage(Explosion explosion, Entity entity) {
-                                return entity != attacker;
-                            }
-                        },
+                        new UnstableExplosionBehavior(attacker, damage * (amplifier+1)),
                         this.getX(), this.getY(), this.getZ(),
-                        amplifier + 1,
+                        4,
                         false,
                         World.ExplosionSourceType.MOB
                 );

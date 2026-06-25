@@ -47,7 +47,7 @@ public class CoinEntity extends ThrownItemEntity {
             Random random = this.getRandom();
             for (int i = 0; i < 3; i++) {
                 this.getWorld().addParticle(
-                        ParticleTypes.CRIT,
+                        ParticleTypes.END_ROD,
                         this.getX() + random.nextGaussian() * 0.05,
                         this.getY() + random.nextGaussian() * 0.05,
                         this.getZ() + random.nextGaussian() * 0.05,
