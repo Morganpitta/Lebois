@@ -7,7 +7,6 @@ import morgan.lesbois.common.Util;
 import morgan.lesbois.entity.effect.LesboisStatusEffects;
 import morgan.lesbois.interfaces.StatusEffectSourceInterface;
 import morgan.lesbois.world.explosion.UnstableExplosionBehavior;
-import net.minecraft.block.BlockState;
 import net.minecraft.entity.*;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffect;
@@ -21,12 +20,8 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-import net.minecraft.world.explosion.Explosion;
-import net.minecraft.world.explosion.ExplosionBehavior;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -36,7 +31,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Map;
-import java.util.UUID;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements StatusEffectSourceInterface {
@@ -62,6 +56,15 @@ public abstract class LivingEntityMixin extends Entity implements StatusEffectSo
     @Shadow
     public abstract boolean isDead();
 
+    @Shadow
+    public abstract boolean removeStatusEffect(RegistryEntry<StatusEffect> effect);
+
+    @Shadow
+    protected boolean dead;
+
+    @Shadow
+    public int deathTime;
+
     public LivingEntityMixin(EntityType<?> type, World world) {
         super(type, world);
     }
@@ -79,24 +82,21 @@ public abstract class LivingEntityMixin extends Entity implements StatusEffectSo
     }
 
     @Unique
-    public void triggerUnstableExplosion(UUID attackerUuid, float damage, int amplifier) {
-        if (this.getWorld() instanceof ServerWorld serverWorld) {
-            Entity attacker = serverWorld.getEntity(attackerUuid);
-            if (attacker != null) {
-                serverWorld.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.PLAYERS, 0.5F, 1.5F);
+    public void triggerUnstableExplosion(Entity attacker, float damage, int amplifier) {
+        if (this.getWorld() instanceof ServerWorld serverWorld && attacker != null) {
+            serverWorld.playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.PLAYERS, 0.5F, 1.5F);
 
-                serverWorld.createExplosion(
-                        null,
-                        this.getDamageSources().explosion(this, attacker),
-                        new UnstableExplosionBehavior(attacker, damage * (amplifier+1)),
-                        this.getX(), this.getY(), this.getZ(),
-                        4,
-                        false,
-                        World.ExplosionSourceType.MOB
-                );
+            serverWorld.createExplosion(
+                    null,
+                    this.getDamageSources().explosion(this, attacker),
+                    new UnstableExplosionBehavior(attacker, damage * (amplifier + 1)),
+                    this.getX(), this.getY(), this.getZ(),
+                    4,
+                    false,
+                    World.ExplosionSourceType.MOB
+            );
 
-                Util.spawnExpandingSphericalParticles(serverWorld, ParticleTypes.SOUL_FIRE_FLAME, new Vec3d(this.getX(), this.getBodyY(0.5), this.getZ()), 18, 18, 0.5);
-            }
+            Util.spawnExpandingSphericalParticles(serverWorld, ParticleTypes.SOUL_FIRE_FLAME, new Vec3d(this.getX(), this.getBodyY(0.5), this.getZ()), 18, 18, 0.5);
         }
     }
 
@@ -106,35 +106,47 @@ public abstract class LivingEntityMixin extends Entity implements StatusEffectSo
             return;
         }
 
-        Entity attacker = damageSource.getAttacker();
+        if (this.getWorld() instanceof ServerWorld) {
+            Entity attacker = damageSource.getAttacker();
 
-        if (damageSource.getSource() != this && attacker instanceof LivingEntity livingEntity) {
-            if (livingEntity.hasStatusEffect(LesboisStatusEffects.OVERCHARGED)) {
+            if (attacker instanceof LivingEntity livingEntity && damageSource.getSource() != this) {
                 StatusEffectInstance effect = livingEntity.getStatusEffect(LesboisStatusEffects.OVERCHARGED);
+                if (effect != null) {
+                    StatusEffectInstance unstable = new StatusEffectInstance(LesboisStatusEffects.UNSTABLE, 40, effect.getAmplifier());
+                    this.lesbois$setStatusEffectSource(LesboisStatusEffects.UNSTABLE, new StatusEffectSource(attacker.getUuid(), amount));
+                    this.addStatusEffect(unstable);
 
-                StatusEffectInstance unstable = new StatusEffectInstance(LesboisStatusEffects.UNSTABLE, 40, effect.getAmplifier());
-                this.lesbois$setStatusEffectSource(LesboisStatusEffects.UNSTABLE, new StatusEffectSource(attacker.getUuid(), amount));
-                this.addStatusEffect(unstable);
-
-                // Clear it down to one tick
-                if (effect.getDuration() > 1) {
-                    livingEntity.removeStatusEffect(LesboisStatusEffects.OVERCHARGED);
-                    livingEntity.addStatusEffect(new StatusEffectInstance(
-                            LesboisStatusEffects.OVERCHARGED,
-                            1,
-                            effect.getAmplifier()
-                    ));
+                    // Clear it down to zero ticks
+                    if (effect.getDuration() > 0) {
+                        livingEntity.removeStatusEffect(LesboisStatusEffects.OVERCHARGED);
+                        livingEntity.addStatusEffect(new StatusEffectInstance(
+                                LesboisStatusEffects.OVERCHARGED,
+                                0,
+                                effect.getAmplifier()
+                        ));
+                    }
                 }
             }
         }
+    }
 
-        if (this.isDead()) {
-            if (this.hasStatusEffect(LesboisStatusEffects.UNSTABLE)) {
-                StatusEffectInstance effect = this.getStatusEffect(LesboisStatusEffects.UNSTABLE);
-                StatusEffectSource source = this.lesbois$getStatusEffectSource(LesboisStatusEffects.UNSTABLE);
+    @Inject(method = "updatePostDeath", at=@At("HEAD"))
+    public void updatePostDeath(CallbackInfo ci) {
+        if (this.getWorld() instanceof ServerWorld serverWorld && this.deathTime == 0) {
+            StatusEffectInstance effect = this.getStatusEffect(LesboisStatusEffects.UNSTABLE);
+            StatusEffectSource source = this.lesbois$getStatusEffectSource(LesboisStatusEffects.UNSTABLE);
 
-                if (source != null && source.attackerUuid() != null) {
-                    this.triggerUnstableExplosion(source.attackerUuid(), source.damage(), effect.getAmplifier());
+            if (effect != null && source != null && source.attackerUuid() != null) {
+                Entity effectAttacker = serverWorld.getEntity(source.attackerUuid());
+
+                if (effectAttacker instanceof LivingEntity livingEntity) {
+                    // In case the zero tick hasn't been removed yet, do it ourselves
+                    StatusEffectInstance attackerEffect = livingEntity.getStatusEffect(LesboisStatusEffects.OVERCHARGED);
+                    if (attackerEffect != null && attackerEffect.getDuration() == 0) {
+                        livingEntity.removeStatusEffect(LesboisStatusEffects.OVERCHARGED);
+                    }
+
+                    this.triggerUnstableExplosion(effectAttacker, source.damage(), effect.getAmplifier());
                 }
             }
         }
@@ -150,10 +162,15 @@ public abstract class LivingEntityMixin extends Entity implements StatusEffectSo
 
     @Inject(method = "onStatusEffectRemoved", at = @At("HEAD"))
     public void onUnstableFinished(StatusEffectInstance effect, CallbackInfo ci) {
-        if (effect.equals(LesboisStatusEffects.UNSTABLE)) {
-            StatusEffectSource source = this.lesbois$getStatusEffectSource(LesboisStatusEffects.UNSTABLE);
-            if (source != null && source.attackerUuid() != null) {
-                this.triggerUnstableExplosion(source.attackerUuid(), source.damage(), effect.getAmplifier());
+        if (!this.isDead()) {
+            if (this.getWorld() instanceof ServerWorld serverWorld) {
+                if (effect.equals(LesboisStatusEffects.UNSTABLE)) {
+                    StatusEffectSource source = this.lesbois$getStatusEffectSource(LesboisStatusEffects.UNSTABLE);
+                    if (source != null && source.attackerUuid() != null) {
+                        Entity attacker = serverWorld.getEntity(source.attackerUuid());
+                        this.triggerUnstableExplosion(attacker, source.damage(), effect.getAmplifier());
+                    }
+                }
             }
         }
     }
