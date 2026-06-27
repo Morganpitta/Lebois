@@ -22,6 +22,7 @@ public class LesboisPowerTypes {
     public static final PowerConfiguration<FrostGlidingPowerType> FROST_GLIDE = register("frost_glide", FrostGlidingPowerType.DATA_FACTORY);
     public static final PowerConfiguration<SpeedometerPowerType> SPEEDOMETER = registerConditionedSimple("speedometer", SpeedometerPowerType::new);
     public static final PowerConfiguration<ShockwavePowerType> SHOCKWAVE = register("shockwave", ShockwavePowerType.DATA_FACTORY);
+    public static final PowerConfiguration<WingsPowerType> WINGS = register("wings", WingsPowerType.DATA_FACTORY);
 
     public static void register() {
     }

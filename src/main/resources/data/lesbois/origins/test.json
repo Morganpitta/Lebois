@@ -1,6 +1,7 @@
 {
   "powers": [
-    "lesbois:test_test"
+    "lesbois:test_test",
+    "lesbois:test_wings"
   ],
   "icon": {
     "id": "minecraft:poisonous_potato"

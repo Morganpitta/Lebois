@@ -48,6 +48,7 @@
     "parry.client.render.item.HeldItemRendererMixin",
     "possession.client.gui.hud.InGameHudMixin",
     "possession.client.network.OtherClientPlayerEntityMixin",
-    "possession.client.render.WorldRendererMixin"
+    "possession.client.render.WorldRendererMixin",
+    "wings.client.render.entity.PlayerEntityRendererMixin"
   ]
 }
