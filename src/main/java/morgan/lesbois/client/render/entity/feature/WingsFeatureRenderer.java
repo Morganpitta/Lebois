@@ -32,8 +32,11 @@ public class WingsFeatureRenderer extends FeatureRenderer<AbstractClientPlayerEn
 
         matrices.push();
 
+        float yOffset = (0.375F) * this.getContextModel().body.yScale;
+        float zOffset = (0.125F - 0.015625F) * this.getContextModel().body.zScale;
+
         this.getContextModel().body.rotate(matrices);
-        matrices.translate(0.0F, 0.0F, 0.125F);
+        matrices.translate(0.0F, yOffset, zOffset);
         matrices.scale(0.5F, 0.5F, 0.5F);
 
         this.getContextModel().copyStateTo(this.model);

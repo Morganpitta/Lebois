@@ -14,30 +14,35 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Optional;
 
 public class WingsPowerType extends PowerType {
-    private final float speed;
+    private final float acceleration;
+    private final float maxSpeed;
     private final float boost;
     private final Identifier texture;
 
     public static final TypedDataObjectFactory<WingsPowerType> DATA_FACTORY = PowerType.createConditionedDataFactory(
             new SerializableData()
-                    .add("speed", SerializableDataTypes.FLOAT, 0.15F)
-                    .add("boost", SerializableDataTypes.FLOAT, 0.025F)
+                    .add("acceleration", SerializableDataTypes.FLOAT, 0.15F)
+                    .add("max_speed", SerializableDataTypes.FLOAT, 1.0F)
+                    .add("boost", SerializableDataTypes.FLOAT, 0.035F)
                     .add("texture", SerializableDataTypes.IDENTIFIER),
             (data, condition) -> new WingsPowerType(
-                    data.get("speed"),
+                    data.get("acceleration"),
+                    data.get("max_speed"),
                     data.get("boost"),
                     data.get("texture"),
                     condition
             ),
             (powerType, serializableData) -> serializableData.instance()
-                    .set("speed", powerType.speed)
+                    .set("acceleration", powerType.acceleration)
+                    .set("max_speed", powerType.maxSpeed)
                     .set("boost", powerType.boost)
                     .set("texture", powerType.texture)
     );
 
-    WingsPowerType(float speed, float boost, Identifier texture, Optional<EntityCondition> condition) {
+    WingsPowerType(float acceleration, float maxSpeed, float boost, Identifier texture, Optional<EntityCondition> condition) {
         super(condition);
-        this.speed = speed;
+        this.acceleration = acceleration;
+        this.maxSpeed = maxSpeed;
         this.boost = boost;
         this.texture = texture;
     }
@@ -51,9 +56,14 @@ public class WingsPowerType extends PowerType {
         return PowerHolderComponent.hasPowerType (player, WingsPowerType.class);
     }
 
-    public static float getSpeed(PlayerEntity player) {
+    public static float getAcceleration(PlayerEntity player) {
         return (float) PowerHolderComponent.getPowerTypes(player, WingsPowerType.class).stream()
-                .mapToDouble(powerType -> powerType.speed).max().orElse(0);
+                .mapToDouble(powerType -> powerType.acceleration).max().orElse(0);
+    }
+
+    public static float getMaxSpeed(PlayerEntity player) {
+        return (float) PowerHolderComponent.getPowerTypes(player, WingsPowerType.class).stream()
+                .mapToDouble(powerType -> powerType.maxSpeed).max().orElse(0);
     }
 
     public static float getBoost(PlayerEntity player) {

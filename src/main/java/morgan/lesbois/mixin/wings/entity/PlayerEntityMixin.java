@@ -59,7 +59,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements WingsInt
     public void tickMovement(CallbackInfo ci) {
         if (WingsPowerType.hasWings((PlayerEntity) (Object) this)) {
             float flapStrength = 0.3F;
-            float speed = WingsPowerType.getSpeed((PlayerEntity) (Object) this);
+            float acceleration = WingsPowerType.getAcceleration((PlayerEntity) (Object) this);
+            float maxSpeed = WingsPowerType.getMaxSpeed((PlayerEntity) (Object) this);
             float boost = WingsPowerType.getBoost((PlayerEntity) (Object) this);
 
             if (this.isFlying){
@@ -71,7 +72,12 @@ public abstract class PlayerEntityMixin extends LivingEntity implements WingsInt
                         (MathHelper.cos(yaw) * this.forwardSpeed) + (MathHelper.sin(yaw) * this.sidewaysSpeed)
                 ).normalize();
 
-                this.setVelocity(this.getVelocity().add(directionNormalised.x * boost, speed, directionNormalised.z * boost));
+                float clampedAcceleration = 0.0F;
+                if (this.getVelocity().y < maxSpeed) {
+                    clampedAcceleration = (float) Math.min(maxSpeed - this.getVelocity().y, acceleration);
+                }
+
+                this.setVelocity(this.getVelocity().add(directionNormalised.x * boost, clampedAcceleration, directionNormalised.z * boost));
 
                 flapStrength = 1.0F;
                 this.fallDistance = 0;

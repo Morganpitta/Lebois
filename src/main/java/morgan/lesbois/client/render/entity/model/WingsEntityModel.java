@@ -27,13 +27,13 @@ public class WingsEntityModel extends AnimalModel<AbstractClientPlayerEntity> {
         Dilation dilation = new Dilation(0.0F);
         modelPartData.addChild(
                 EntityModelPartNames.LEFT_WING,
-                ModelPartBuilder.create().uv(0, 0).cuboid(0.0F, 0.0F, 0.0F, 18.0F, 32.0F, 1.0F, dilation),
-                ModelTransform.of(0.0F, -3.0F, 0.0F, 0.0F, -0.5236F, 0.0F)
+                ModelPartBuilder.create().uv(0, 36).cuboid(0.0F, -18.0F, 0.0F, 24.0F, 36.0F, 0.0F, dilation),
+                ModelTransform.of(0.0F, 0.0F, -1.0F, 0.0F, -0.7854F, 0.0F)
         );
         modelPartData.addChild(
                 EntityModelPartNames.RIGHT_WING,
-                ModelPartBuilder.create().uv(0, 33).cuboid(-18.0F, 0.0F, 0.0F, 18.0F, 32.0F, 1.0F, dilation),
-                ModelTransform.of(0.0F, -3.0F, 0.0F, 0.0F, 0.5236F, 0.0F)
+                ModelPartBuilder.create().uv(0, 0).cuboid(-24.0F, -18.0F, 0.0F, 24.0F, 36.0F, 0.0F, dilation),
+                ModelTransform.of(-1.0F, 0.0F, -1.0F, 0.0F, 0.7854F, 0.0F)
         );
         return TexturedModelData.of(modelData, 128, 128);
     }
