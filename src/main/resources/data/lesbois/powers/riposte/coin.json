@@ -1,5 +1,11 @@
 {
   "type": "origins:active_self",
+  "condition": {
+    "type": "origins:resource",
+    "resource": "lesbois:riposte/coin_resource",
+    "comparison": ">",
+    "compare_to": 9
+    },
   "key": {
     "key": "key.origins.primary_active"
   },
@@ -12,6 +18,11 @@
       {
         "type": "origins:play_sound",
         "sound": "minecraft:item.armor.equip_chain"
+      },
+      {
+        "type": "origins:change_resource",
+        "resource": "lesbois:riposte/coin_resource",
+        "change": -10
       }
     ]
   }

@@ -1,8 +1,9 @@
 {
-  "type": "lesbois:action_on_parry",
+  "type": "origins:action_over_time",
+  "interval": 120,
   "entity_action": {
     "type": "origins:change_resource",
     "resource": "lesbois:riposte/coin_resource",
-    "change": 10
+    "change": 1
   }
 }

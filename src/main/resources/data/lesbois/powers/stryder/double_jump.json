@@ -1,6 +1,6 @@
 {
   "type": "lesbois:double_jump",
-  "double_jumps": 4,
+  "double_jumps": 8,
   "height": 1,
   "name": "Test",
   "description": "Testign"

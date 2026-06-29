@@ -4,7 +4,10 @@
     "lesbois:riposte/shieldless",
     "lesbois:riposte/coin",
     "lesbois:riposte/coin_action",
-    "lesbois:riposte/frost_glide"
+    "lesbois:riposte/dash",
+    "lesbois:riposte/coin_resource",
+    "lesbois:riposte/coin_over_time",
+    "lesbois:riposte/parry_action"
   ],
   "icon": {
     "id": "minecraft:iron_sword"
