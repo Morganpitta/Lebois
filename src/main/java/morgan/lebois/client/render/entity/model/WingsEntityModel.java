@@ -8,7 +8,7 @@ import net.minecraft.client.render.entity.model.EntityModelPartNames;
 import net.minecraft.util.math.MathHelper;
 
 public class WingsEntityModel extends AnimalModel<AbstractClientPlayerEntity> {
-    public static final float DEFAULT_ANGLE = (float) (45 * (Math.PI) / 180.0F);
+    public static final float DEFAULT_ANGLE = (float) (55 * (Math.PI) / 180.0F);
     public static final float FLAP_SPEED = 1.5F;
     public static final float FLAP_SIZE = (float) (20 * (Math.PI) / 180.0F);
 
