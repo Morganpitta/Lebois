@@ -7,5 +7,6 @@
   "condition": {
     "type": "origins:power_active",
     "power": "lebois:stryder/oc_toggle"
-  }
+  },
+  "hidden": true
 }

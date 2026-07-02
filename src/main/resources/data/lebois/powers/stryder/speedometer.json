@@ -1,3 +1,5 @@
 {
-  "type": "lebois:speedometer"
+  "type": "lebois:speedometer",
+  "name": "Spedometer",
+  "description": "Shows you how fast you're going, turns red when you can use shockwave."
 }

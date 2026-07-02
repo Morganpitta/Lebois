@@ -5,5 +5,7 @@
     "continuous": false
   },
   "retain_state": false,
-  "active_by_default": false
+  "active_by_default": false,
+  "name": "overclock",
+  "description": "Enter an enhanced movement mode that turns your grappling hook into a high speed slingshot. Carry momentum better with reduced drag and slide accross the ground with modified friction."
 }

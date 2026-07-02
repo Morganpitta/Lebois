@@ -50,5 +50,7 @@
     "should_render": true,
     "sprite_location": "origins:textures/gui/community/huang/resource_bar_02.png",
     "bar_index": 5
-  }
+  },
+  "name": "Grappling Hook",
+  "description": "Launch a sword that quickly pulls you to where it lands."
 }
