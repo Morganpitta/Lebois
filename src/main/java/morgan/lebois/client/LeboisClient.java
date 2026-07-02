@@ -1,0 +1,21 @@
+package morgan.lebois.client;
+
+import morgan.lebois.Lebois;
+import morgan.lebois.client.render.LeboisRenderLayer;
+import morgan.lebois.client.render.entity.LeboisEntityRenderers;
+import morgan.lebois.network.packet.LeboisClientPackets;
+import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+
+@Environment(EnvType.CLIENT)
+public class LeboisClient implements ClientModInitializer {
+    @Override
+    public void onInitializeClient() {
+        LeboisEntityRenderers.register();
+        LeboisClientPackets.register();
+        LeboisRenderLayer.register();
+
+        Lebois.LOGGER.info("Lebois Client initialised!!!!!");
+    }
+}

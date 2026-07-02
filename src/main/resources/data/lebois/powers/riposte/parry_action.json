@@ -1,0 +1,8 @@
+{
+  "type": "lebois:action_on_parry",
+  "entity_action": {
+    "type": "origins:change_resource",
+    "resource": "lebois:riposte/coin_resource",
+    "change": 10
+  }
+}

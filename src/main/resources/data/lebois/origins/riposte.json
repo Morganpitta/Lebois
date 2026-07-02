@@ -1,0 +1,18 @@
+{
+  "powers": [
+    "lebois:riposte/parry",
+    "lebois:riposte/shieldless",
+    "lebois:riposte/coin",
+    "lebois:riposte/coin_action",
+    "lebois:riposte/dash",
+    "lebois:riposte/coin_resource",
+    "lebois:riposte/coin_over_time",
+    "lebois:riposte/parry_action"
+  ],
+  "icon": {
+    "id": "minecraft:iron_sword"
+  },
+  "name": "Riposte",
+  "description": "Parry this you filthy casual",
+  "impact": 3
+}

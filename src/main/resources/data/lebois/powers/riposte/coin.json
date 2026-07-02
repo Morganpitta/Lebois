@@ -1,0 +1,29 @@
+{
+  "type": "origins:active_self",
+  "condition": {
+    "type": "origins:resource",
+    "resource": "lebois:riposte/coin_resource",
+    "comparison": ">",
+    "compare_to": 9
+    },
+  "key": {
+    "key": "key.origins.primary_active"
+  },
+  "entity_action": {
+    "type": "origins:and",
+    "actions": [
+      {
+        "type": "lebois:toss_coin"
+      },
+      {
+        "type": "origins:play_sound",
+        "sound": "minecraft:item.armor.equip_chain"
+      },
+      {
+        "type": "origins:change_resource",
+        "resource": "lebois:riposte/coin_resource",
+        "change": -10
+      }
+    ]
+  }
+}

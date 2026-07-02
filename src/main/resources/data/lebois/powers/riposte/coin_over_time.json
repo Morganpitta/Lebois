@@ -1,0 +1,9 @@
+{
+  "type": "origins:action_over_time",
+  "interval": 120,
+  "entity_action": {
+    "type": "origins:change_resource",
+    "resource": "lebois:riposte/coin_resource",
+    "change": 1
+  }
+}

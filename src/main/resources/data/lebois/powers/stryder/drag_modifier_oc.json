@@ -1,0 +1,11 @@
+{
+  "type": "lebois:drag_modifier",
+  "air_drag": 0.97,
+  "friction": 0.96,
+  "ignore_block_friction": true,
+  "slide_mode": true,
+  "condition": {
+    "type": "apoli:power_active",
+    "power": "lebois:stryder/oc_toggle"
+  }
+}

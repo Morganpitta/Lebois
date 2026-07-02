@@ -1,0 +1,23 @@
+{
+  "powers": [
+    "lebois:stryder/double_jump",
+    "lebois:stryder/double_jump_oc",
+    "lebois:stryder/grapple",
+    "lebois:stryder/grapple_oc",
+    "lebois:stryder/un_grapple",
+    "lebois:stryder/oc_toggle",
+    "lebois:stryder/oc_overlay",
+    "lebois:stryder/safe_fall",
+    "lebois:stryder/safe_fall_oc",
+    "lebois:stryder/step_height_oc",
+    "lebois:stryder/drag_modifier_oc",
+    "lebois:stryder/shockwave",
+    "lebois:stryder/speedometer"
+  ],
+  "icon": {
+    "id": "minecraft:wind_charge"
+  },
+  "name": "Stryder",
+  "description": "Stryde around with the stryd mmmmmm",
+  "impact": 3
+}

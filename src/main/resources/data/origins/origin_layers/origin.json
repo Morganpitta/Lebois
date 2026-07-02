@@ -1,10 +1,10 @@
 {
   "replace": true,
   "origins": [
-    "lesbois:test",
-    "lesbois:parasyte",
-    "lesbois:stryder",
-    "lesbois:riposte"
+    "lebois:test",
+    "lebois:parasyte",
+    "lebois:stryder",
+    "lebois:riposte"
   ],
   "loading_priority": 1
 }

@@ -4,7 +4,7 @@ Open a command prompt with admin perms, run the following commands
 ```
 cd [Whatever your project folder is]
 
-mklink /D "run/saves/[World Name]/datapacks/lesbois_dev" ".datapack"
+mklink /D "run/saves/[World Name]/datapacks/lebois_dev" "[Whatever your project folder is]/.datapack"
 
 git config core.symlinks true
 

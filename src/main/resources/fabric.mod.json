@@ -1,27 +1,27 @@
 {
   "schemaVersion": 1,
-  "id": "lesbois",
+  "id": "lebois",
   "version": "${version}",
-  "name": "Lesbois",
+  "name": "Lebois",
   "description": "",
   "authors": [],
   "contact": {},
   "license": "MIT",
-  "icon": "assets/lesbois/icon.png",
+  "icon": "assets/lebois/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "morgan.lesbois.Lesbois"
+      "morgan.lebois.Lebois"
     ],
     "client": [
-      "morgan.lesbois.client.LesboisClient"
+      "morgan.lebois.client.LeboisClient"
     ],
     "cardinal-components": [
-      "morgan.lesbois.cardinalComponents.LesboisEntityComponents"
+      "morgan.lebois.cardinalComponents.LeboisEntityComponents"
     ]
   },
   "mixins": [
-    "lesbois.mixins.json"
+    "lebois.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.19.2",
@@ -30,8 +30,8 @@
   },
   "custom": {
     "cardinal-components": [
-      "lesbois:double_jumps",
-      "lesbois:possession"
+      "lebois:double_jumps",
+      "lebois:possession"
     ]
   }
 }

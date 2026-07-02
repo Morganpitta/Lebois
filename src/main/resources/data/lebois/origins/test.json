@@ -1,0 +1,12 @@
+{
+  "powers": [
+    "lebois:test_test",
+    "lebois:test_wings"
+  ],
+  "icon": {
+    "id": "minecraft:poisonous_potato"
+  },
+  "name": "Test",
+  "description": "Testing",
+  "impact": 1
+}

@@ -1,0 +1,5 @@
+{
+  "type": "lebois:wings",
+  "max_speed": 0.5,
+  "texture": "lebois:textures/entity/wings.png"
+}
