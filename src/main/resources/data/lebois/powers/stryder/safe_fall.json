@@ -12,5 +12,7 @@
     "type": "apoli:power_active",
     "power": "lebois:stryder/oc_toggle",
     "inverted": true
-  }
+  },
+  "name": "Fall Damage Resistance",
+  "description": "Increase the distance in which you can fall before you take fall damage."
 }

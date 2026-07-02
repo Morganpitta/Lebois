@@ -6,5 +6,7 @@
   "knockback": 1,
   "key": {
     "key": "key.origins.ternary_active"
-  }
+  },
+  "name": "Shockwave",
+  "description": "While moving at high speed, unleash a massive shockwave in your direction of travel to deal damage and launch enemies away."
 }
