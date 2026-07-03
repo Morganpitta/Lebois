@@ -1,5 +1,5 @@
 {
   "type": "lebois:speedometer",
   "name": "Spedometer",
-  "description": "Shows you how fast you're going, turns red when you can use shockwave."
+  "description": "Your Stryder suit has a built in speedometer, alerting you when your repulsors are available."
 }
