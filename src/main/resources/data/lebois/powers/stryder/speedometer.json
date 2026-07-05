@@ -1,5 +1,5 @@
 {
   "type": "lebois:speedometer",
-  "name": "Spedometer",
+  "name": "Speedometer",
   "description": "Your Stryder suit has a built in speedometer, alerting you when your repulsors are available."
 }

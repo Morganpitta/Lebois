@@ -51,6 +51,6 @@
     "sprite_location": "origins:textures/gui/community/huang/resource_bar_02.png",
     "bar_index": 5
   },
-  "name": "Grappling Hook",
+  "name": "x-064(H): Helios Hook",
   "description": "Release a hooked sword that lodges itself into a surface, rapidly pulling the user to where it lands. [DAYS SINCE LAST INCIDENT - 0]"
 }
