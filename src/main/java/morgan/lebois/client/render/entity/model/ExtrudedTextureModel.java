@@ -126,7 +126,6 @@ public class ExtrudedTextureModel {
                     endU = (u + 1) / textureWidth;
                     endV = (v + 1) / textureHeight;
 
-                    // Top face (Direction.UP)
                     if (yIndex == 0 || isTransparent(img, u, v - 1)) {
                         Vertex[] topVertices = new Vertex[]{
                                 new Vertex(startX, startY, startZ, 0, 0),
@@ -134,9 +133,9 @@ public class ExtrudedTextureModel {
                                 new Vertex(endX, startY, endZ, 0, 0),
                                 new Vertex(startX, startY, endZ, 0, 0)
                         };
-                        generatedQuads.add(new Quad(topVertices, startU, startV, endU, endV, 1.0F, 1.0F, false, Direction.UP));
+                        generatedQuads.add(new Quad(topVertices, startU, startV, endU, endV, 1.0F, 1.0F, false, Direction.DOWN));
                     }
-                    // Bottom face (Direction.DOWN)
+
                     if (yIndex == height - 1 || isTransparent(img, u, v + 1)) {
                         Vertex[] bottomVertices = new Vertex[]{
                                 new Vertex(startX, endY, endZ, 0, 0),
@@ -144,9 +143,9 @@ public class ExtrudedTextureModel {
                                 new Vertex(endX, endY, startZ, 0, 0),
                                 new Vertex(startX, endY, startZ, 0, 0)
                         };
-                        generatedQuads.add(new Quad(bottomVertices, startU, startV, endU, endV, 1.0F, 1.0F, false, Direction.DOWN));
+                        generatedQuads.add(new Quad(bottomVertices, startU, startV, endU, endV, 1.0F, 1.0F, false, Direction.UP));
                     }
-                    // Left face (Direction.WEST)
+
                     if (xIndex == 0 || isTransparent(img, u + 1, v)) {
                         Vertex[] leftVertices = new Vertex[]{
                                 new Vertex(startX, startY, startZ, 0, 0),
@@ -156,7 +155,7 @@ public class ExtrudedTextureModel {
                         };
                         generatedQuads.add(new Quad(leftVertices, startU, startV, endU, endV, 1.0F, 1.0F, false, Direction.WEST));
                     }
-                    // Right face (Direction.EAST)
+
                     if (xIndex == width - 1 || isTransparent(img, u - 1, v)) {
                         Vertex[] rightVertices = new Vertex[]{
                                 new Vertex(endX, startY, endZ, 0, 0),
