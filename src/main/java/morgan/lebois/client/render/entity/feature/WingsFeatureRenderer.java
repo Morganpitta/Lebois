@@ -1,5 +1,6 @@
 package morgan.lebois.client.render.entity.feature;
 
+import morgan.lebois.client.render.entity.WingsModelCacheManager;
 import morgan.lebois.client.render.entity.model.WingsEntityModel;
 import morgan.lebois.interfaces.Winged;
 import morgan.lebois.powers.WingsPowerType;
@@ -16,11 +17,9 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
 public class WingsFeatureRenderer extends FeatureRenderer<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>> {
-    private final WingsEntityModel model;
 
     public WingsFeatureRenderer(FeatureRendererContext<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>> context) {
         super(context);
-        this.model = new WingsEntityModel(WingsEntityModel.getTexturedModelData().createModel());
     }
 
     @Override
@@ -29,6 +28,8 @@ public class WingsFeatureRenderer extends FeatureRenderer<AbstractClientPlayerEn
 
         Identifier texture = WingsPowerType.getTexture(entity);
         if (texture == null) return;
+
+        WingsEntityModel model = WingsModelCacheManager.getOrCreate(texture);
 
         matrices.push();
 
@@ -39,15 +40,15 @@ public class WingsFeatureRenderer extends FeatureRenderer<AbstractClientPlayerEn
         matrices.translate(0.0F, yOffset, zOffset);
         matrices.scale(0.5F, 0.5F, 0.5F);
 
-        this.getContextModel().copyStateTo(this.model);
+        this.getContextModel().copyStateTo(model);
 
         float wingAngle = MathHelper.lerp(tickDelta, ((Winged) entity).lebois$getPrevWingAngle(), ((Winged) entity).lebois$getWingAngle());
         float wingDistance = MathHelper.lerp(tickDelta, ((Winged) entity).lebois$getPrevWingDistance(), ((Winged) entity).lebois$getWingDistance());
 
-        this.model.setAngles(entity, wingAngle, wingDistance, animationProgress, headYaw, headPitch);
+        model.setAngles(entity, wingAngle, wingDistance, animationProgress, headYaw, headPitch);
 
         VertexConsumer vertexConsumer = vertexConsumers.getBuffer(RenderLayer.getEntityTranslucentCull(texture));
-        this.model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV);
+        model.render(matrices, vertexConsumer, light, OverlayTexture.DEFAULT_UV);
 
         matrices.pop();
     }
