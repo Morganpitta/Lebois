@@ -30,6 +30,7 @@ public class WingsFeatureRenderer extends FeatureRenderer<AbstractClientPlayerEn
         if (texture == null) return;
 
         WingsEntityModel model = WingsModelCacheManager.getOrCreate(texture);
+        if (model == null) return;
 
         matrices.push();
 

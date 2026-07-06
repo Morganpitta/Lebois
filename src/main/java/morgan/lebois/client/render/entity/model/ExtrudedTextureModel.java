@@ -1,12 +1,15 @@
 package morgan.lebois.client.render.entity.model;
 
 import morgan.lebois.Lebois;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.resource.Resource;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.math.Direction;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -17,18 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+// Basically just mimicking how ModelPart works, but for extruded textures
+@Environment(EnvType.CLIENT)
 public class ExtrudedTextureModel {
-
-    public record ExtrudedQuad(
-            float x1, float y1, float z1,
-            float x2, float y2, float z2,
-            float x3, float y3, float z3,
-            float x4, float y4, float z4,
-            float u1, float v1, float u2, float v2,
-            Vector3f direction
-    ) {}
-
-    private final List<ExtrudedQuad> quads;
+    private final List<Quad> quads;
 
     public float pivotX;
     public float pivotY;
@@ -40,130 +35,144 @@ public class ExtrudedTextureModel {
     public float yScale = 1.0F;
     public float zScale = 1.0F;
     public boolean visible = true;
+    public boolean hidden = false;
 
-    public ExtrudedTextureModel(Identifier textureId, int offsetU, int offsetV, float offsetX, float offsetY, int width, int height, float depth) {
-        this.quads = generateExtrudedQuads(textureId, offsetU, offsetV, offsetX, offsetY, width, height, depth);
+    public ExtrudedTextureModel(Identifier textureId, int offsetU, int offsetV, float offsetX, float offsetY, float offsetZ, int width, int height, float depth) {
+        this.quads = generateQuads(textureId, offsetU, offsetV, offsetX, offsetY, offsetZ, width, height, depth);
     }
 
+    // See ModelPart#render()
     public void render(MatrixStack matrices, VertexConsumer vertices, int light, int overlay, int color) {
-        if (!this.visible || this.quads.isEmpty()) return;
+        if (this.visible) {
+            if (!this.quads.isEmpty()) {
+                matrices.push();
 
-        matrices.push();
+                this.rotate(matrices);
 
-        // --- COPIED DIRECTLY FROM ModelPart#rotate ---
+                if (!this.hidden) {
+                    this.renderQuads(matrices.peek(), vertices, light, overlay, color);
+                }
+
+                matrices.pop();
+            }
+        }
+    }
+
+    public void rotate(MatrixStack matrices) {
         matrices.translate(this.pivotX / 16.0F, this.pivotY / 16.0F, this.pivotZ / 16.0F);
         if (this.pitch != 0.0F || this.yaw != 0.0F || this.roll != 0.0F) {
             matrices.multiply((new Quaternionf()).rotationZYX(this.roll, this.yaw, this.pitch));
         }
+
         if (this.xScale != 1.0F || this.yScale != 1.0F || this.zScale != 1.0F) {
             matrices.scale(this.xScale, this.yScale, this.zScale);
         }
-
-        MatrixStack.Entry entry = matrices.peek();
-        Matrix4f positionMatrix = entry.getPositionMatrix();
-        Vector3f normalBuffer = new Vector3f();
-
-        for (ExtrudedQuad quad : this.quads) {
-            // --- COPIED DIRECTLY FROM ModelPart#renderCuboids Normal Transformation ---
-            Vector3f transformedNormal = entry.transformNormal(quad.direction, normalBuffer);
-            float nx = transformedNormal.x();
-            float ny = transformedNormal.y();
-            float nz = transformedNormal.z();
-
-            // Pass the raw overlay color directly through to prevent color degradation
-            renderVertex(positionMatrix, vertices, quad.x1, quad.y1, quad.z1, quad.u1, quad.v1, overlay, light, nx, ny, nz, color);
-            renderVertex(positionMatrix, vertices, quad.x2, quad.y2, quad.z2, quad.u1, quad.v2, overlay, light, nx, ny, nz, color);
-            renderVertex(positionMatrix, vertices, quad.x3, quad.y3, quad.z3, quad.u2, quad.v2, overlay, light, nx, ny, nz, color);
-            renderVertex(positionMatrix, vertices, quad.x4, quad.y4, quad.z4, quad.u2, quad.v1, overlay, light, nx, ny, nz, color);
-        }
-
-        matrices.pop();
     }
 
-    private void renderVertex(Matrix4f matrix, VertexConsumer consumer, float x, float y, float z, float u, float v, int overlay, int light, float nx, float ny, float nz, int color) {
-        // --- COPIED DIRECTLY FROM ModelPart.Cuboid#renderCuboid Vertex Scaling ---
-        float blockX = x / 16.0F;
-        float blockY = y / 16.0F;
-        float blockZ = z / 16.0F;
-        Vector3f posBuffer = matrix.transformPosition(blockX, blockY, blockZ, new Vector3f());
-
-        consumer.vertex(posBuffer.x(), posBuffer.y(), posBuffer.z(), color, u, v, overlay, light, nx, ny, nz);
-    }
-
-    private static List<ExtrudedQuad> generateExtrudedQuads(Identifier textureId, int offsetU, int offsetV, float offsetX, float offsetY, int width, int height, float depth) {
-        List<ExtrudedQuad> generatedQuads = new ArrayList<>();
+    private static List<Quad> generateQuads(Identifier textureId, int offsetU, int offsetV, float offsetX, float offsetY, float offsetZ, int width, int height, float depth) {
+        List<Quad> generatedQuads = new ArrayList<>();
         try (NativeImage img = loadNativeImageFromResource(textureId)) {
             if (img == null) return generatedQuads;
-            float texW = (float) img.getWidth();
-            float texH = (float) img.getHeight();
 
-            float fullU1 = offsetU / texW;
-            float fullV1 = offsetV / texH;
-            float fullU2 = (offsetU + width) / texW;
-            float fullV2 = (offsetV + height) / texH;
+            float textureWidth = (float) img.getWidth();
+            float textureHeight = (float) img.getHeight();
+
+            float startU = offsetU / textureWidth;
+            float startV = offsetV / textureHeight;
+            float endU = (offsetU + width) / textureWidth;
+            float endV = (offsetV + height) / textureHeight;
+
+            float startX = offsetX;
+            float startY = offsetY;
+            float startZ = offsetZ;
 
             float endX = offsetX + width;
             float endY = offsetY + height;
+            float endZ = offsetZ + depth;
 
-            // --- FIXED PANEL WINDING & COORDINATES ---
-            // Front Face (z = depth)
-            generatedQuads.add(new ExtrudedQuad(
-                    endX, offsetY, depth,
-                    endX, endY, depth,
-                    offsetX, endY, depth,
-                    offsetX, offsetY, depth,
-                    fullU1, fullV1, fullU2, fullV2, new Vector3f(0, 0, 1)
-            ));
+            // OpenGL renders counter-clockwise (if you are facing the quad)
+            // Top Right, Top Left, Bottom Left, Bottom Right
 
-            // Back Face (z = 0.0F)
-            generatedQuads.add(new ExtrudedQuad(
-                    offsetX, offsetY, 0.0F,
-                    offsetX, endY, 0.0F,
-                    endX, endY, 0.0F,
-                    endX, offsetY, 0.0F,
-                    fullU2, fullV1, fullU1, fullV2, new Vector3f(0, 0, -1)
-            ));
+            // Front face
+            Vertex[] frontVertices = new Vertex[]{
+                    new Vertex(endX, endY, endZ, 0, 0),
+                    new Vertex(startX, endY, endZ, 0, 0),
+                    new Vertex(startX, startY, endZ, 0, 0),
+                    new Vertex(endX, startY, endZ, 0, 0)
+            };
+            generatedQuads.add(new Quad(frontVertices, startU, startV, endU, endV, 1.0F, 1.0F, false, Direction.SOUTH));
 
-            // --- FIXED SIDE STRIPS & DIRECTION CORRECTIONS ---
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    // Read texture right-to-left to cancel out the global texture flip
-                    int u = offsetU + (width - 1 - x);
-                    int v = offsetV + y;
+            // Back face
+            Vertex[] backVertices = new Vertex[]{
+                    new Vertex(endX, startY, startZ, 0, 0),
+                    new Vertex(startX, startY, startZ, 0, 0),
+                    new Vertex(startX, endY, startZ, 0, 0),
+                    new Vertex(endX, endY, startZ, 0, 0)
+            };
+            generatedQuads.add(new Quad(backVertices, startU, startV, endU, endV, 1.0F, 1.0F, false, Direction.NORTH));
+
+            // Side Quads
+            for (int xIndex = 0; xIndex < width; xIndex++) {
+                for (int yIndex = 0; yIndex < height; yIndex++) {
+                    int u = offsetU + xIndex;
+                    int v = offsetV + yIndex;
 
                     if (isTransparent(img, u, v)) continue;
 
-                    // Track positions along flipped structural orientation
-                    float px1 = offsetX + x;
-                    float px2 = px1 + 1.0F;
-                    float py1 = offsetY + y;
-                    float py2 = py1 + 1.0F;
+                    startX = offsetX + xIndex;
+                    endX = startX + 1.0F;
+                    startY = offsetY + yIndex;
+                    endY = startY + 1.0F;
 
-                    float u1 = u / texW;
-                    float v1 = v / texH;
-                    float u2 = (u + 1) / texW;
-                    float v2 = (v + 1) / texH;
+                    startU = u / textureWidth;
+                    startV = v / textureHeight;
+                    endU = (u + 1) / textureWidth;
+                    endV = (v + 1) / textureHeight;
 
-                    // Top Edge (Y-)
-                    if (y == 0 || isTransparent(img, u, v - 1)) {
-                        generatedQuads.add(new ExtrudedQuad(px2, py1, 0.0F, px2, py1, depth, px1, py1, depth, px1, py1, 0.0F, u1, v1, u2, v2, new Vector3f(0, -1, 0)));
+                    // Top face
+                    if (yIndex == 0 || isTransparent(img, u, v + 1)) {
+                        Vertex[] topVertices = new Vertex[]{
+                                new Vertex(endX, endY, startZ, 0, 0),
+                                new Vertex(startX, endY, startZ, 0, 0),
+                                new Vertex(startX, endY, endZ, 0, 0),
+                                new Vertex(endX, endY, endZ, 0, 0)
+                        };
+                        generatedQuads.add(new Quad(topVertices, startU, startV, endU, endV, 1.0F, 1.0F, true, Direction.UP));
                     }
-                    // Bottom Edge (Y+)
-                    if (y == height - 1 || isTransparent(img, u, v + 1)) {
-                        generatedQuads.add(new ExtrudedQuad(px1, py2, 0.0F, px1, py2, depth, px2, py2, depth, px2, py2, 0.0F, u1, v1, u2, v2, new Vector3f(0, 1, 0)));
+                    // Bottom face
+                    if (yIndex == height - 1 || isTransparent(img, u, v - 1)) {
+                        Vertex[] bottomVertices = new Vertex[]{
+                                new Vertex(endX, startY, endZ, 0, 0),
+                                new Vertex(startX, startY, endZ, 0, 0),
+                                new Vertex(startX, startY, startZ, 0, 0),
+                                new Vertex(endX, startY, startZ, 0, 0)
+                        };
+                        generatedQuads.add(new Quad(bottomVertices, startU, startV, endU, endV, 1.0F, 1.0F, true, Direction.DOWN));
                     }
-                    // Left Edge (X-)
-                    if (x == 0 || isTransparent(img, offsetU + (width - x), v)) {
-                        generatedQuads.add(new ExtrudedQuad(px1, py1, 0.0F, px1, py1, depth, px1, py2, depth, px1, py2, 0.0F, u1, v1, u2, v2, new Vector3f(-1, 0, 0)));
+                    // Left face
+                    if (xIndex == 0 || isTransparent(img, u - 1, v)) {
+                        Vertex[] leftVertices = new Vertex[]{
+                                new Vertex(startX, endY, endZ, 0, 0),
+                                new Vertex(startX, endY, startZ, 0, 0),
+                                new Vertex(startX, startY, startZ, 0, 0),
+                                new Vertex(startX, startY, endZ, 0, 0)
+                        };
+                        generatedQuads.add(new Quad(leftVertices, startU, startV, endU, endV, 1.0F, 1.0F, true, Direction.WEST));
                     }
-                    // Right Edge (X+)
-                    if (x == width - 1 || isTransparent(img, offsetU + (width - 2 - x), v)) {
-                        generatedQuads.add(new ExtrudedQuad(px2, py2, 0.0F, px2, py2, depth, px2, py1, depth, px2, py1, 0.0F, u1, v1, u2, v2, new Vector3f(1, 0, 0)));
+                    // Right face
+                    if (xIndex == width - 1 || isTransparent(img, u + 1, v)) {
+                        Vertex[] rightVertices = new Vertex[]{
+                                new Vertex(endX, endY, startZ, 0, 0),
+                                new Vertex(endX, endY, endZ, 0, 0),
+                                new Vertex(endX, startY, endZ, 0, 0),
+                                new Vertex(endX, startY, startZ, 0, 0)
+                        };
+                        generatedQuads.add(new Quad(rightVertices, startU, startV, endU, endV, 1.0F, 1.0F, true, Direction.EAST));
                     }
                 }
             }
         } catch (Exception e) {
-            Lebois.LOGGER.warn("Failed to generate custom model extrusion data for texture: {}", textureId);
+            Lebois.LOGGER.warn("Failed to generate ExtrudedTextureModel from ID: {}", textureId);
         }
         return generatedQuads;
     }
@@ -184,5 +193,85 @@ public class ExtrudedTextureModel {
     private static boolean isTransparent(NativeImage img, int u, int v) {
         if (u < 0 || v < 0 || u >= img.getWidth() || v >= img.getHeight()) return true;
         return (img.getColor(u, v) >>> 24) < 10;
+    }
+
+
+    // See ModelPart#Quad
+    @Environment(EnvType.CLIENT)
+    public static class Quad {
+        public final Vertex[] vertices;
+        public final Vector3f direction;
+
+        public Quad(Vertex[] vertices, float u1, float v1, float u2, float v2, float squishU, float squishV, boolean flip, Direction direction) {
+            this.vertices = vertices;
+            float f = 0.0F / squishU;
+            float g = 0.0F / squishV;
+            vertices[0] = vertices[0].remap(u2 / squishU - f, v1 / squishV + g);
+            vertices[1] = vertices[1].remap(u1 / squishU + f, v1 / squishV + g);
+            vertices[2] = vertices[2].remap(u1 / squishU + f, v2 / squishV - g);
+            vertices[3] = vertices[3].remap(u2 / squishU - f, v2 / squishV - g);
+            if (flip) {
+                int i = vertices.length;
+
+                for (int j = 0; j < i / 2; j++) {
+                    Vertex vertex = vertices[j];
+                    vertices[j] = vertices[i - 1 - j];
+                    vertices[i - 1 - j] = vertex;
+                }
+            }
+
+            this.direction = direction.getUnitVector();
+            if (flip) {
+                this.direction.mul(-1.0F, 1.0F, 1.0F);
+            }
+        }
+    }
+
+    // See ModelPart#Vertex
+    @Environment(EnvType.CLIENT)
+    public static class Vertex {
+        public final Vector3f pos;
+        public final float u;
+        public final float v;
+
+        public Vertex(float x, float y, float z, float u, float v) {
+            this(new Vector3f(x, y, z), u, v);
+        }
+
+        public Vertex remap(float u, float v) {
+            return new Vertex(this.pos, u, v);
+        }
+
+        public Vertex(Vector3f pos, float u, float v) {
+            this.pos = pos;
+            this.u = u;
+            this.v = v;
+        }
+    }
+
+    // See ModelPart#renderCuboids()
+    private void renderQuads(MatrixStack.Entry entry, VertexConsumer vertexConsumer, int light, int overlay, int color) {
+        for (Quad quad : this.quads) {
+            renderQuad(quad, entry, vertexConsumer, light, overlay, color);
+        }
+    }
+
+    // See ModelPart#renderCuboid()
+    private void renderQuad(Quad quad, MatrixStack.Entry entry, VertexConsumer vertexConsumer, int light, int overlay, int color) {
+        Matrix4f matrix4f = entry.getPositionMatrix();
+        Vector3f vector3f = new Vector3f();
+
+        Vector3f transformedNormal = entry.transformNormal(quad.direction, vector3f);
+        float f = transformedNormal.x();
+        float g = transformedNormal.y();
+        float h = transformedNormal.z();
+
+        for (Vertex vertex : quad.vertices) {
+            float i = vertex.pos.x() / 16.0F;
+            float j = vertex.pos.y() / 16.0F;
+            float k = vertex.pos.z() / 16.0F;
+            Vector3f transformedPos = matrix4f.transformPosition(i, j, k, vector3f);
+            vertexConsumer.vertex(transformedPos.x(), transformedPos.y(), transformedPos.z(), color, vertex.u, vertex.v, overlay, light, f, g, h);
+        }
     }
 }

@@ -18,8 +18,8 @@ public class WingsEntityModel extends AnimalModel<AbstractClientPlayerEntity> {
     private final ExtrudedTextureModel rightWing;
 
     public WingsEntityModel(Identifier texture) {
-        this.leftWing = new ExtrudedTextureModel(texture, 0, 0, 0.0F, -18.0F, 24, 36, 1.0F);
-        this.rightWing = new ExtrudedTextureModel(texture, 24, 0, -24.0F, -18.0F, 24, 36, 1.0F);
+        this.leftWing = new ExtrudedTextureModel(texture, 0, 0, 0.0F, -18.0F, 0.0F, 24, 36, 1.0F);
+        this.rightWing = new ExtrudedTextureModel(texture, 24, 0, -24.0F, -18.0F, 0.0F, 24, 36, 1.0F);
 
         this.leftWing.pivotX = 0.0F;
         this.leftWing.pivotY = 0.0F;
