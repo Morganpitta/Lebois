@@ -13,5 +13,5 @@ public interface Winged {
     public float lebois$getPrevWingDistance();
     public void lebois$updateWings();
 
-    public boolean lebois$canPropell();
+    public boolean lebois$gliding();
 }

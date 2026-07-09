@@ -89,9 +89,9 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Winged {
         }
     }
 
-    public boolean lebois$canPropell() {
+    public boolean lebois$gliding() {
         int maxUseTime = WingsPowerType.getMaxUseTime((PlayerEntity) (Object) this);
-        return maxUseTime == -1 || this.flyingTime < maxUseTime;
+        return maxUseTime != -1 && this.flyingTime >= maxUseTime;
     }
 
     @Inject(method = "tickMovement", at=@At("HEAD"))
@@ -113,7 +113,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Winged {
                 this.setVelocity(this.getVelocity().add(directionNormalised.x * boost, 0.0F, directionNormalised.z * boost));
 
                 double yVelocity = this.getVelocity().y;
-                if (this.lebois$canPropell()) {
+                if (!this.lebois$gliding()) {
                     if (yVelocity < maxSpeed) {
                         yVelocity = (double) Math.min(maxSpeed, yVelocity + acceleration);
                     }
