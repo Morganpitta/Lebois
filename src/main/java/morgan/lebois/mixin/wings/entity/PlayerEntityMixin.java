@@ -120,7 +120,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Winged {
                 }
                 else {
                     if (yVelocity < 0) {
-                        yVelocity *= 0.91;
+                        yVelocity *= 0.85;
                     }
                 }
 
