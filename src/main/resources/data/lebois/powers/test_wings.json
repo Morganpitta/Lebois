@@ -1,6 +1,7 @@
 {
   "type": "lebois:wings",
   "max_speed": 0.5,
+  "max_use_time": 100,
   "texture": "lebois:textures/entity/wings.png",
   "width": 20,
   "height": 25,

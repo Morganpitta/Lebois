@@ -39,7 +39,7 @@ public abstract class PlayerEntityMixin extends LivingEntity implements DoubleJu
     }
 
     @Unique
-    public void lebois$doubleJump() {
+    public void lebois$doubleJump(boolean boost, float forwardSpeed, float sidewaysSpeed) {
         Vec3d vec3d = this.getVelocity();
         float yaw = this.getYaw() * ((float)Math.PI / 180F);
         double horizontalSpeed = vec3d.horizontalLength();
@@ -47,16 +47,16 @@ public abstract class PlayerEntityMixin extends LivingEntity implements DoubleJu
         this.setVelocity(vec3d.x, Math.max(this.getJumpVelocity() * this.lebois$getDoubleJumpHeight(), vec3d.y), vec3d.z);
 
         Vec3d directionNormalised = new Vec3d(
-                (-MathHelper.sin(yaw) * this.forwardSpeed) + (MathHelper.cos(yaw) * this.sidewaysSpeed),
+                (-MathHelper.sin(yaw) * forwardSpeed) + (MathHelper.cos(yaw) * sidewaysSpeed),
                 0,
-                (MathHelper.cos(yaw) * this.forwardSpeed) + (MathHelper.sin(yaw) * this.sidewaysSpeed)
+                (MathHelper.cos(yaw) * forwardSpeed) + (MathHelper.sin(yaw) * sidewaysSpeed)
         ).normalize();
 
         if (directionNormalised.lengthSquared() > 0) {
             this.setVelocity(directionNormalised.x * horizontalSpeed, this.getVelocity().y, directionNormalised.z * horizontalSpeed);
         }
 
-        if (this.isSprinting()) {
+        if (boost) {
             this.setVelocity(this.getVelocity().add(directionNormalised.x * 0.2, 0.0, directionNormalised.z * 0.2));
         }
 

@@ -26,11 +26,12 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Winged {
     @Unique
     private static final TrackedData<Boolean> IS_FLYING = DataTracker.registerData(PlayerEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
 
-    @Unique float wingSpeed = 0.0F;
-    @Unique float wingAngle = 0.0F;
-    @Unique float prevWingAngle = 0.0F;
-    @Unique float wingDistance = 0.0F;
-    @Unique float prevWingDistance = 0.0F;
+    @Unique private int flyingTime = 0;
+    @Unique private float wingSpeed = 0.0F;
+    @Unique private float wingAngle = 0.0F;
+    @Unique private float prevWingAngle = 0.0F;
+    @Unique private float wingDistance = 0.0F;
+    @Unique private float prevWingDistance = 0.0F;
 
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
@@ -47,6 +48,14 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Winged {
 
     public void lebois$setFlying(boolean value) {
         this.dataTracker.set(IS_FLYING, value);
+    }
+
+    public int lebois$getFlyingTime() {
+        return this.flyingTime;
+    }
+
+    public void lebois$setFlyingTime(int value) {
+        this.flyingTime = value;
     }
 
     public float lebois$getWingAngle() {
@@ -80,6 +89,11 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Winged {
         }
     }
 
+    public boolean lebois$canPropell() {
+        int maxUseTime = WingsPowerType.getMaxUseTime((PlayerEntity) (Object) this);
+        return maxUseTime == -1 || this.flyingTime < maxUseTime;
+    }
+
     @Inject(method = "tickMovement", at=@At("HEAD"))
     public void tickMovement(CallbackInfo ci) {
         if (WingsPowerType.hasWings((PlayerEntity) (Object) this)) {
@@ -96,12 +110,23 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Winged {
                         (MathHelper.cos(yaw) * this.forwardSpeed) + (MathHelper.sin(yaw) * this.sidewaysSpeed)
                 ).normalize();
 
-                float clampedAcceleration = 0.0F;
-                if (this.getVelocity().y < maxSpeed) {
-                    clampedAcceleration = (float) Math.min(maxSpeed - this.getVelocity().y, acceleration);
+                this.setVelocity(this.getVelocity().add(directionNormalised.x * boost, 0.0F, directionNormalised.z * boost));
+
+                double yVelocity = this.getVelocity().y;
+                if (this.lebois$canPropell()) {
+                    if (yVelocity < maxSpeed) {
+                        yVelocity = (double) Math.min(maxSpeed, yVelocity + acceleration);
+                    }
+                }
+                else {
+                    if (yVelocity < 0) {
+                        yVelocity *= 0.91;
+                    }
                 }
 
-                this.setVelocity(this.getVelocity().add(directionNormalised.x * boost, clampedAcceleration, directionNormalised.z * boost));
+                this.setVelocity(this.getVelocity().x, yVelocity, this.getVelocity().z);
+
+                this.flyingTime++;
 
                 this.fallDistance = 0;
                 this.velocityDirty = true;

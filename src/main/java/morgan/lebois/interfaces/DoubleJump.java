@@ -7,5 +7,5 @@ public interface DoubleJump {
     public void lebois$setDoubleJumps(int doubleJumps);
 
     public boolean lebois$canDoubleJump();
-    public void lebois$doubleJump();
+    public void lebois$doubleJump(boolean boost, float forwardSpeed, float sidewaysSpeed);
 }

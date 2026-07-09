@@ -16,6 +16,7 @@ import java.util.Optional;
 public class WingsPowerType extends PowerType {
     private final float acceleration;
     private final float maxSpeed;
+    private final int maxUseTime;
     private final float boost;
     private final Identifier texture;
     private final int width;
@@ -27,6 +28,7 @@ public class WingsPowerType extends PowerType {
             new SerializableData()
                     .add("acceleration", SerializableDataTypes.FLOAT, 0.15F)
                     .add("max_speed", SerializableDataTypes.FLOAT, 1.0F)
+                    .add("max_use_time", SerializableDataTypes.INT, -1)
                     .add("boost", SerializableDataTypes.FLOAT, 0.035F)
                     .add("texture", SerializableDataTypes.IDENTIFIER)
                     .add("width", SerializableDataTypes.INT)
@@ -36,6 +38,7 @@ public class WingsPowerType extends PowerType {
             (data, condition) -> new WingsPowerType(
                     data.get("acceleration"),
                     data.get("max_speed"),
+                    data.get("max_use_time"),
                     data.get("boost"),
                     data.get("texture"),
                     data.get("width"),
@@ -47,6 +50,7 @@ public class WingsPowerType extends PowerType {
             (powerType, serializableData) -> serializableData.instance()
                     .set("acceleration", powerType.acceleration)
                     .set("max_speed", powerType.maxSpeed)
+                    .set("max_use_time", powerType.maxUseTime)
                     .set("boost", powerType.boost)
                     .set("texture", powerType.texture)
                     .set("width", powerType.width)
@@ -55,10 +59,11 @@ public class WingsPowerType extends PowerType {
                     .set("offset", powerType.offset)
     );
 
-    WingsPowerType(float acceleration, float maxSpeed, float boost, Identifier texture, int width, int height, float scale, float offset, Optional<EntityCondition> condition) {
+    WingsPowerType(float acceleration, float maxSpeed, int maxUseTime, float boost, Identifier texture, int width, int height, float scale, float offset, Optional<EntityCondition> condition) {
         super(condition);
         this.acceleration = acceleration;
         this.maxSpeed = maxSpeed;
+        this.maxUseTime = maxUseTime;
         this.boost = boost;
         this.texture = texture;
         this.width = width;
@@ -84,6 +89,11 @@ public class WingsPowerType extends PowerType {
     public static float getMaxSpeed(PlayerEntity player) {
         return (float) PowerHolderComponent.getPowerTypes(player, WingsPowerType.class).stream()
                 .mapToDouble(powerType -> powerType.maxSpeed).max().orElse(0);
+    }
+
+    public static int getMaxUseTime(PlayerEntity player) {
+        return PowerHolderComponent.getPowerTypes(player, WingsPowerType.class).stream()
+                .mapToInt(powerType -> powerType.maxUseTime).max().orElse(0);
     }
 
     public static float getBoost(PlayerEntity player) {

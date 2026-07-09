@@ -3,6 +3,7 @@ package morgan.lebois.mixin.grapple.entity.player;
 import morgan.lebois.entity.GrappleHookEntity;
 import morgan.lebois.interfaces.DoubleJump;
 import morgan.lebois.interfaces.Grapple;
+import morgan.lebois.interfaces.Winged;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -66,8 +67,12 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Grapple 
         this.getWorld().spawnEntity(hook);
         this.grappleHook = hook;
 
+        // MP: Probably the wrong way to do this but im not mithered
         DoubleJump doubleJumps = (DoubleJump) (Object) this;
         doubleJumps.lebois$setDoubleJumps(doubleJumps.lebois$getMaxDoubleJumps());
+
+        Winged winged = (Winged) (Object) this;
+        winged.lebois$setFlyingTime(0);
 
         return hook;
     }

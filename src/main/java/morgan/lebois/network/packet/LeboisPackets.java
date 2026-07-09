@@ -47,14 +47,14 @@ public class LeboisPackets {
     public static void handleDoubleJumpPacket(DoubleJumpC2SPacket payload, ServerPlayNetworking.Context context) {
         MinecraftServer server = context.player().getServer();
 
-        if ( server == null ) return;
+        if (server == null) return;
 
         server.execute(() -> {
             ServerPlayerEntity player = context.player();
-            DoubleJump playerCasted = (DoubleJump) (Object) player;
+            DoubleJump playerCasted = (DoubleJump) player;
 
             if (playerCasted.lebois$getDoubleJumps() > 0) {
-                playerCasted.lebois$doubleJump();
+                playerCasted.lebois$doubleJump(payload.boost(), Math.clamp(payload.forwardSpeed(), -1.0F, 1.0F), Math.clamp(payload.sidewaysSpeed(), -1.0F, 1.0F));
             }
         });
     }
