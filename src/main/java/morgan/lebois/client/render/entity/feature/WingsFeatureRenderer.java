@@ -27,19 +27,23 @@ public class WingsFeatureRenderer extends FeatureRenderer<AbstractClientPlayerEn
         if (!WingsPowerType.hasWings(entity)) return;
 
         Identifier texture = WingsPowerType.getTexture(entity);
-        if (texture == null) return;
+        int width = WingsPowerType.getWidth(entity);
+        int height = WingsPowerType.getHeight(entity);
+        float scale = WingsPowerType.getScale(entity);
+        float offset = WingsPowerType.getOffset(entity);
+        if (texture == null || width <= 0 || height <= 0) return;
 
-        WingsEntityModel model = WingsModelCacheManager.getOrCreate(texture);
+        WingsEntityModel model = WingsModelCacheManager.getOrCreate(texture, width, height);
         if (model == null) return;
 
         matrices.push();
 
-        float yOffset = (0.375F) * this.getContextModel().body.yScale;
-        float zOffset = (0.125F - 0.015625F) * this.getContextModel().body.zScale;
+        float yOffset = (6.0F + offset) / 16.0F * this.getContextModel().body.yScale;
+        float zOffset = (2.0F - 0.25F) / 16.0F * this.getContextModel().body.zScale;
 
         this.getContextModel().body.rotate(matrices);
         matrices.translate(0.0F, yOffset, zOffset);
-        matrices.scale(0.5F, 0.5F, 0.5F);
+        matrices.scale(scale, scale, scale);
 
         this.getContextModel().copyStateTo(model);
 

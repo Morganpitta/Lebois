@@ -37,8 +37,8 @@ public class ExtrudedTextureModel {
     public boolean visible = true;
     public boolean hidden = false;
 
-    public ExtrudedTextureModel(Identifier textureId, int offsetU, int offsetV, float offsetX, float offsetY, float offsetZ, int width, int height, float depth, boolean mirror) {
-        if (textureId == null) {
+    public ExtrudedTextureModel(Identifier texture, int offsetU, int offsetV, float offsetX, float offsetY, float offsetZ, int width, int height, float depth, boolean mirror) {
+        if (texture == null) {
             throw new IllegalArgumentException("Texture cannot be null");
         }
         if (offsetU < 0 || offsetV < 0) {
@@ -51,7 +51,7 @@ public class ExtrudedTextureModel {
             throw new IllegalArgumentException("Depth must be positive");
         }
 
-        this.quads = generateQuads(textureId, offsetU, offsetV, offsetX, offsetY, offsetZ, width, height, depth, mirror);
+        this.quads = generateQuads(texture, offsetU, offsetV, offsetX, offsetY, offsetZ, width, height, depth, mirror);
     }
 
     // See ModelPart#render()
@@ -82,11 +82,11 @@ public class ExtrudedTextureModel {
         }
     }
 
-    private static List<Quad> generateQuads(Identifier textureId, int offsetU, int offsetV, float offsetX, float offsetY, float offsetZ, int width, int height, float depth, boolean mirror) {
+    private static List<Quad> generateQuads(Identifier texture, int offsetU, int offsetV, float offsetX, float offsetY, float offsetZ, int width, int height, float depth, boolean mirror) {
         List<Quad> generatedQuads = new ArrayList<>();
-        try (NativeImage img = loadNativeImageFromResource(textureId)) {
+        try (NativeImage img = loadNativeImageFromResource(texture)) {
             if (img == null) {
-                Lebois.LOGGER.error("Failed to load texture '{}' for ExtrudedTextureModel", textureId);
+                Lebois.LOGGER.error("Failed to load texture '{}' for ExtrudedTextureModel", texture);
                 return generatedQuads;
             }
 
@@ -94,7 +94,7 @@ public class ExtrudedTextureModel {
             float textureHeight = (float) img.getHeight();
 
             if (offsetU + width > textureWidth || offsetV + height > textureHeight) {
-                Lebois.LOGGER.error("UV mapping out of bounds for ExtrudedTextureModel with texture '{}'", textureId);
+                Lebois.LOGGER.error("UV mapping out of bounds for ExtrudedTextureModel with texture '{}'", texture);
                 return generatedQuads;
             }
 
@@ -196,7 +196,7 @@ public class ExtrudedTextureModel {
                 }
             }
         } catch (Exception e) {
-            Lebois.LOGGER.warn("Failed to generate ExtrudedTextureModel from texture '{}'", textureId);
+            Lebois.LOGGER.warn("Failed to generate ExtrudedTextureModel from texture '{}'", texture);
         }
         return generatedQuads;
     }
@@ -299,12 +299,12 @@ public class ExtrudedTextureModel {
         }
     }
 
-    public static Builder builder(Identifier textureId, int width, int height, float depth) {
-        return new Builder(textureId, width, height, depth);
+    public static Builder builder(Identifier texture, int width, int height, float depth) {
+        return new Builder(texture, width, height, depth);
     }
 
     public static class Builder {
-        private final Identifier textureId;
+        private final Identifier texture;
         private final int width;
         private final int height;
         private final float depth;
@@ -320,10 +320,13 @@ public class ExtrudedTextureModel {
         private float pitch = 0.0F;
         private float yaw = 0.0F;
         private float roll = 0.0F;
+        public float xScale = 1.0F;
+        public float yScale = 1.0F;
+        public float zScale = 1.0F;
         private boolean mirror = false;
 
-        public Builder(Identifier textureId, int width, int height, float depth) {
-            this.textureId = textureId;
+        public Builder(Identifier texture, int width, int height, float depth) {
+            this.texture = texture;
             this.width = width;
             this.height = height;
             this.depth = depth;
@@ -349,10 +352,24 @@ public class ExtrudedTextureModel {
             return this;
         }
 
-        public Builder rotate(float pitch, float yaw, float roll) {
+        public Builder rotation(float pitch, float yaw, float roll) {
             this.pitch = pitch;
             this.yaw = yaw;
             this.roll = roll;
+            return this;
+        }
+
+        public Builder scale(float xScale, float yScale, float zScale) {
+            this.xScale = xScale;
+            this.yScale = yScale;
+            this.zScale = zScale;
+            return this;
+        }
+
+        public Builder scale(float scale) {
+            this.xScale = scale;
+            this.yScale = scale;
+            this.zScale = scale;
             return this;
         }
 
@@ -363,7 +380,7 @@ public class ExtrudedTextureModel {
 
         public ExtrudedTextureModel build() {
             ExtrudedTextureModel model = new ExtrudedTextureModel(
-                    this.textureId, this.u, this.v,
+                    this.texture, this.u, this.v,
                     this.offsetX, this.offsetY, this.offsetZ,
                     this.width, this.height, this.depth, mirror
             );
@@ -374,6 +391,9 @@ public class ExtrudedTextureModel {
             model.pitch = this.pitch;
             model.yaw = this.yaw;
             model.roll = this.roll;
+            model.xScale = this.xScale;
+            model.yScale = this.yScale;
+            model.zScale = this.zScale;
 
             return model;
         }

@@ -17,16 +17,12 @@ public class WingsEntityModel extends AnimalModel<AbstractClientPlayerEntity> {
     private final ExtrudedTextureModel leftWing;
     private final ExtrudedTextureModel rightWing;
 
-    public WingsEntityModel(Identifier texture) {
-        this.leftWing = ExtrudedTextureModel.builder(texture, 24, 36, 1.0F)
-                            .uv(0, 0)
-                            .offset(1.0F, -18.0F, 0.0F)
-                            .pivot(1.0F, 0.0F, 0.0F).rotate(0.0F, -DEFAULT_ANGLE, 0.0F).build();
+    public WingsEntityModel(Identifier texture, int width, int height) {
+        this.leftWing = ExtrudedTextureModel.builder(texture, width, height, 1.0F).uv(0, 0).offset(0.0F, -height/2.0F, 0.0F)
+                                            .pivot(1.0F, 0.0F, 0.0F).rotation(0.0F, -DEFAULT_ANGLE, 0.0F).build();
 
-        this.rightWing = ExtrudedTextureModel.builder(texture, 24, 36, 1.0F)
-                .uv(24, 0)
-                .offset(-25.0F, -18.0F, 0.0F)
-                .pivot(-1.0F, 0.0F, 0.0F).rotate(0.0F, DEFAULT_ANGLE, 0.0F).build();
+        this.rightWing = ExtrudedTextureModel.builder(texture, width, height, 1.0F).uv(width, 0).offset(-width, -height/2.0F, 0.0F)
+                                             .pivot(-1.0F, 0.0F, 0.0F).rotation(0.0F, DEFAULT_ANGLE, 0.0F).build();
     }
 
     @Override

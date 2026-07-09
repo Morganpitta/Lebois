@@ -12,16 +12,18 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class WingsModelCacheManager {
-    private static final Map<Identifier, WingsEntityModel> cachedModelMap = new ConcurrentHashMap<>();
+    private record Key(Identifier texture, int width, int height) {}
+
+    private static final Map<Key, WingsEntityModel> cachedModelMap = new ConcurrentHashMap<>();
 
     public static void register() {
         registerReloader();
     }
 
-    public static WingsEntityModel getOrCreate(Identifier texture) {
+    public static WingsEntityModel getOrCreate(Identifier texture, int width, int height) {
         return cachedModelMap.computeIfAbsent(
-                texture,
-                WingsEntityModel::new
+                new Key(texture, width, height),
+                (key) -> new WingsEntityModel(key.texture(), key.width(), key.height())
         );
     }
 

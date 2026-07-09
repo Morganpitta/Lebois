@@ -18,18 +18,30 @@ public class WingsPowerType extends PowerType {
     private final float maxSpeed;
     private final float boost;
     private final Identifier texture;
+    private final int width;
+    private final int height;
+    private final float scale;
+    private final float offset;
 
     public static final TypedDataObjectFactory<WingsPowerType> DATA_FACTORY = PowerType.createConditionedDataFactory(
             new SerializableData()
                     .add("acceleration", SerializableDataTypes.FLOAT, 0.15F)
                     .add("max_speed", SerializableDataTypes.FLOAT, 1.0F)
                     .add("boost", SerializableDataTypes.FLOAT, 0.035F)
-                    .add("texture", SerializableDataTypes.IDENTIFIER),
+                    .add("texture", SerializableDataTypes.IDENTIFIER)
+                    .add("width", SerializableDataTypes.INT)
+                    .add("height", SerializableDataTypes.INT)
+                    .add("scale", SerializableDataTypes.FLOAT, 1.0F)
+                    .add("offset", SerializableDataTypes.FLOAT, 0.0F),
             (data, condition) -> new WingsPowerType(
                     data.get("acceleration"),
                     data.get("max_speed"),
                     data.get("boost"),
                     data.get("texture"),
+                    data.get("width"),
+                    data.get("height"),
+                    data.get("scale"),
+                    data.get("offset"),
                     condition
             ),
             (powerType, serializableData) -> serializableData.instance()
@@ -37,14 +49,22 @@ public class WingsPowerType extends PowerType {
                     .set("max_speed", powerType.maxSpeed)
                     .set("boost", powerType.boost)
                     .set("texture", powerType.texture)
+                    .set("width", powerType.width)
+                    .set("height", powerType.height)
+                    .set("scale", powerType.scale)
+                    .set("offset", powerType.offset)
     );
 
-    WingsPowerType(float acceleration, float maxSpeed, float boost, Identifier texture, Optional<EntityCondition> condition) {
+    WingsPowerType(float acceleration, float maxSpeed, float boost, Identifier texture, int width, int height, float scale, float offset, Optional<EntityCondition> condition) {
         super(condition);
         this.acceleration = acceleration;
         this.maxSpeed = maxSpeed;
         this.boost = boost;
         this.texture = texture;
+        this.width = width;
+        this.height = height;
+        this.scale = scale;
+        this.offset = offset;
     }
 
     @Override
@@ -74,5 +94,25 @@ public class WingsPowerType extends PowerType {
     public static Identifier getTexture(PlayerEntity player) {
         return PowerHolderComponent.getPowerTypes(player, WingsPowerType.class).stream()
                 .map(powerType -> powerType.texture).findFirst().orElse(null);
+    }
+
+    public static int getWidth(PlayerEntity player) {
+        return PowerHolderComponent.getPowerTypes(player, WingsPowerType.class).stream()
+                .map(powerType -> powerType.width).findFirst().orElse(0);
+    }
+
+    public static int getHeight(PlayerEntity player) {
+        return PowerHolderComponent.getPowerTypes(player, WingsPowerType.class).stream()
+                .map(powerType -> powerType.height).findFirst().orElse(0);
+    }
+
+    public static float getScale(PlayerEntity player) {
+        return PowerHolderComponent.getPowerTypes(player, WingsPowerType.class).stream()
+                .map(powerType -> powerType.scale).findFirst().orElse(1.0F);
+    }
+
+    public static float getOffset(PlayerEntity player) {
+        return PowerHolderComponent.getPowerTypes(player, WingsPowerType.class).stream()
+                .map(powerType -> powerType.offset).findFirst().orElse(0.0F);
     }
 }
