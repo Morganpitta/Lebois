@@ -8,7 +8,6 @@ import net.minecraft.client.render.entity.feature.FeatureRendererContext;
 import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -28,7 +27,7 @@ public abstract class ElytraFeatureRendererMixin<T extends LivingEntity, M exten
     public void render(
             MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, T livingEntity, float f, float g, float h, float j, float k, float l, CallbackInfo ci
     ) {
-        if (livingEntity instanceof PlayerEntity player && WingsPowerType.hasWings(player)) {
+        if (WingsPowerType.hasWings(livingEntity)) {
             ci.cancel();
         }
     }

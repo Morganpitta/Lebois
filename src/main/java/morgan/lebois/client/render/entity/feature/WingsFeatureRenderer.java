@@ -4,26 +4,25 @@ import morgan.lebois.client.render.entity.WingsModelCacheManager;
 import morgan.lebois.client.render.entity.model.WingsEntityModel;
 import morgan.lebois.interfaces.Winged;
 import morgan.lebois.powers.WingsPowerType;
-import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
-import net.minecraft.client.render.entity.model.PlayerEntityModel;
+import net.minecraft.client.render.entity.model.BipedEntityModel;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.MathHelper;
 
-public class WingsFeatureRenderer extends FeatureRenderer<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>> {
-
-    public WingsFeatureRenderer(FeatureRendererContext<AbstractClientPlayerEntity, PlayerEntityModel<AbstractClientPlayerEntity>> context) {
+public class WingsFeatureRenderer<T extends LivingEntity, M extends BipedEntityModel<T>> extends FeatureRenderer<T, M> {
+    public WingsFeatureRenderer(FeatureRendererContext<T, M> context) {
         super(context);
     }
 
     @Override
-    public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, AbstractClientPlayerEntity entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
+    public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, T entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
         if (!WingsPowerType.hasWings(entity)) return;
 
         Identifier texture = WingsPowerType.getTexture(entity);
@@ -33,7 +32,7 @@ public class WingsFeatureRenderer extends FeatureRenderer<AbstractClientPlayerEn
         float offset = WingsPowerType.getOffset(entity);
         if (texture == null || width <= 0 || height <= 0) return;
 
-        WingsEntityModel model = WingsModelCacheManager.getOrCreate(texture, width, height);
+        WingsEntityModel<T> model = WingsModelCacheManager.getOrCreate(texture, width, height);
         if (model == null) return;
 
         matrices.push();

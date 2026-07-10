@@ -1,6 +1,5 @@
 package morgan.lebois.mixin.wings.entity;
 
-import morgan.lebois.interfaces.DoubleJump;
 import morgan.lebois.interfaces.Winged;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;

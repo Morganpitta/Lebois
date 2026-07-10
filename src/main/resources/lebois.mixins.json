@@ -38,7 +38,7 @@
     "possession.server.PlayerManagerMixin",
     "possession.server.network.ServerPlayerEntityMixin",
     "wings.entity.EntityMixin",
-    "wings.entity.PlayerEntityMixin"
+    "wings.entity.LivingEntityMixin"
   ],
   "injectors": {
     "defaultRequire": 1
@@ -47,6 +47,7 @@
     "common.client.gui.hud.InGameHudMixin",
     "common.client.world.ClientWorldAccessor",
     "common.client.world.MinecraftClientMixin",
+    "common.render.entity.model.AnimalModelAccessor",
     "double_jump.client.network.ClientPlayerEntityMixin",
     "effects.client.render.entity.LivingEntityRendererMixin",
     "effects.client.world.MinecraftClientMixin",
@@ -55,7 +56,7 @@
     "possession.client.network.OtherClientPlayerEntityMixin",
     "possession.client.render.WorldRendererMixin",
     "wings.client.network.ClientPlayerEntityMixin",
-    "wings.client.network.OtherClientPlayerEntityMixin",
+    "wings.client.render.entity.BipedEntityRendererMixin",
     "wings.client.render.entity.PlayerEntityRendererMixin",
     "wings.client.render.entity.feature.ElytraFeatureRendererMixin"
   ]

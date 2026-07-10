@@ -45,12 +45,4 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
 
         wasJumping = this.input.jumping;
     }
-
-    @Inject(
-            method = "tick",
-            at = @At("TAIL")
-    )
-    public void tickWings(CallbackInfo ci) {
-        ((Winged) this).lebois$updateWings();
-    }
 }
