@@ -31,7 +31,7 @@ public class GrappleHookEntity extends Entity implements Ownable {
     }
 
     public GrappleHookEntity(World world, @Nullable PlayerEntity owner, Vec3d position, float yaw, float pitch, boolean disableFallDamage, float minDistance, float pullSpeed, float lookAssist, float damping) {
-        super(LeboisEntities.GRAPPLE_HOOK, world);
+        super(LeboisEntityType.GRAPPLE_HOOK, world);
         this.setOwner(owner);
         this.setPosition(position);
         this.setRotation(yaw, pitch);

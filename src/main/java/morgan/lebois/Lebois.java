@@ -5,7 +5,7 @@ import morgan.lebois.block.LeboisBlocks;
 import morgan.lebois.command.LeboisCommands;
 import morgan.lebois.component.LeboisComponentTypes;
 import morgan.lebois.conditions.LeboisConditionTypes;
-import morgan.lebois.entity.LeboisEntities;
+import morgan.lebois.entity.LeboisEntityType;
 import morgan.lebois.entity.effect.LeboisStatusEffects;
 import morgan.lebois.item.LeboisItems;
 import morgan.lebois.network.packet.LeboisPackets;
@@ -31,7 +31,7 @@ public class Lebois implements ModInitializer {
     public void onInitialize() {
         // Minecraft registries
         LeboisPackets.register();
-        LeboisEntities.register();
+        LeboisEntityType.register();
         LeboisCommands.register();
         LeboisSounds.register();
         LeboisComponentTypes.register();

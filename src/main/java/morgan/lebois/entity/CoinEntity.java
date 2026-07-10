@@ -17,7 +17,7 @@ public class CoinEntity extends ThrownItemEntity {
     }
 
     public CoinEntity(World world) {
-        super(LeboisEntities.COIN, world);
+        super(LeboisEntityType.COIN, world);
     }
 
     @Override
