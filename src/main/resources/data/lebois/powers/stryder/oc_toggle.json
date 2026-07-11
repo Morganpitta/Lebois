@@ -6,6 +6,6 @@
   },
   "retain_state": false,
   "active_by_default": false,
-  "name": "X-064(LB) Limit Break",
-  "description": "Overclock your Stryder suit, disabling movement limiters whilst enhancing all traversal tools. [WARNING - Hammond Robotics is not liable for any fatal injuries caused by the prototype. For further enquiries, please reach out to the cleanup team]"
+  "name": "Limit Override",
+  "description": "Overclock your Stryder suit, disabling movement limiters whilst enhancing all traversal tools.\n§o[WARNING - Hammond Robotics is not liable for any fatal injuries caused by the prototype]§r"
 }

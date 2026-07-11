@@ -2,6 +2,6 @@
   "type": "lebois:double_jump",
   "double_jumps": 8,
   "height": 1,
-  "name": "X-064(V): Venus Boots",
-  "description": "Initiate a black-powder fuelled double jump. Test Log 137: Subject E42 suffered severe heart palpitations on the 3rd jump, injuries sustained to lower calves. Remains salvageable. Proceed with E43."
+  "name": "Venus Boots",
+  "description": "Initiate a black-powder fuelled double jump.\n§o[Test Log 137: Subject E42 suffered severe heart palpitations on the 3rd jump, injuries sustained to lower calves. Remains salvageable. Proceed with E43]§r"
 }

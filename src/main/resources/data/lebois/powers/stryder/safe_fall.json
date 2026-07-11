@@ -13,6 +13,6 @@
     "power": "lebois:stryder/oc_toggle",
     "inverted": true
   },
-  "name": "X-064(T): Talaria",
-  "description": "Your Stryder suit reduces impact during rapid descents, mitigating damage. Test Log 349: Product secured, cranium exposed during the descent. Reminder to use helmet in future."
+  "name": "Impact Bracing",
+  "description": "Your Stryder suit reduces impact during rapid descents, mitigating damage.\n§o[Test Log 349: Product secured, cranium exposed during the descent. Reminder to use helmet in future]§r"
 }
