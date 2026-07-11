@@ -2,10 +2,7 @@ package morgan.lebois.entity;
 
 import morgan.lebois.powers.WingsPowerType;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.Tameable;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.control.FlightMoveControl;
 import net.minecraft.entity.ai.control.MoveControl;
 import net.minecraft.entity.ai.goal.*;
@@ -21,18 +18,19 @@ import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.mob.PathAwareEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.scoreboard.Team;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.EnumSet;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Predicate;
 
 public class CloneEntity extends PathAwareEntity implements Tameable {
     protected static final TrackedData<Optional<UUID>> OWNER_UUID = DataTracker.registerData(CloneEntity.class, TrackedDataHandlerRegistry.OPTIONAL_UUID);
@@ -64,7 +62,7 @@ public class CloneEntity extends PathAwareEntity implements Tameable {
 
     public static DefaultAttributeContainer.Builder createAttributes() {
         return MobEntity.createMobAttributes()
-                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE)
+                .add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 1.0F)
                 .add(EntityAttributes.GENERIC_MAX_HEALTH, 20)
                 .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.35f)
                 .add(EntityAttributes.GENERIC_FLYING_SPEED, 4.0F)
@@ -143,19 +141,35 @@ public class CloneEntity extends PathAwareEntity implements Tameable {
             this.navigation = new MobNavigation(this, this.getWorld());
         }
 
+        if (this.getHealth() < this.getMaxHealth() && this.age % 20 == 0) {
+            this.heal(1.0F);
+        }
+
         super.tick();
     }
 
     @Override
     public ActionResult interactMob(PlayerEntity player, Hand hand) {
         ActionResult actionResult = super.interactMob(player, hand);
+        ItemStack itemStack = player.getStackInHand(hand);
 
-        if (player == this.getOwner() && !actionResult.isAccepted()) {
-            this.setSitting(!this.isSitting());
-            return ActionResult.success(this.getWorld().isClient());
+        if (!actionResult.isAccepted()) {
+            if (!itemStack.isEmpty()) {
+                EquipmentSlot equipmentSlot = this.getPreferredEquipmentSlot(itemStack);
+                this.equipStack(equipmentSlot, itemStack.copy());
+                return ActionResult.success(this.getWorld().isClient());
+            }
+            else if (player == this.getOwner()) {
+                this.setSitting(!this.isSitting());
+                return ActionResult.success(this.getWorld().isClient());
+            }
         }
 
         return actionResult;
+    }
+
+    @Override
+    protected void dropEquipment(ServerWorld world, DamageSource source, boolean causedByPlayer) {
     }
 
     @Override
@@ -276,26 +290,28 @@ public class CloneEntity extends PathAwareEntity implements Tameable {
     }
 
     protected static class FollowOwnerGoal extends CloneGoal {
-        private static final double MAX_DISTANCE = 16;
-        private static final double MIN_DISTANCE = 6;
+        private final float maxDistance;
+        private final float minDistance;
 
         private final double speed;
 
         private int tickTimer = 0;
 
-        public FollowOwnerGoal (CloneEntity clone, double speed) {
+        public FollowOwnerGoal(CloneEntity clone, double speed, float maxDistance, float minDistance) {
             super(clone);
             this.speed = speed;
+            this.maxDistance = maxDistance;
+            this.minDistance = minDistance;
             this.setControls(EnumSet.of(Goal.Control.MOVE, Goal.Control.LOOK));
         }
 
-        public FollowOwnerGoal (CloneEntity clone) {
-            this(clone, 1.0);
+        public FollowOwnerGoal(CloneEntity clone) {
+            this(clone, 1.0, 16, 6);
         }
 
         @Override
         public boolean canStart() {
-            return super.canStart() && this.clone.distanceTo(this.owner) >= MAX_DISTANCE;
+            return super.canStart() && this.clone.distanceTo(this.owner) >= this.maxDistance;
         }
 
         @Override
@@ -310,7 +326,7 @@ public class CloneEntity extends PathAwareEntity implements Tameable {
 
         @Override
         public boolean shouldContinue() {
-            return super.canStart() && this.clone.distanceTo(this.owner) >= MIN_DISTANCE;
+            return super.canStart() && (!this.clone.isOnGround() || this.clone.distanceTo(this.owner) >= this.minDistance);
         }
 
         @Override
