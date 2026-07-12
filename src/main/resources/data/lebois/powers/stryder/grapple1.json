@@ -1,0 +1,56 @@
+{
+  "type": "origins:action_on_key_press",
+  "cooldown": 80,
+  "entity_action": {
+    "type": "origins:and",
+    "actions": [
+      {
+        "type": "lebois:grapple",
+        "max_distance": 40,
+        "look_assist": 0.2,
+        "pull_speed": 2.0,
+        "damping": 0.5,
+        "disable_fall_damage": true
+      },
+      {
+        "type": "origins:play_sound",
+        "sound": "minecraft:block.chain.place",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "type": "origins:play_sound",
+        "sound": "minecraft:item.spyglass.use",
+        "volume": 1.0,
+        "pitch": 0.75
+      }
+    ]
+  },
+  "key": {
+    "key": "key.origins.primary_active"
+  },
+  "condition": {
+    "type": "origins:and",
+    "conditions":[
+      {
+        "type": "origins:raycast",
+        "block_distance": 40,
+        "shape_type": "collider",
+        "fluid_handling": "none",
+        "entity": false
+      },
+      {
+        "type": "origins:power_active",
+        "power": "lebois:stryder/oc_toggle",
+        "inverted": true
+      }
+    ]
+  },
+  "hud_render": {
+    "should_render": true,
+    "sprite_location": "origins:textures/gui/community/huang/resource_bar_02.png",
+    "bar_index": 5
+  },
+  "name": "Helios Hook",
+  "description": "Release a hooked sword that lodges itself into a surface, rapidly pulling the user to where it lands.\n§o[DAYS SINCE LAST INCIDENT - 0]§r"
+}

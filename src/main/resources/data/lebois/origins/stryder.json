@@ -1,9 +1,7 @@
 {
   "powers": [
     "lebois:stryder/double_jump",
-    "lebois:stryder/double_jump_oc",
     "lebois:stryder/grapple",
-    "lebois:stryder/grapple_oc",
     "lebois:stryder/un_grapple",
     "lebois:stryder/oc_toggle",
     "lebois:stryder/oc_overlay",

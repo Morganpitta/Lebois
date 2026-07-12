@@ -1,0 +1,64 @@
+{
+  "entity_action": {
+    "type": "origins:and",
+    "actions": [
+      {
+        "type": "origins:if_else",
+        "condition": {
+          "type": "origins:power_active",
+          "power": "lebois:stryder/oc_toggle",
+          "inverted": true
+        },
+        "if_action": {
+          "type": "origins:action_on_key_press",
+          "cooldown": 80,
+          "entity_action": {
+            "type": "lebois:grapple",
+            "max_distance": 40,
+            "look_assist": 0.2,
+            "pull_speed": 2.0,
+            "damping": 0.5,
+            "disable_fall_damage": true
+          },
+          "condition": {
+            "type": "origins:raycast",
+            "block_distance": 40,
+            "shape_type": "collider",
+            "fluid_handling": "none",
+            "entity": false
+          },
+          "else_action": {
+            "type": "lebois:grapple",
+            "max_distance": 80,
+            "look_assist": 0.5,
+            "pull_speed": 0.75,
+            "damping": 0.1,
+            "disable_fall_damage": true
+          },
+          "condition": {
+            "type": "origins:raycast",
+            "block_distance": 80,
+            "shape_type": "collider",
+            "fluid_handling": "none",
+            "entity": false
+          }
+        }
+      },
+      {
+        "type": "origins:play_sound",
+        "sound": "minecraft:block.chain.place",
+        "volume": 1.0,
+        "pitch": 1.0
+      },
+      {
+        "type": "origins:play_sound",
+        "sound": "minecraft:item.spyglass.use",
+        "volume": 1.0,
+        "pitch": 0.75
+      }
+    ]
+  },
+  "key": {
+    "key": "key.origins.primary_active"
+  }
+}
