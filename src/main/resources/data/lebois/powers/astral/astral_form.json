@@ -1,0 +1,101 @@
+{
+  "type": "origins:multiple",
+  "toggle": {
+    "type": "origins:toggle",
+    "active_by_default": false,
+    "key": {
+      "key": "key.origins.primary_active"
+    }
+  },
+  "invisible": {
+    "type": "origins:invisibility",
+    "condition": {
+      "type": "origins:power_active",
+      "power": "*:*_toggle"
+    }
+  },
+  "invulnerable": {
+    "type": "origins:invulnerability",
+    "condition": {
+      "type": "origins:power_active",
+      "power": "*:*_toggle"
+    }
+  },
+  "prevent_block_selection": {
+    "type": "origins:prevent_block_selection",
+    "condition": {
+      "type": "origins:power_active",
+      "power": "*:*_toggle"
+    }
+  },
+  "prevent_block_use": {
+    "type": "origins:prevent_block_use",
+    "condition": {
+      "type": "origins:power_active",
+      "power": "*:*_toggle"
+    }
+  },
+  "prevent_block_place": {
+    "type": "origins:prevent_block_place",
+    "condition": {
+      "type": "origins:power_active",
+      "power": "*:*_toggle"
+    }
+  },
+  "prevent_collision": {
+    "type": "origins:prevent_entity_collision",
+    "condition": {
+      "type": "origins:power_active",
+      "power": "*:*_toggle"
+    }
+  },
+  "prevent_entity_use": {
+    "type": "origins:prevent_entity_use",
+    "condition": {
+      "type": "origins:power_active",
+      "power": "*:*_toggle"
+    }
+  },
+  "prevent_item_pickup": {
+    "type": "origins:prevent_item_pickup",
+    "condition": {
+      "type": "origins:power_active",
+      "power": "*:*_toggle"
+    }
+  },
+  "prevent_item_use": {
+    "type": "origins:prevent_item_use",
+    "condition": {
+      "type": "origins:power_active",
+      "power": "*:*_toggle"
+    }
+  },
+  "prevent_sleep": {
+    "type": "origins:prevent_sleep",
+    "condition": {
+      "type": "origins:power_active",
+      "power": "*:*_toggle"
+    }
+  },
+  "size": {
+    "type": "origins:conditioned_attribute",
+    "modifier": {
+      "id": "size",
+      "attribute": "minecraft:generic.scale",
+      "operation": "add_multiplied_base",
+      "amount": -0.5
+    },
+    "tick_rate": 2,
+    "condition": {
+      "type": "origins:power_active",
+      "power": "*:*_toggle"
+    }
+  },
+  "flight": {
+    "type": "origins:creative_flight",
+    "condition": {
+      "type": "origins:power_active",
+      "power": "*:*_toggle"
+    }
+  }
+}

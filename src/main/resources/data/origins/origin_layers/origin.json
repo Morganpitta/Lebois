@@ -4,7 +4,8 @@
     "lebois:test",
     "lebois:parasyte",
     "lebois:stryder",
-    "lebois:riposte"
+    "lebois:riposte",
+    "lebois:astral"
   ],
   "loading_priority": 1
 }

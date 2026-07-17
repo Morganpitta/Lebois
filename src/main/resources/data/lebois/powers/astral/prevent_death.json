@@ -1,0 +1,11 @@
+{
+  "type": "origins:prevent_death",
+  "entity_action": {
+    "type": "lebois:load_snapshot",
+    "name": "astral"
+  },
+  "condition": {
+    "type": "origins:dimension",
+    "dimension": "lebois:astral_void"
+  }
+}

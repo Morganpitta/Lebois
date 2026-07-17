@@ -1,0 +1,48 @@
+{
+  "type": "origins:active_self",
+  "key": {
+    "key": "key.origins.secondary_active"
+  },
+  "entity_action": {
+    "type": "origins:area_of_effect",
+    "radius": 5,
+    "shape": "sphere",
+    "include_actor": true,
+    "bientity_action": {
+      "type": "origins:target_action",
+      "action": {
+        "type": "origins:if_else",
+        "condition": {
+          "type": "origins:dimension",
+          "dimension": "lebois:astral_void"
+        },
+        "if_action": {
+          "type": "lebois:load_snapshot",
+          "name": "astral"
+        },
+        "else_action": {
+          "type": "origins:and",
+          "actions": [
+            {
+              "type": "lebois:save_snapshot",
+              "name": "astral"
+            },
+            {
+              "type": "origins:set_fall_distance",
+              "fall_distance": 0
+            },
+            {
+              "type": "origins:execute_command",
+              "command": "execute in lebois:astral_void run fill -1 63 -1 1 63 1 bedrock",
+              "permission_level": 4
+            },
+            {
+              "type": "origins:execute_command",
+              "command": "execute in lebois:astral_void run tp @s 0 64 0"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

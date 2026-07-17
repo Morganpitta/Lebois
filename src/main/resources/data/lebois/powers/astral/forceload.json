@@ -1,0 +1,9 @@
+{
+  "type": "origins:action_on_callback",
+  "entity_action_chosen": {
+    "type": "origins:execute_command",
+    "command": "execute in lebois:astral_void run forceload add 0 0",
+    "permission_level": 4
+  },
+  "hidden": true
+}

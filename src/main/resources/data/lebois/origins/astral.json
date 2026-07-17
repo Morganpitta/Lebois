@@ -1,0 +1,13 @@
+{
+  "powers": [
+    "lebois:astral/astral_void",
+    "lebois:astral/forceload",
+    "lebois:astral/astral_form"
+  ],
+  "icon": {
+    "id": "minecraft:poisonous_potato"
+  },
+  "name": "Astral",
+  "description": "",
+  "impact": 3
+}

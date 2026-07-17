@@ -42,7 +42,7 @@ public class SnapshotComponent implements Component {
         snapshots.remove(id);
     }
 
-    public void loadSnapshot(String id) {
+    public void loadSnapshot(String id, boolean clear) {
         Snapshot snapshot = snapshots.get(id);
 
         if (snapshot != null && livingEntity.getServer() != null) {
@@ -59,7 +59,7 @@ public class SnapshotComponent implements Component {
                 livingEntity.velocityModified = true;
             }
 
-            this.clearSnapshot(id);
+            if (clear) this.clearSnapshot(id);
         }
     }
 
