@@ -89,11 +89,11 @@
         {
           "name": "apoli-2.12.0-pre.2+mc.1.21.1-morgan.jar",
           "url": "apoli-2.12.0-pre.2+mc.1.21.1-morgan.jar",
-          "size": 4309797,
-          "sha512": "d478902986d6845c536bd1a4534bcdf8842649fae41f9a5898af35f4f8e0de3a9ae096b2964ee998dbd5ec7c6734b7f4a6be7135a232fd06c87fc26e4c494ac9",
-          "sha256": "4c38900c79e6d1f602675265219904de4252bbcc4dcd198573b9a20ffe49d12d",
-          "sha1": "91f7490c305936b91595e3fcbe04c1afe8d75cc0",
-          "md5": "a2ac7a9dd4ac0de3753ad7b6a7b050a6"
+          "size": 4309120,
+          "sha512": "708ad13b8ebb6513be3d98492ecf7c727ac78185bca760e28612e31c27b5528de42b504f156d3e10a49f325688b41d919a6674544b98f1ef997ef3a6012f2fca",
+          "sha256": "2fda9302eb81791f141c36cac7bcc62659a55e93e36e18c8fd748bbea66d39ec",
+          "sha1": "1671a0cc00b2a111ea8842cd4c14b44587f17a85",
+          "md5": "8ec13926c84a9de435cdc85f08edd207"
         }
       ]
     },
@@ -207,11 +207,11 @@
         {
           "name": "apoli-2.12.0-pre.2+mc.1.21.1-morgan.jar",
           "url": "apoli-2.12.0-pre.2+mc.1.21.1-morgan.jar",
-          "size": 4309797,
-          "sha512": "d478902986d6845c536bd1a4534bcdf8842649fae41f9a5898af35f4f8e0de3a9ae096b2964ee998dbd5ec7c6734b7f4a6be7135a232fd06c87fc26e4c494ac9",
-          "sha256": "4c38900c79e6d1f602675265219904de4252bbcc4dcd198573b9a20ffe49d12d",
-          "sha1": "91f7490c305936b91595e3fcbe04c1afe8d75cc0",
-          "md5": "a2ac7a9dd4ac0de3753ad7b6a7b050a6"
+          "size": 4309120,
+          "sha512": "708ad13b8ebb6513be3d98492ecf7c727ac78185bca760e28612e31c27b5528de42b504f156d3e10a49f325688b41d919a6674544b98f1ef997ef3a6012f2fca",
+          "sha256": "2fda9302eb81791f141c36cac7bcc62659a55e93e36e18c8fd748bbea66d39ec",
+          "sha1": "1671a0cc00b2a111ea8842cd4c14b44587f17a85",
+          "md5": "8ec13926c84a9de435cdc85f08edd207"
         }
       ]
     },
@@ -227,11 +227,11 @@
         {
           "name": "apoli-2.12.0-pre.2+mc.1.21.1-morgan-sources.jar",
           "url": "apoli-2.12.0-pre.2+mc.1.21.1-morgan-sources.jar",
-          "size": 822399,
-          "sha512": "a5a3ee124aceab7e5a27f8d17b208ed33f16295781e8ec714f413068ef505d7acbc3d4d2db7547489b66d8577dae3fe5507235997914faa442c3ca1872e49195",
-          "sha256": "e580148b49ad5c6bd6c812b8ca5d601dacdd477d497fb892be0febfed00f973a",
-          "sha1": "01420acc74cfb8d8d467fab5cb056e056f04b3d3",
-          "md5": "bf417145930f5288fb8ac3711b9677a6"
+          "size": 823686,
+          "sha512": "4cbeab423cc08a072e30f3fe707962a884b4e23bc88ddb7be3ddb979729bfdd9e2441743247363354d485c4984e607ee41d6279a1b490a37c33c90d663ff722e",
+          "sha256": "47a21cf5493eeab9bc936ea2d4edb0772a056e50261e4082fbf89554d71823af",
+          "sha1": "e5bcf4bff39be67c6b30b597fbb07b2604959d80",
+          "md5": "7a65f9fd45f758c1da613d4e40292fc5"
         }
       ]
     }
