@@ -31,7 +31,8 @@
   "custom": {
     "cardinal-components": [
       "lebois:double_jumps",
-      "lebois:possession"
+      "lebois:possession",
+      "lebois:snapshot"
     ]
   }
 }

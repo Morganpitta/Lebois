@@ -12,11 +12,13 @@ import org.ladysnake.cca.api.v3.entity.EntityComponentInitializer;
 public class LeboisEntityComponents implements EntityComponentInitializer {
     public static final ComponentKey<DoubleJumpComponent> DOUBLE_JUMP = getOrCreate("double_jumps", DoubleJumpComponent.class);
     public static final ComponentKey<PossessionComponent> POSSESSION = getOrCreate("possession", PossessionComponent.class);
+    public static final ComponentKey<SnapshotComponent> SNAPSHOT = getOrCreate("snapshot", SnapshotComponent.class);
 
     @Override
     public void registerEntityComponentFactories(EntityComponentFactoryRegistry registry) {
         registry.registerFor(LivingEntity.class, DOUBLE_JUMP, DoubleJumpComponent::new);
         registry.registerFor(PlayerEntity.class, POSSESSION, PossessionComponent::new);
+        registry.registerFor(LivingEntity.class, SNAPSHOT, SnapshotComponent::new);
     }
 
     public static <T extends Component> ComponentKey<T> getOrCreate(String path, Class<T> component){

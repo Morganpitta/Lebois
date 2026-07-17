@@ -17,6 +17,8 @@ public class LeboisActionTypes {
     public static final ActionConfiguration<UnPossessEntityActionType> UN_POSSESS = registerEntityAction("un_possess", UnPossessEntityActionType.DATA_FACTORY);
     public static final ActionConfiguration<PossessedEntityActionEntityActionType> POSSESSED_ENTITY_ACTION = registerEntityAction("possessed_entity_action", PossessedEntityActionEntityActionType.DATA_FACTORY);
     public static final ActionConfiguration<TossCoinEntityAction> TOSS_COIN = registerEntityAction("toss_coin", TossCoinEntityAction.DATA_FACTORY);
+    public static final ActionConfiguration<SaveSnapshotEntityActionType> SAVE_SNAPSHOT = registerEntityAction("save_snapshot", SaveSnapshotEntityActionType.DATA_FACTORY);
+    public static final ActionConfiguration<LoadSnapshotEntityActionType> LOAD_SNAPSHOT = registerEntityAction("load_snapshot", LoadSnapshotEntityActionType.DATA_FACTORY);
 
     public static void register() {
     }

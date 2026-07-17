@@ -1,6 +1,7 @@
 {
   "powers": [
-    "lebois:test_test",
+    "lebois:test_save_snapshot",
+    "lebois:test_load_snapshot",
     "lebois:test_wings"
   ],
   "icon": {

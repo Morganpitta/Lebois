@@ -1,0 +1,10 @@
+{
+  "type": "origins:active_self",
+  "key": {
+    "key": "key.origins.primary_active"
+  },
+  "entity_action": {
+      "type": "lebois:save_snapshot",
+    "name": "test"
+  }
+}
