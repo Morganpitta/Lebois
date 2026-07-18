@@ -77,22 +77,57 @@
       "power": "*:*_toggle"
     }
   },
+  "prevent_damage": {
+    "type": "origins:modify_damage_dealt",
+    "modifier": {
+      "operation": "set_base",
+      "amount": 0
+    },
+    "condition": {
+      "type": "origins:power_active",
+      "power": "*:*_toggle"
+    }
+  },
   "size": {
     "type": "origins:conditioned_attribute",
-    "modifier": {
-      "id": "size",
-      "attribute": "minecraft:generic.scale",
-      "operation": "add_multiplied_base",
-      "amount": -0.5
-    },
-    "tick_rate": 2,
+    "modifiers": [
+      {
+        "id": "size",
+        "attribute": "minecraft:generic.scale",
+        "operation": "add_multiplied_base",
+        "amount": -0.5
+      },
+      {
+        "id": "size",
+        "attribute": "minecraft:generic.gravity",
+        "operation": "add_multiplied_base",
+        "amount": -1
+      }
+    ],
+    "tick_rate": 1,
     "condition": {
       "type": "origins:power_active",
       "power": "*:*_toggle"
     }
   },
   "flight": {
-    "type": "origins:creative_flight",
+    "type": "origins:action_over_time",
+    "entity_action": {
+      "type": "origins:and",
+      "actions": [
+        {
+          "type": "origins:add_velocity",
+          "set": true,
+          "space": "local",
+          "z": 0.75
+        },
+        {
+          "type": "origins:set_fall_distance",
+          "fall_distance": 0
+        }
+      ]
+    },
+    "interval": 1,
     "condition": {
       "type": "origins:power_active",
       "power": "*:*_toggle"
