@@ -96,12 +96,6 @@
         "attribute": "minecraft:generic.scale",
         "operation": "add_multiplied_base",
         "amount": -0.5
-      },
-      {
-        "id": "size",
-        "attribute": "minecraft:generic.gravity",
-        "operation": "add_multiplied_base",
-        "amount": -1
       }
     ],
     "tick_rate": 1,
@@ -111,23 +105,7 @@
     }
   },
   "flight": {
-    "type": "origins:action_over_time",
-    "entity_action": {
-      "type": "origins:and",
-      "actions": [
-        {
-          "type": "origins:add_velocity",
-          "set": true,
-          "space": "local",
-          "z": 0.75
-        },
-        {
-          "type": "origins:set_fall_distance",
-          "fall_distance": 0
-        }
-      ]
-    },
-    "interval": 1,
+    "type": "lebois:forced_flight",
     "condition": {
       "type": "origins:power_active",
       "power": "*:*_toggle"

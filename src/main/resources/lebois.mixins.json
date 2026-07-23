@@ -45,6 +45,7 @@
   },
   "client": [
     "common.client.gui.hud.InGameHudMixin",
+    "common.client.player.ClientPlayerInteractionManagerMixin",
     "common.client.world.ClientWorldAccessor",
     "common.client.world.MinecraftClientMixin",
     "common.render.entity.model.AnimalModelAccessor",
