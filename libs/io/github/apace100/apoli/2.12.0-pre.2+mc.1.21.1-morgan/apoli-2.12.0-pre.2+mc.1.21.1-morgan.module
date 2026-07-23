@@ -228,10 +228,10 @@
           "name": "apoli-2.12.0-pre.2+mc.1.21.1-morgan-sources.jar",
           "url": "apoli-2.12.0-pre.2+mc.1.21.1-morgan-sources.jar",
           "size": 823686,
-          "sha512": "4cbeab423cc08a072e30f3fe707962a884b4e23bc88ddb7be3ddb979729bfdd9e2441743247363354d485c4984e607ee41d6279a1b490a37c33c90d663ff722e",
-          "sha256": "47a21cf5493eeab9bc936ea2d4edb0772a056e50261e4082fbf89554d71823af",
-          "sha1": "e5bcf4bff39be67c6b30b597fbb07b2604959d80",
-          "md5": "7a65f9fd45f758c1da613d4e40292fc5"
+          "sha512": "e290dc66511f6303bed52213793abfe547efa35c684dd4498e74513ebf20af0338d7606edb993907c0868934013937d1ecda3f6597882528264ab95460a585b7",
+          "sha256": "c94c33b91c3d5f8f32983b658444c0ffe3ea92715526046ee93694b832ecec63",
+          "sha1": "2d6e14517f287fd1a92661e12eed61bf7c996aeb",
+          "md5": "84c7c02b7f3b9ce5e3d9896068b5ed4f"
         }
       ]
     }
