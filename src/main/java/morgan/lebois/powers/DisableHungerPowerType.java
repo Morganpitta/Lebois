@@ -19,7 +19,7 @@ public class DisableHungerPowerType extends PowerType {
         return LeboisPowerTypes.DISABLE_HUNGER;
     }
 
-    public static boolean shouldDisableHunger(PlayerEntity player) {
+    public static boolean shouldDisable(PlayerEntity player) {
         return PowerHolderComponent.hasPowerType(player, DisableHungerPowerType.class);
     }
 }

@@ -49,7 +49,6 @@ public class SnapshotComponent implements Component {
             ServerWorld world = livingEntity.getServer().getWorld(snapshot.worldKey);
 
             if (world != null) {
-                livingEntity.teleport(world, snapshot.pos.x, snapshot.pos.y, snapshot.pos.z, Set.of(), snapshot.yaw, snapshot.pitch);
                 livingEntity.setVelocity(snapshot.velocity);
                 livingEntity.setHealth(snapshot.health);
                 livingEntity.fallDistance = snapshot.fallDistance;
@@ -57,6 +56,8 @@ public class SnapshotComponent implements Component {
 
                 livingEntity.velocityDirty = true;
                 livingEntity.velocityModified = true;
+
+                livingEntity.teleport(world, snapshot.pos.x, snapshot.pos.y, snapshot.pos.z, Set.of(), snapshot.yaw, snapshot.pitch);
             }
 
             if (clear) this.clearSnapshot(id);

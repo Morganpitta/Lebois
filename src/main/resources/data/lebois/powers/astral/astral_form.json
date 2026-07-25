@@ -7,8 +7,8 @@
       "key": "key.origins.primary_active"
     }
   },
-  "invisible": {
-    "type": "origins:invisibility",
+  "prevent_self_render": {
+    "type": "lebois:prevent_self_render",
     "condition": {
       "type": "origins:power_active",
       "power": "*:*_toggle"
@@ -89,16 +89,12 @@
     }
   },
   "size": {
-    "type": "origins:conditioned_attribute",
-    "modifiers": [
-      {
-        "id": "size",
-        "attribute": "minecraft:generic.scale",
-        "operation": "add_multiplied_base",
-        "amount": -0.5
-      }
-    ],
-    "tick_rate": 1,
+    "type": "origins:modify_attribute",
+    "attribute": "minecraft:generic.scale",
+    "modifier": {
+      "operation": "multiply_base_additive",
+      "amount": -0.5
+    },
     "condition": {
       "type": "origins:power_active",
       "power": "*:*_toggle"
@@ -109,6 +105,13 @@
     "condition": {
       "type": "origins:power_active",
       "power": "*:*_toggle"
+    }
+  },
+  "flight_speed": {
+    "type": "origins:modify_air_speed",
+    "modifier": {
+      "operation": "multiply_base_additive",
+      "amount": -0.33
     }
   }
 }

@@ -25,7 +25,7 @@ public class HungerManagerMixin {
 
     @Inject(method = "update", at = @At("HEAD"), cancellable = true)
     public void disableHunger(PlayerEntity player, CallbackInfo ci) {
-        if (DisableHungerPowerType.shouldDisableHunger(player)) {
+        if (DisableHungerPowerType.shouldDisable(player)) {
             this.foodLevel = 20;
             this.prevFoodLevel = 20;
             this.exhaustion = 0;

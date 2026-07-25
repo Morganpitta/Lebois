@@ -24,6 +24,7 @@ public class LeboisPowerTypes {
     public static final PowerConfiguration<ShockwavePowerType> SHOCKWAVE = register("shockwave", ShockwavePowerType.DATA_FACTORY);
     public static final PowerConfiguration<WingsPowerType> WINGS = register("wings", WingsPowerType.DATA_FACTORY);
     public static final PowerConfiguration<ForcedFlightPowerType> FORCED_FLIGHT = registerConditionedSimple("forced_flight", ForcedFlightPowerType::new);
+    public static final PowerConfiguration<PreventSelfRenderPowerType> PREVENT_SELF_RENDER = registerConditionedSimple("prevent_self_render", PreventSelfRenderPowerType::new);
 
     public static void register() {
     }

@@ -35,7 +35,7 @@ public abstract class InGameHudMixin {
             at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Lnet/minecraft/util/Identifier;IIII)V")
     )
     private void disableFood(DrawContext instance, Identifier texture, int x, int y, int width, int height, DrawContext context, PlayerEntity player, int top, int right) {
-        if (DisableHungerPowerType.shouldDisableHunger(player)) {
+        if (DisableHungerPowerType.shouldDisable(player)) {
             instance.drawGuiTexture(FOOD_DISABLED_TEXTURE, x, y, width, height);
         } else {
             instance.drawGuiTexture(texture, x, y, width, height);
