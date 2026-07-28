@@ -118,7 +118,7 @@
     "type": "origins:particle",
     "particle": "minecraft:wax_off",
     "frequency": 1,
-    "count": 3,
+    "count": 2,
     "speed": 1,
     "spread": {
       "x": 0,
@@ -136,7 +136,7 @@
     "type": "origins:particle",
     "particle": "minecraft:scrape",
     "frequency": 1,
-    "count": 3,
+    "count": 2,
     "speed": 3,
     "spread": {
       "x": 0,
