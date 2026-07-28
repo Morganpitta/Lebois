@@ -28,6 +28,10 @@
               "name": "astral"
             },
             {
+              "type": "origins:heal",
+              "amount": 1000
+            },
+            {
               "type": "origins:set_fall_distance",
               "fall_distance": 0
             },

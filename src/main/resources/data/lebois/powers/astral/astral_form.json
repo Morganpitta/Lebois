@@ -1,80 +1,204 @@
 {
   "type": "origins:multiple",
-  "toggle": {
-    "type": "origins:toggle",
-    "active_by_default": false,
-    "key": {
-      "key": "key.origins.primary_active"
+  "charge": {
+    "type": "origins:resource",
+    "min": 0,
+    "max": 100,
+    "min_action": {
+      "type": "origins:if_else",
+      "condition": {
+        "type": "origins:resource",
+        "resource": "*:*_toggle",
+        "comparison": "==",
+        "compare_to": 1
+      },
+      "if_action": {
+        "type": "origins:change_resource",
+        "resource": "*:*_toggle",
+        "change": -1
+      }
+    },
+    "hud_render": {
+      "should_render": true,
+      "bar_index": 0,
+      "sprite_location": "origins:textures/gui/community/huang/resource_bar_02.png",
+      "condition": {
+        "type": "origins:resource",
+        "resource": "*:*_charge",
+        "comparison": "<",
+        "compare_to": 100
+      }
     }
+  },
+  "toggle": {
+    "type": "origins:resource",
+    "min": 0,
+    "max": 1
+  },
+  "active_self": {
+    "type": "origins:active_self",
+    "entity_action": {
+      "type": "origins:if_else",
+      "condition": {
+        "type": "origins:resource",
+        "resource": "*:*_toggle",
+        "comparison": "==",
+        "compare_to": 1
+      },
+      "if_action": {
+        "type": "origins:change_resource",
+        "resource": "*:*_toggle",
+        "change": -1
+      },
+      "else_action": {
+        "type": "origins:if_else",
+        "condition": {
+          "type": "origins:resource",
+          "resource": "*:*_charge",
+          "comparison": "==",
+          "compare_to": 100
+        },
+        "if_action": {
+          "type": "origins:and",
+          "actions": [
+            {
+              "type": "origins:change_resource",
+              "resource": "*:*_toggle",
+              "change": 1
+            },
+            {
+              "type": "origins:play_sound",
+              "sound": "minecraft:entity.evoker.cast_spell",
+              "volume": 0.8,
+              "pitch": 1.2
+            },
+            {
+              "type": "origins:spawn_particles",
+              "particle": "minecraft:cloud",
+              "count": 15,
+              "speed": 0.1,
+              "spread": {
+                "x": 0,
+                "y": 0,
+                "z": 0
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "action_over_time": {
+    "type": "origins:action_over_time",
+    "entity_action": {
+      "type": "origins:if_else",
+      "condition": {
+        "type": "origins:resource",
+        "resource": "*:*_toggle",
+        "comparison": "==",
+        "compare_to": 1
+      },
+      "if_action": {
+        "type": "origins:change_resource",
+        "resource": "*:*_charge",
+        "change": -1
+      },
+      "else_action": {
+        "type": "origins:change_resource",
+        "resource": "*:*_charge",
+        "change": 1
+      }
+    },
+    "interval": 1
   },
   "prevent_self_render": {
     "type": "lebois:prevent_self_render",
     "condition": {
-      "type": "origins:power_active",
-      "power": "*:*_toggle"
+      "type": "origins:resource",
+      "resource": "*:*_toggle",
+      "comparison": "==",
+      "compare_to": 1
     }
   },
   "invulnerable": {
     "type": "origins:invulnerability",
     "condition": {
-      "type": "origins:power_active",
-      "power": "*:*_toggle"
+      "type": "origins:resource",
+      "resource": "*:*_toggle",
+      "comparison": "==",
+      "compare_to": 1
     }
   },
   "prevent_block_selection": {
     "type": "origins:prevent_block_selection",
     "condition": {
-      "type": "origins:power_active",
-      "power": "*:*_toggle"
+      "type": "origins:resource",
+      "resource": "*:*_toggle",
+      "comparison": "==",
+      "compare_to": 1
     }
   },
   "prevent_block_use": {
     "type": "origins:prevent_block_use",
     "condition": {
-      "type": "origins:power_active",
-      "power": "*:*_toggle"
+      "type": "origins:resource",
+      "resource": "*:*_toggle",
+      "comparison": "==",
+      "compare_to": 1
     }
   },
   "prevent_block_place": {
     "type": "origins:prevent_block_place",
     "condition": {
-      "type": "origins:power_active",
-      "power": "*:*_toggle"
+      "type": "origins:resource",
+      "resource": "*:*_toggle",
+      "comparison": "==",
+      "compare_to": 1
     }
   },
   "prevent_collision": {
     "type": "origins:prevent_entity_collision",
     "condition": {
-      "type": "origins:power_active",
-      "power": "*:*_toggle"
+      "type": "origins:resource",
+      "resource": "*:*_toggle",
+      "comparison": "==",
+      "compare_to": 1
     }
   },
   "prevent_entity_use": {
     "type": "origins:prevent_entity_use",
     "condition": {
-      "type": "origins:power_active",
-      "power": "*:*_toggle"
+      "type": "origins:resource",
+      "resource": "*:*_toggle",
+      "comparison": "==",
+      "compare_to": 1
     }
   },
   "prevent_item_pickup": {
     "type": "origins:prevent_item_pickup",
     "condition": {
-      "type": "origins:power_active",
-      "power": "*:*_toggle"
+      "type": "origins:resource",
+      "resource": "*:*_toggle",
+      "comparison": "==",
+      "compare_to": 1
     }
   },
   "prevent_item_use": {
     "type": "origins:prevent_item_use",
     "condition": {
-      "type": "origins:power_active",
-      "power": "*:*_toggle"
+      "type": "origins:resource",
+      "resource": "*:*_toggle",
+      "comparison": "==",
+      "compare_to": 1
     }
   },
   "prevent_sleep": {
     "type": "origins:prevent_sleep",
     "condition": {
-      "type": "origins:power_active",
-      "power": "*:*_toggle"
+      "type": "origins:resource",
+      "resource": "*:*_toggle",
+      "comparison": "==",
+      "compare_to": 1
     }
   },
   "prevent_damage": {
@@ -84,8 +208,19 @@
       "amount": 0
     },
     "condition": {
-      "type": "origins:power_active",
-      "power": "*:*_toggle"
+      "type": "origins:resource",
+      "resource": "*:*_toggle",
+      "comparison": "==",
+      "compare_to": 1
+    }
+  },
+  "prevent_regen": {
+    "type": "origins:disable_regen",
+    "condition": {
+      "type": "origins:resource",
+      "resource": "*:*_toggle",
+      "comparison": "==",
+      "compare_to": 1
     }
   },
   "size": {
@@ -96,15 +231,19 @@
       "amount": -0.5
     },
     "condition": {
-      "type": "origins:power_active",
-      "power": "*:*_toggle"
+      "type": "origins:resource",
+      "resource": "*:*_toggle",
+      "comparison": "==",
+      "compare_to": 1
     }
   },
   "flight": {
     "type": "lebois:forced_flight",
     "condition": {
-      "type": "origins:power_active",
-      "power": "*:*_toggle"
+      "type": "origins:resource",
+      "resource": "*:*_toggle",
+      "comparison": "==",
+      "compare_to": 1
     }
   },
   "flight_speed": {
@@ -128,8 +267,10 @@
     "offset_y": 0.5,
     "visible_in_first_person": false,
     "condition": {
-      "type": "origins:power_active",
-      "power": "*:*_toggle"
+      "type": "origins:resource",
+      "resource": "*:*_toggle",
+      "comparison": "==",
+      "compare_to": 1
     }
   },
   "particle_2": {
@@ -146,8 +287,10 @@
     "offset_y": 0.5,
     "visible_in_first_person": false,
     "condition": {
-      "type": "origins:power_active",
-      "power": "*:*_toggle"
+      "type": "origins:resource",
+      "resource": "*:*_toggle",
+      "comparison": "==",
+      "compare_to": 1
     }
   }
 }
