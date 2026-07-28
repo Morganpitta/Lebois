@@ -245,6 +245,15 @@
       "compare_to": 1
     }
   },
+  "fire_immunity": {
+    "type": "origins:fire_immunity",
+    "condition": {
+      "type": "origins:resource",
+      "resource": "*:*_toggle",
+      "comparison": "==",
+      "compare_to": 1
+    }
+  },
   "size": {
     "type": "origins:modify_attribute",
     "attribute": "minecraft:generic.scale",
