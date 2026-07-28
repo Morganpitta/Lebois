@@ -113,5 +113,41 @@
       "operation": "multiply_base_additive",
       "amount": -0.33
     }
+  },
+  "particle_1": {
+    "type": "origins:particle",
+    "particle": "minecraft:wax_off",
+    "frequency": 1,
+    "count": 3,
+    "speed": 1,
+    "spread": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "offset_y": 0.5,
+    "visible_in_first_person": false,
+    "condition": {
+      "type": "origins:power_active",
+      "power": "*:*_toggle"
+    }
+  },
+  "particle_2": {
+    "type": "origins:particle",
+    "particle": "minecraft:scrape",
+    "frequency": 1,
+    "count": 3,
+    "speed": 3,
+    "spread": {
+      "x": 0,
+      "y": 0,
+      "z": 0
+    },
+    "offset_y": 0.5,
+    "visible_in_first_person": false,
+    "condition": {
+      "type": "origins:power_active",
+      "power": "*:*_toggle"
+    }
   }
 }
