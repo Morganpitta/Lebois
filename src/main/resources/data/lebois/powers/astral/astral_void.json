@@ -3,7 +3,7 @@
   "charge": {
     "type": "origins:resource",
     "min": 0,
-    "max": 40,
+    "max": 30,
     "max_action": {
       "type": "origins:and",
       "actions": [
@@ -21,41 +21,68 @@
           "bientity_action": {
             "type": "origins:target_action",
             "action": {
-              "type": "origins:if_else",
-              "condition": {
-                "type": "origins:dimension",
-                "dimension": "lebois:astral_void"
-              },
-              "if_action": {
-                "type": "lebois:load_snapshot",
-                "name": "astral"
-              },
-              "else_action": {
-                "type": "origins:and",
-                "actions": [
-                  {
-                    "type": "lebois:save_snapshot",
+              "type": "origins:and",
+              "actions": [
+                {
+                  "type": "origins:spawn_particles",
+                  "particle": "minecraft:cloud",
+                  "count": 50,
+                  "speed": 0.3,
+                  "spread": {
+                    "x": 0.5,
+                    "y": 0.5,
+                    "z": 0.5
+                  }
+                },
+                {
+                  "type": "origins:if_else",
+                  "condition": {
+                    "type": "origins:dimension",
+                    "dimension": "lebois:astral_void"
+                  },
+                  "if_action": {
+                    "type": "lebois:load_snapshot",
                     "name": "astral"
                   },
-                  {
-                    "type": "origins:heal",
-                    "amount": 1000
-                  },
-                  {
-                    "type": "origins:set_fall_distance",
-                    "fall_distance": 0
-                  },
-                  {
-                    "type": "origins:execute_command",
-                    "command": "execute in lebois:astral_void run fill -1 63 -1 1 63 1 bedrock",
-                    "permission_level": 4
-                  },
-                  {
-                    "type": "origins:execute_command",
-                    "command": "execute in lebois:astral_void run tp @s 0 64 0"
+                  "else_action": {
+                    "type": "origins:and",
+                    "actions": [
+                      {
+                        "type": "lebois:save_snapshot",
+                        "name": "astral"
+                      },
+                      {
+                        "type": "origins:heal",
+                        "amount": 1000
+                      },
+                      {
+                        "type": "origins:set_fall_distance",
+                        "fall_distance": 0
+                      },
+                      {
+                        "type": "origins:execute_command",
+                        "command": "execute in lebois:astral_void run fill -1 63 -1 1 63 1 bedrock",
+                        "permission_level": 4
+                      },
+                      {
+                        "type": "origins:execute_command",
+                        "command": "execute in lebois:astral_void run tp @s 0 64 0"
+                      }
+                    ]
                   }
-                ]
-              }
+                },
+                {
+                  "type": "origins:spawn_particles",
+                  "particle": "minecraft:cloud",
+                  "count": 50,
+                  "speed": 0.3,
+                  "spread": {
+                    "x": 0.5,
+                    "y": 0.5,
+                    "z": 0.5
+                  }
+                }
+              ]
             }
           }
         }
@@ -83,30 +110,56 @@
       "type": "origins:and",
       "actions": [
         {
-          "type": "origins:change_resource",
-          "resource": "*:*_charge",
-          "change": 1
-        },
-        {
-          "type": "origins:spawn_particles",
-          "particle": "minecraft:wax_off",
-          "count": 6,
-          "speed": 10,
-          "spread": {
-            "x": 0.6,
-            "y": 0.5,
-            "z": 0.6
+          "type": "origins:if_else",
+          "condition": {
+            "type": "origins:dimension",
+            "dimension": "lebois:astral_void"
+          },
+          "if_action": {
+            "type": "origins:change_resource",
+            "resource": "*:*_charge",
+            "change": 2
+          },
+          "else_action": {
+            "type": "origins:change_resource",
+            "resource": "*:*_charge",
+            "change": 1
           }
         },
         {
-          "type": "origins:spawn_particles",
-          "particle": "minecraft:scrape",
-          "count": 6,
-          "speed": 10,
-          "spread": {
-            "x": 0.6,
-            "y": 0.5,
-            "z": 0.6
+          "type": "origins:area_of_effect",
+          "radius": 5,
+          "shape": "sphere",
+          "include_actor": true,
+          "bientity_action": {
+            "type": "origins:target_action",
+            "action": {
+              "type": "origins:and",
+              "actions": [
+                {
+                  "type": "origins:spawn_particles",
+                  "particle": "minecraft:wax_off",
+                  "count": 4,
+                  "speed": 5,
+                  "spread": {
+                    "x": 0.5,
+                    "y": 0.5,
+                    "z": 0.5
+                  }
+                },
+                {
+                  "type": "origins:spawn_particles",
+                  "particle": "minecraft:scrape",
+                  "count": 6,
+                  "speed": 10,
+                  "spread": {
+                    "x": 0.7,
+                    "y": 0.5,
+                    "z": 0.7
+                  }
+                }
+              ]
+            }
           }
         }
       ]
