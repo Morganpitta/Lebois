@@ -1,8 +1,24 @@
 {
   "type": "origins:prevent_death",
   "entity_action": {
-    "type": "lebois:load_snapshot",
-    "name": "astral"
+    "type": "origins:and",
+    "actions": [
+      {
+        "type": "lebois:load_snapshot",
+        "name": "astral"
+      },
+      {
+        "type": "origins:spawn_particles",
+        "particle": "minecraft:cloud",
+        "count": 50,
+        "speed": 0.3,
+        "spread": {
+          "x": 0.5,
+          "y": 0.5,
+          "z": 0.5
+        }
+      }
+    ]
   },
   "condition": {
     "type": "origins:dimension",
