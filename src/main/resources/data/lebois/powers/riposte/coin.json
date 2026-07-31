@@ -1,29 +1,62 @@
 {
-  "type": "origins:active_self",
-  "condition": {
+  "type": "origins:multiple",
+  "charge": {
     "type": "origins:resource",
-    "resource": "lebois:riposte/coin_resource",
-    "comparison": ">",
-    "compare_to": 9
-    },
-  "key": {
-    "key": "key.origins.primary_active"
+    "min": 0,
+    "max": 70,
+    "start_value": 0,
+    "hud_render": {
+      "should_render": true,
+      "bar_index": 5
+    }
   },
-  "entity_action": {
-    "type": "origins:and",
-    "actions": [
-      {
-        "type": "lebois:toss_coin"
-      },
-      {
-        "type": "origins:play_sound",
-        "sound": "minecraft:item.armor.equip_chain"
-      },
-      {
-        "type": "origins:change_resource",
-        "resource": "lebois:riposte/coin_resource",
-        "change": -10
+  "active_self": {
+    "type": "origins:active_self",
+    "condition": {
+      "type": "origins:resource",
+      "resource": "*:*_charge",
+      "comparison": ">=",
+      "compare_to": 10
+    },
+    "key": {
+      "key": "key.origins.primary_active"
+    },
+    "entity_action": {
+      "type": "origins:and",
+      "actions": [
+        {
+          "type": "lebois:toss_coin"
+        },
+        {
+          "type": "origins:play_sound",
+          "sound": "minecraft:item.armor.equip_chain"
+        },
+        {
+          "type": "origins:change_resource",
+          "resource": "*:*_charge",
+          "change": -10
+        }
+      ]
+    }
+  },
+  "coin_action": {
+    "type": "lebois:action_on_coin",
+    "entity_action": {
+      "type": "origins:apply_effect",
+      "effect": {
+        "id": "lebois:overcharged",
+        "duration": 400,
+        "amplifier": 0
       }
-    ]
+    }
+  },
+  "action_over_time": {
+    "type": "origins:action_over_time",
+    "interval": 120,
+    "entity_action": {
+      "type": "origins:change_resource",
+      "resource": "*:*_charge",
+      "change": 1
+    }
   }
 }

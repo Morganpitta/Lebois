@@ -1,7 +1,0 @@
-{
-  "type": "lebois:action_on_key_release",
-  "entity_action": {
-    "type": "lebois:un_grapple"
-  },
-  "hidden": true
-}

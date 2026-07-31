@@ -1,17 +1,10 @@
 {
-  "type": "origins:conditioned_attribute",
+  "type": "origins:attribute",
   "modifier": {
     "id": "lebois:safe_fall",
-    "name": "Safe fall increase",
     "attribute": "minecraft:generic.safe_fall_distance",
-    "amount": 9,
-    "operation": "ADD_VALUE"
-  },
-  "tick_rate": 5,
-  "condition": {
-    "type": "apoli:power_active",
-    "power": "lebois:stryder/oc_toggle",
-    "inverted": true
+    "amount": 6,
+    "operation": "add_value"
   },
   "name": "Impact Bracing",
   "description": "Your Stryder suit reduces impact during rapid descents, mitigating damage.\n§o[Test Log 349: Product secured, cranium exposed during the descent. Reminder to use helmet in future]§r"

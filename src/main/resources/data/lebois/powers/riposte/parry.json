@@ -1,6 +1,17 @@
 {
-  "type": "lebois:parry",
-  "max_duration_ticks": 20,
-  "failed_falter_ticks": 40,
-  "success_falter_ticks": 60
+  "type": "origins:multiple",
+  "parry": {
+    "type": "lebois:parry",
+    "max_duration_ticks": 20,
+    "failed_falter_ticks": 40,
+    "success_falter_ticks": 60
+  },
+  "parry_action": {
+    "type": "lebois:action_on_parry",
+    "entity_action": {
+      "type": "origins:change_resource",
+      "resource": "*:riposte/coin_charge",
+      "change": 10
+    }
+  }
 }

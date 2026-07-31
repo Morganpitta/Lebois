@@ -1,0 +1,30 @@
+{
+  "type": "origins:attribute",
+  "hidden": true,
+  "modifiers": [
+    {
+      "id": "lebois:increased_hitbox_height",
+      "attribute": "additionalentityattributes:generic.hitbox_height",
+      "amount": 0.1,
+      "operation": "add_value"
+    },
+    {
+      "id": "lebois:increased_hitbox_width",
+      "attribute": "additionalentityattributes:generic.hitbox_width",
+      "amount": 0.15,
+      "operation": "add_value"
+    },
+    {
+      "id": "lebois:increased_model_height",
+      "attribute": "additionalentityattributes:generic.model_height",
+      "amount": 0.1,
+      "operation": "add_value"
+    },
+    {
+      "id": "lebois:increased_model_width",
+      "attribute": "additionalentityattributes:generic.model_width",
+      "amount": 0.2,
+      "operation": "add_value"
+    }
+  ]
+}

@@ -3,7 +3,7 @@
   "charge": {
     "type": "origins:resource",
     "min": 0,
-    "max": 30,
+    "max": 40,
     "max_action": {
       "type": "origins:and",
       "actions": [
@@ -103,29 +103,37 @@
   "active_self": {
     "type": "origins:active_self",
     "key": {
-      "key": "key.origins.secondary_active",
+      "key": "key.origins.primary_active"
+    },
+    "entity_action": {
+      "type": "origins:if_else",
+      "condition": {
+        "type": "origins:dimension",
+        "dimension": "lebois:astral_void"
+      },
+      "if_action": {
+        "type": "origins:play_sound",
+        "sound": "minecraft:entity.allay.ambient_without_item",
+        "volume": 1,
+        "pitch": 1.75
+      },
+      "else_action": {
+        "type": "origins:play_sound",
+        "sound": "minecraft:entity.allay.ambient_without_item",
+        "volume": 1,
+        "pitch": 1
+      }
+    }
+  },
+  "active_self_continuous": {
+    "type": "origins:active_self",
+    "key": {
+      "key": "key.origins.primary_active",
       "continuous": true
     },
     "entity_action": {
       "type": "origins:and",
       "actions": [
-        {
-          "type": "origins:if_else",
-          "condition": {
-            "type": "origins:dimension",
-            "dimension": "lebois:astral_void"
-          },
-          "if_action": {
-            "type": "origins:change_resource",
-            "resource": "*:*_charge",
-            "change": 2
-          },
-          "else_action": {
-            "type": "origins:change_resource",
-            "resource": "*:*_charge",
-            "change": 1
-          }
-        },
         {
           "type": "origins:area_of_effect",
           "radius": 5,
@@ -161,6 +169,23 @@
               ]
             }
           }
+        },
+        {
+          "type": "origins:if_else",
+          "condition": {
+            "type": "origins:dimension",
+            "dimension": "lebois:astral_void"
+          },
+          "if_action": {
+            "type": "origins:change_resource",
+            "resource": "*:*_charge",
+            "change": 2
+          },
+          "else_action": {
+            "type": "origins:change_resource",
+            "resource": "*:*_charge",
+            "change": 1
+          }
         }
       ]
     },
@@ -174,7 +199,7 @@
   "key_release": {
     "type": "lebois:action_on_key_release",
     "key": {
-      "key": "key.origins.secondary_active"
+      "key": "key.origins.primary_active"
     },
     "entity_action": {
       "type": "origins:change_resource",

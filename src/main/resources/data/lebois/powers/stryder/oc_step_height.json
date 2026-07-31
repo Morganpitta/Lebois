@@ -1,0 +1,14 @@
+{
+  "type": "origins:modify_attribute",
+  "hidden": true,
+  "attribute": "minecraft:generic.step_height",
+  "modifier": {
+    "id": "lebois:increased_step_height",
+    "amount": 0.4,
+    "operation": "add_base_early"
+  },
+  "condition": {
+    "type": "apoli:power_active",
+    "power": "lebois:stryder/oc_toggle"
+  }
+}

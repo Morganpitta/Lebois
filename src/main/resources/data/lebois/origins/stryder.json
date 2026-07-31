@@ -2,15 +2,14 @@
   "powers": [
     "lebois:stryder/double_jump",
     "lebois:stryder/grapple",
-    "lebois:stryder/un_grapple",
     "lebois:stryder/oc_toggle",
     "lebois:stryder/oc_overlay",
     "lebois:stryder/safe_fall",
-    "lebois:stryder/safe_fall_oc",
-    "lebois:stryder/step_height_oc",
-    "lebois:stryder/drag_modifier_oc",
+    "lebois:stryder/oc_step_height",
+    "lebois:stryder/oc_drag_modifier",
     "lebois:stryder/shockwave",
-    "lebois:stryder/speedometer"
+    "lebois:stryder/speedometer",
+    "lebois:stryder/attributes"
   ],
   "icon": {
     "id": "minecraft:wind_charge"

@@ -13,6 +13,5 @@
   "condition": {
     "type": "apoli:power_active",
     "power": "lebois:stryder/oc_toggle"
-  },
-  "hidden": true
+  }
 }
