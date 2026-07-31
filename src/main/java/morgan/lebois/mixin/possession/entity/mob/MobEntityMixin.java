@@ -6,6 +6,7 @@ import morgan.lebois.mixin.common.entity.mob.MobEntityAccessor;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.ai.brain.Brain;
 import net.minecraft.entity.ai.brain.MemoryModuleType;
 import net.minecraft.entity.ai.goal.GoalSelector;
 import net.minecraft.entity.ai.goal.PrioritizedGoal;
@@ -16,6 +17,7 @@ import net.minecraft.entity.data.TrackedDataHandlerRegistry;
 import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
@@ -28,6 +30,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(MobEntity.class)
 public abstract class MobEntityMixin extends LivingEntity implements PossessorInterface {
@@ -108,6 +111,10 @@ public abstract class MobEntityMixin extends LivingEntity implements PossessorIn
         this.getBrain().forget(MemoryModuleType.ANGRY_AT);
         this.getBrain().forget(MemoryModuleType.UNIVERSAL_ANGER);
 
+        if (this.getWorld() instanceof ServerWorld serverWorld) {
+            ((Brain) this.getBrain()).stopAllTasks(serverWorld, (LivingEntity) (Object) this);
+        }
+
         if (this.getNavigation() != null) {
             this.getNavigation().stop();
         }
@@ -124,49 +131,11 @@ public abstract class MobEntityMixin extends LivingEntity implements PossessorIn
         }
     }
 
-    @Unique
-    private GoalSelector emptyGoalSelector = null;
-
-    @Redirect(
-            method = "tickNewAi",
-            at = @At(value = "FIELD", target = "Lnet/minecraft/entity/mob/MobEntity;targetSelector:Lnet/minecraft/entity/ai/goal/GoalSelector;", opcode = Opcodes.GETFIELD)
-    )
-    private GoalSelector redirectTargetSelector(MobEntity instance) {
+    @Inject(method = "canMoveVoluntarily", at=@At("HEAD"), cancellable = true)
+    public void canMoveVoluntarily(CallbackInfoReturnable<Boolean> cir) {
         if (this.lebois$getPossessor() != null) {
-            if (this.emptyGoalSelector == null) {
-                this.emptyGoalSelector = new GoalSelector(instance.getWorld().getProfilerSupplier());
-            }
-
-            return this.emptyGoalSelector;
+            cir.setReturnValue(false);
         }
-
-        // Target selector is protected and MobEntityMixin isn't a subclass and thus cant access, so I had to do this :(
-        return ((MobEntityAccessor) instance).lebois$getTargetSelector();
-    }
-
-
-
-    @Redirect(
-            method = "tickNewAi",
-            at = @At(value = "FIELD", target = "Lnet/minecraft/entity/mob/MobEntity;goalSelector:Lnet/minecraft/entity/ai/goal/GoalSelector;", opcode = Opcodes.GETFIELD)
-    )
-    private GoalSelector redirectGoalSelector(MobEntity instance) {
-        // Dolphins have a goal that can spit out items... Man screw dolphins
-
-        if (this.lebois$getPossessor() != null) {
-            GoalSelector goalSelector = new GoalSelector(instance.getWorld().getProfilerSupplier());
-
-            for (PrioritizedGoal prioritizedGoal : ((MobEntityAccessor) instance).lebois$getGoalSelector().getGoals()) {
-                if (!prioritizedGoal.getGoal().getClass().getSimpleName().equals("PlayWithItemsGoal") &&
-                    !prioritizedGoal.getGoal().getClass().getSimpleName().equals("TemptGoal")) {
-                    goalSelector.add(prioritizedGoal.getPriority(), prioritizedGoal);
-                }
-            }
-
-            return goalSelector;
-        }
-
-        return ((MobEntityAccessor) instance).lebois$getGoalSelector();
     }
 
     @Inject(method = "getEquippedStack", at=@At("HEAD"), cancellable = true)
@@ -180,6 +149,37 @@ public abstract class MobEntityMixin extends LivingEntity implements PossessorIn
             else {
                 cir.setReturnValue(player.getEquippedStack(slot));
             }
+        }
+    }
+
+    @Unique
+    private PlayerEntity lebois$cachedPossessor = null;
+
+    @Inject(method = "convertTo", at = @At("HEAD"))
+    private <T extends MobEntity> void unPossessOnConvert(EntityType<T> entityType, boolean keepEquipment, CallbackInfoReturnable<T> cir) {
+        PlayerEntity player = this.lebois$getPossessor();
+
+        if (player != null) {
+            ((PossessionInterface) player).lebois$unPossess();
+
+            this.lebois$cachedPossessor = player;
+        }
+    }
+
+    @Inject(method = "convertTo", at = @At("TAIL"))
+    private <T extends MobEntity> void rePossessAfterConvert(
+            EntityType<T> entityType,
+            boolean keepEquipment,
+            CallbackInfoReturnable<T> cir) {
+
+        if (this.lebois$cachedPossessor != null) {
+            T newEntity = cir.getReturnValue();
+
+            if (newEntity != null) {
+                ((PossessionInterface) this.lebois$cachedPossessor).lebois$possess(newEntity);
+            }
+
+            this.lebois$cachedPossessor = null;
         }
     }
 }

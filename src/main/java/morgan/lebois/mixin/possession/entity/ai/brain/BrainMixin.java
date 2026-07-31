@@ -18,23 +18,15 @@ import java.util.Set;
 
 @Mixin(Brain.class)
 public abstract class BrainMixin<E extends LivingEntity> {
-    @Shadow
-    public abstract void stopAllTasks(ServerWorld world, E entity);
-
-    @Shadow
-    @Final
-    private Set<Activity> possibleActivities;
-
     @Inject(method = "tick", at=@At("HEAD"), cancellable = true)
     public void tick(ServerWorld world, E entity, CallbackInfo ci) {
         if (entity instanceof MobEntity mobEntity) {
             PlayerEntity player = ((PossessorInterface) mobEntity).lebois$getPossessor();
 
             if (player != null) {
-                this.stopAllTasks(world, entity);
-                mobEntity.getNavigation().stop();
-
-                this.possibleActivities.clear();
+                if (!mobEntity.getNavigation().isIdle()) {
+                    mobEntity.getNavigation().stop();
+                }
 
                 ci.cancel();
             }
