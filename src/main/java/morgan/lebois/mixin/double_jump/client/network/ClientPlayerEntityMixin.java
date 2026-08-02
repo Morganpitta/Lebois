@@ -24,6 +24,10 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
     @Shadow
     @Final
     protected MinecraftClient client;
+
+    @Shadow
+    protected abstract boolean canSprint();
+
     @Unique
     private boolean wasJumping = false;
 
@@ -38,7 +42,7 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
     public void tickMovementDoubleJump(CallbackInfo ci) {
         if (this.input.jumping && !wasJumping) {
             if (((DoubleJump) this).lebois$canDoubleJump() && !(this.isInLava() || this.isTouchingWater())) {
-                boolean boost = this.client.options.sprintKey.isPressed();
+                boolean boost = this.client.options.sprintKey.isPressed() && this.canSprint();
 
                 ((DoubleJump) this).lebois$doubleJump(boost, this.input.movementForward, this.input.movementSideways);
                 ClientPlayNetworking.send(new DoubleJumpC2SPacket(boost, this.input.movementForward, this.input.movementSideways));
