@@ -1,7 +1,11 @@
 package morgan.lebois.cardinalComponents;
 
 import morgan.lebois.Lebois;
+import morgan.lebois.interfaces.PossessionInterface;
+import morgan.lebois.interfaces.PossessorInterface;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
@@ -58,6 +62,13 @@ public class SnapshotComponent implements Component {
                 livingEntity.velocityModified = true;
 
                 livingEntity.teleport(world, snapshot.pos.x, snapshot.pos.y, snapshot.pos.z, Set.of(), snapshot.yaw, snapshot.pitch);
+            }
+
+            if (livingEntity instanceof MobEntity) {
+                PlayerEntity player = ((PossessorInterface) livingEntity).lebois$getPossessor();
+                if (player != null) {
+                    player.getComponent(LeboisEntityComponents.SNAPSHOT).loadSnapshot(id, clear);
+                }
             }
 
             if (clear) this.clearSnapshot(id);

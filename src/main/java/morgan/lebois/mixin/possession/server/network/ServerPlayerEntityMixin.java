@@ -2,6 +2,7 @@ package morgan.lebois.mixin.possession.server.network;
 
 import com.mojang.authlib.GameProfile;
 import morgan.lebois.Lebois;
+import morgan.lebois.common.PossessionTeleportManager;
 import morgan.lebois.interfaces.PossessionInterface;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -35,7 +36,9 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
         MobEntity entity = ((PossessionInterface) this).lebois$getPossessedEntity();
 
         if (entity != null) {
+            PossessionTeleportManager.setPossessionTeleport(true);
             Entity newEntity = entity.teleportTo(new TeleportTarget(teleportTarget.world(), teleportTarget.pos(), Vec3d.ZERO, teleportTarget.yaw(), teleportTarget.pitch(), TeleportTarget.NO_OP));
+            PossessionTeleportManager.setPossessionTeleport(false);
 
             if (newEntity != entity) {
                 ((PossessionInterface) this).lebois$setPossessedEntity((MobEntity) newEntity);
@@ -48,7 +51,9 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
         MobEntity entity = ((PossessionInterface) this).lebois$getPossessedEntity();
 
         if (entity != null) {
+            PossessionTeleportManager.setPossessionTeleport(true);
             Entity newEntity = entity.teleportTo(new TeleportTarget((ServerWorld) this.getWorld(), new Vec3d(destX, destY, destZ), Vec3d.ZERO, 0, 0, TeleportTarget.NO_OP));
+            PossessionTeleportManager.setPossessionTeleport(false);
 
             if (newEntity != entity) {
                 ((PossessionInterface) this).lebois$setPossessedEntity((MobEntity) newEntity);
@@ -61,7 +66,9 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
         MobEntity entity = ((PossessionInterface) this).lebois$getPossessedEntity();
 
         if (entity != null) {
+            PossessionTeleportManager.setPossessionTeleport(true);
             Entity newEntity = entity.teleportTo(new TeleportTarget((ServerWorld) this.getWorld(), this.getPos().add(new Vec3d(offsetX, offsetY, offsetZ)), Vec3d.ZERO, 0, 0, TeleportTarget.NO_OP));
+            PossessionTeleportManager.setPossessionTeleport(false);
 
             if (newEntity != entity) {
                 ((PossessionInterface) this).lebois$setPossessedEntity((MobEntity) newEntity);
@@ -75,7 +82,9 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
         MobEntity entity = ((PossessionInterface) this).lebois$getPossessedEntity();
 
         if (entity != null) {
+            PossessionTeleportManager.setPossessionTeleport(true);
             Entity newEntity = entity.teleportTo(new TeleportTarget(targetWorld, new Vec3d(x, y, z), Vec3d.ZERO, yaw, pitch, TeleportTarget.NO_OP));
+            PossessionTeleportManager.setPossessionTeleport(false);
 
             if (newEntity != entity) {
                 ((PossessionInterface) this).lebois$setPossessedEntity((MobEntity) newEntity);
@@ -89,7 +98,9 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
         MobEntity entity = ((PossessionInterface) this).lebois$getPossessedEntity();
 
         if (entity != null) {
+            PossessionTeleportManager.setPossessionTeleport(true);
             Entity newEntity = entity.teleportTo(new TeleportTarget(world, new Vec3d(destX, destY, destZ), Vec3d.ZERO, yaw, pitch, TeleportTarget.NO_OP));
+            PossessionTeleportManager.setPossessionTeleport(false);
 
             if (newEntity != entity) {
                 ((PossessionInterface) this).lebois$setPossessedEntity((MobEntity) newEntity);

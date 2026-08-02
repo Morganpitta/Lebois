@@ -1,5 +1,6 @@
 package morgan.lebois.mixin.possession.entity;
 
+import morgan.lebois.common.PossessionTeleportManager;
 import morgan.lebois.interfaces.PossessionInterface;
 import morgan.lebois.interfaces.PossessorInterface;
 import net.minecraft.entity.Entity;
@@ -80,46 +81,75 @@ public abstract class EntityMixin {
         }
     }
 
-    @Inject(method = "teleportTo", at=@At("HEAD"))
+    @Inject(method = "teleportTo", at=@At("HEAD"), cancellable = true)
     public void teleportToPossessedEntity(TeleportTarget teleportTarget, CallbackInfoReturnable<Entity> cir) {
-        if (this.getWorld() instanceof ServerWorld && (Entity) (Object) this instanceof PlayerEntity) {
+        if ((Entity) (Object) this instanceof PlayerEntity) {
             MobEntity entity = ((PossessionInterface) this).lebois$getPossessedEntity();
 
             if (entity != null) {
+                PossessionTeleportManager.setPossessionTeleport(true);
                 Entity newEntity = entity.teleportTo(new TeleportTarget(teleportTarget.world(), teleportTarget.pos(), Vec3d.ZERO, teleportTarget.yaw(), teleportTarget.pitch(), TeleportTarget.NO_OP));
+                PossessionTeleportManager.setPossessionTeleport(false);
 
                 if (newEntity != entity) {
                     ((PossessionInterface) this).lebois$setPossessedEntity((MobEntity) newEntity);
                 }
             }
         }
+        else if ((Entity) (Object) this instanceof MobEntity) {
+            PlayerEntity player = ((PossessorInterface) this).lebois$getPossessor();
+
+            if (player != null && !PossessionTeleportManager.isPossessionTeleport()) {
+                cir.setReturnValue((Entity) (Object) this);
+            }
+        }
     }
 
-    @Inject(method = "teleport", at=@At("HEAD"))
+    @Inject(method = "teleport", at=@At("HEAD"), cancellable = true)
     public void teleportPossessedEntity(ServerWorld world, double destX, double destY, double destZ, Set<PositionFlag> flags, float yaw, float pitch, CallbackInfoReturnable<Boolean> cir) {
         if ((Entity) (Object) this instanceof PlayerEntity) {
             MobEntity entity = ((PossessionInterface) this).lebois$getPossessedEntity();
 
             if (entity != null) {
+                PossessionTeleportManager.setPossessionTeleport(true);
                 Entity newEntity = entity.teleportTo(new TeleportTarget(world, new Vec3d(destX, destY, destZ), Vec3d.ZERO, yaw, pitch, TeleportTarget.NO_OP));
+                PossessionTeleportManager.setPossessionTeleport(false);
 
                 if (newEntity != entity) {
                     ((PossessionInterface) this).lebois$setPossessedEntity((MobEntity) newEntity);
                 }
             }
         }
+        else if ((Entity) (Object) this instanceof MobEntity) {
+            PlayerEntity player = ((PossessorInterface) this).lebois$getPossessor();
+
+            if (player != null) {
+                cir.setReturnValue(false);
+            }
+        }
     }
 
-    @Inject(method = "requestTeleport", at=@At("HEAD"))
+    @Inject(method = "requestTeleport", at=@At("HEAD"), cancellable = true)
     void requestTeleportPossessedEntity(double destX, double destY, double destZ, CallbackInfo ci) {
-        if (this.getWorld() instanceof ServerWorld && (Entity) (Object) this instanceof PlayerEntity) {
-            MobEntity entity = ((PossessionInterface) this).lebois$getPossessedEntity();
+        if (this.getWorld() instanceof ServerWorld world) {
+            if ((Entity) (Object) this instanceof PlayerEntity) {
+                MobEntity entity = ((PossessionInterface) this).lebois$getPossessedEntity();
 
-            if (entity != null) {
-                Entity newEntity = entity.teleportTo(new TeleportTarget((ServerWorld) this.getWorld(), new Vec3d(destX, destY, destZ), Vec3d.ZERO, 0, 0, TeleportTarget.NO_OP));
+                if (entity != null) {
+                    PossessionTeleportManager.setPossessionTeleport(true);
+                    Entity newEntity = entity.teleportTo(new TeleportTarget(world, new Vec3d(destX, destY, destZ), Vec3d.ZERO, 0, 0, TeleportTarget.NO_OP));
+                    PossessionTeleportManager.setPossessionTeleport(false);
 
-                if (newEntity != entity) {
-                    ((PossessionInterface) this).lebois$setPossessedEntity((MobEntity) newEntity);
+                    if (newEntity != entity) {
+                        ((PossessionInterface) this).lebois$setPossessedEntity((MobEntity) newEntity);
+                    }
+                }
+            }
+            else if ((Entity) (Object) this instanceof MobEntity) {
+                PlayerEntity player = ((PossessorInterface) this).lebois$getPossessor();
+
+                if (player != null) {
+                    ci.cancel();
                 }
             }
         }
