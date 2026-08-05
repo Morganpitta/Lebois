@@ -147,7 +147,7 @@
                 {
                   "type": "origins:spawn_particles",
                   "particle": "minecraft:wax_off",
-                  "count": 4,
+                  "count": 2,
                   "speed": 5,
                   "spread": {
                     "x": 0.5,
@@ -158,7 +158,7 @@
                 {
                   "type": "origins:spawn_particles",
                   "particle": "minecraft:scrape",
-                  "count": 6,
+                  "count": 3,
                   "speed": 10,
                   "spread": {
                     "x": 0.7,
