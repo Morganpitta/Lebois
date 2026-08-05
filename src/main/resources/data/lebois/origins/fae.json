@@ -1,0 +1,13 @@
+{
+  "powers": [
+    "lebois:fae/size",
+    "lebois:fae/fairy_wings",
+    "lebois:fae/attributes"
+  ],
+  "icon": {
+    "id": "minecraft:torchflower"
+  },
+  "name": "Fae",
+  "description": "",
+  "impact": 3
+}

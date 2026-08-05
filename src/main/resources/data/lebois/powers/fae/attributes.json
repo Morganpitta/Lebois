@@ -1,0 +1,123 @@
+{
+  "type": "origins:multiple",
+  "small_scale": {
+    "type": "origins:modify_attribute",
+    "attribute": "minecraft:generic.scale",
+    "modifier": {
+      "name": "lebois:fae_small_scale",
+      "operation": "multiply_base_additive",
+      "amount": -0.5
+    },
+    "condition": {
+      "type": "origins:resource",
+      "resource": "*:fae/size_resource",
+      "comparison": "==",
+      "compare_to": 0
+    }
+  },
+  "big_scale": {
+    "type": "origins:modify_attribute",
+    "attribute": "minecraft:generic.scale",
+    "modifier": {
+      "name": "lebois:fae_big_scale",
+      "operation": "multiply_base_additive",
+      "amount": 1.0
+    },
+    "condition": {
+      "type": "origins:resource",
+      "resource": "*:fae/size_resource",
+      "comparison": "==",
+      "compare_to": 2
+    }
+  },
+  "big_block_reach": {
+    "type": "origins:modify_attribute",
+    "attribute": "minecraft:player.block_interaction_range",
+    "modifier": {
+      "name": "lebois:fae_big_block_reach",
+      "operation": "multiply_base_additive",
+      "amount": 1.0
+    },
+    "condition": {
+      "type": "origins:resource",
+      "resource": "*:fae/size_resource",
+      "comparison": "==",
+      "compare_to": 2
+    }
+  },
+  "big_entity_reach": {
+    "type": "origins:modify_attribute",
+    "attribute": "minecraft:player.entity_interaction_range",
+    "modifier": {
+      "name": "lebois:fae_big_entity_reach",
+      "operation": "multiply_base_additive",
+      "amount": 1.0
+    },
+    "condition": {
+      "type": "origins:resource",
+      "resource": "*:fae/size_resource",
+      "comparison": "==",
+      "compare_to": 2
+    }
+  },
+  "big_speed": {
+    "type": "origins:modify_attribute",
+    "attribute": "minecraft:generic.movement_speed",
+    "modifier": {
+      "name": "lebois:fae_big_speed",
+      "operation": "multiply_base_additive",
+      "amount": 1.0
+    },
+    "condition": {
+      "type": "origins:resource",
+      "resource": "*:fae/size_resource",
+      "comparison": "==",
+      "compare_to": 2
+    }
+  },
+  "big_jump": {
+    "type": "origins:modify_attribute",
+    "attribute": "minecraft:generic.jump_strength",
+    "modifier": {
+      "name": "lebois:fae_big_jump",
+      "operation": "multiply_base_additive",
+      "amount": 0.5
+    },
+    "condition": {
+      "type": "origins:resource",
+      "resource": "*:fae/size_resource",
+      "comparison": "==",
+      "compare_to": 2
+    }
+  },
+  "big_step_height": {
+    "type": "origins:modify_attribute",
+    "attribute": "minecraft:generic.step_height",
+    "modifier": {
+      "name": "lebois:fae_big_step_height",
+      "operation": "add_base_late",
+      "amount": 1.0
+    },
+    "condition": {
+      "type": "origins:resource",
+      "resource": "*:fae/size_resource",
+      "comparison": "==",
+      "compare_to": 2
+    }
+  },
+  "big_safe_fall": {
+    "type": "origins:modify_attribute",
+    "attribute": "minecraft:generic.safe_fall_distance",
+    "modifier": {
+      "name": "lebois:fae_big_safe_fall",
+      "operation": "multiply_base_additive",
+      "amount": 1.0
+    },
+    "condition": {
+      "type": "origins:resource",
+      "resource": "*:fae/size_resource",
+      "comparison": "==",
+      "compare_to": 2
+    }
+  }
+}

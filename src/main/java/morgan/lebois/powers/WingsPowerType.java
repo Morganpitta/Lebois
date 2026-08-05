@@ -78,7 +78,7 @@ public class WingsPowerType extends PowerType {
     }
 
     public static boolean hasWings(LivingEntity player) {
-        return PowerHolderComponent.hasPowerType (player, WingsPowerType.class);
+        return PowerHolderComponent.hasPowerType(player, WingsPowerType.class);
     }
 
     public static float getAcceleration(LivingEntity player) {

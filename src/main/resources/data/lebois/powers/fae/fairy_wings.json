@@ -1,0 +1,17 @@
+{
+  "type": "lebois:wings",
+  "max_speed": 0.4,
+  "max_use_time": 100,
+  "texture": "lebois:textures/entity/wings.png",
+  "width": 20,
+  "height": 25,
+  "scale": 0.75,
+  "offset": -3,
+  "boost": 0.02,
+  "condition": {
+    "type": "origins:resource",
+    "resource": "*:fae/size_resource",
+    "comparison": "==",
+    "compare_to": 0
+  }
+}
