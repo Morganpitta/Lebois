@@ -2,6 +2,7 @@ package morgan.lebois.mixin.parry.entity.player;
 
 import morgan.lebois.entity.effect.LeboisStatusEffects;
 import morgan.lebois.interfaces.Parry;
+import morgan.lebois.interfaces.Parryable;
 import morgan.lebois.network.packet.SyncItemUseTimeS2CPacket;
 import morgan.lebois.powers.ParryPowerType;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -9,10 +10,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.damage.DamageTypes;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.player.ItemCooldownManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
+import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.item.*;
 import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -100,8 +103,11 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Parry {
             ServerPlayNetworking.send(serverPlayerEntity, new SyncItemUseTimeS2CPacket(this.itemUseTimeLeft));
         }
 
-        if (source.isIn(DamageTypeTags.IS_PROJECTILE)) {
+        if (source.isIn(DamageTypeTags.IS_PROJECTILE) || source.getSource() instanceof ProjectileEntity) {
             this.lebois$setRedirectProjectile(true);
+            if ( source.getSource() instanceof ProjectileEntity projectileSource) {
+                ((Parryable) projectileSource).lebois$setParriedOwner(this);
+            }
         }
         else if (source.getAttacker() instanceof LivingEntity entity) {
             entity.takeKnockback(0.5F, this.getX() - entity.getX(), this.getZ() - entity.getZ());

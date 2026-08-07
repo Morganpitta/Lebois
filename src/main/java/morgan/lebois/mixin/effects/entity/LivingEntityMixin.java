@@ -113,7 +113,7 @@ public abstract class LivingEntityMixin extends Entity implements EffectSource {
             if (attacker instanceof LivingEntity livingEntity && damageSource.getSource() != this) {
                 StatusEffectInstance effect = livingEntity.getStatusEffect(LeboisStatusEffects.OVERCHARGED);
                 if (effect != null) {
-                    StatusEffectInstance unstable = new StatusEffectInstance(LeboisStatusEffects.UNSTABLE, 40, effect.getAmplifier());
+                    StatusEffectInstance unstable = new StatusEffectInstance(LeboisStatusEffects.UNSTABLE, 60, effect.getAmplifier());
                     this.lebois$setStatusEffectSource(LeboisStatusEffects.UNSTABLE, new Source(attacker.getUuid(), amount));
                     this.addStatusEffect(unstable);
 
