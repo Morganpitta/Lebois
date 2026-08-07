@@ -2,7 +2,9 @@ package morgan.lebois.mixin.parry.entity.player;
 
 import morgan.lebois.entity.effect.LeboisStatusEffects;
 import morgan.lebois.interfaces.Parry;
+import morgan.lebois.network.packet.SyncItemUseTimeS2CPacket;
 import morgan.lebois.powers.ParryPowerType;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -13,8 +15,10 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.projectile.PersistentProjectileEntity;
 import net.minecraft.item.*;
 import net.minecraft.registry.tag.DamageTypeTags;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Hand;
 import net.minecraft.util.UseAction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -87,8 +91,14 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Parry {
     }
 
     public void lebois$parry(DamageSource source, float amount) {
-        this.getItemCooldownManager().set(this.activeItemStack.getItem(), 10);
-        this.clearActiveItem();
+        ItemStack stack = this.activeItemStack;
+        this.getItemCooldownManager().set(stack.getItem(), 10);
+
+        this.itemUseTimeLeft = stack.getMaxUseTime(this)+5;
+
+        if ((PlayerEntity) (Object) this instanceof ServerPlayerEntity serverPlayerEntity) {
+            ServerPlayNetworking.send(serverPlayerEntity, new SyncItemUseTimeS2CPacket(this.itemUseTimeLeft));
+        }
 
         if (source.isIn(DamageTypeTags.IS_PROJECTILE)) {
             this.lebois$setRedirectProjectile(true);

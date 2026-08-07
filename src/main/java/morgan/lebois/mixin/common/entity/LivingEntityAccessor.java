@@ -8,4 +8,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 public interface LivingEntityAccessor {
     @Accessor("jumping")
     public boolean lebois$isJumping();
+
+    @Accessor("itemUseTimeLeft")
+    public void lebois$setItemUseTimeLeft(int value);
 }

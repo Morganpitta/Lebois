@@ -63,7 +63,9 @@ public abstract class ToolItemMixin extends Item {
     @Override
     public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user) {
         if (user instanceof PlayerEntity player && ((Parry)player).lebois$canParry()) {
-            this.falter(world, player);
+            if (!player.getItemCooldownManager().isCoolingDown(stack.getItem())) {
+                this.falter(world, player);
+            }
         }
 
         return stack;
@@ -72,7 +74,9 @@ public abstract class ToolItemMixin extends Item {
     @Override
     public void onStoppedUsing(ItemStack stack, World world, LivingEntity user, int remainingUseTicks) {
         if (user instanceof PlayerEntity player && ((Parry)player).lebois$canParry()) {
-            this.falter(world, player);
+            if (!player.getItemCooldownManager().isCoolingDown(stack.getItem())) {
+                this.falter(world, player);
+            }
         }
     }
 }

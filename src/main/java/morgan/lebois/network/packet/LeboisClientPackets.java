@@ -2,6 +2,7 @@ package morgan.lebois.network.packet;
 
 import morgan.lebois.Lebois;
 import morgan.lebois.interfaces.PossessionInterface;
+import morgan.lebois.mixin.common.entity.LivingEntityAccessor;
 import morgan.lebois.sound.LivingEntityTrackingSoundInstance;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -21,6 +22,7 @@ public class LeboisClientPackets {
         ClientPlayNetworking.registerGlobalReceiver(PossessionS2CPacket.ID, LeboisClientPackets::handlePossessionPacket);
         ClientPlayNetworking.registerGlobalReceiver(UnPossessionS2CPacket.ID, LeboisClientPackets::handleUnPossessionPacket);
         ClientPlayNetworking.registerGlobalReceiver(MovingSoundS2CPacket.ID, LeboisClientPackets::handleMovingSoundPacket);
+        ClientPlayNetworking.registerGlobalReceiver(SyncItemUseTimeS2CPacket.ID, LeboisClientPackets::handleSyncItemUseTimePacket);
     }
 
     public static void handlePossessionPacket(PossessionS2CPacket payload, ClientPlayNetworking.Context context) {
@@ -67,5 +69,11 @@ public class LeboisClientPackets {
                 );
             }
         });
+    }
+
+    public static void handleSyncItemUseTimePacket(SyncItemUseTimeS2CPacket payload, ClientPlayNetworking.Context context) {
+        PlayerEntity player = context.player();
+
+        ((LivingEntityAccessor) player).lebois$setItemUseTimeLeft(payload.useTimeLeft());
     }
 }
